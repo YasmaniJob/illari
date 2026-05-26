@@ -1,0 +1,27 @@
+id,nombre,descripcion,nivel_id,es_oficial,orden,activo,created_at,updated_at
+inicial-ciencia-tecnologia,Ciencia y Tecnología,Indagación y alfabetización científica,inicial,true,5,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+inicial-comunicacion,Comunicación,"Desarrollo de competencias comunicativas orales, escritas y artísticas",inicial,true,1,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+inicial-matematica,Matemática,Resolución de problemas matemáticos,inicial,true,4,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+inicial-personal-social,Personal Social,Construcción de la identidad y convivencia democrática,inicial,true,2,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+inicial-psicomotriz,Psicomotriz,Desarrollo de la motricidad y expresión corporal,inicial,true,3,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-arte-cultura,Arte y Cultura,Apreciación y creación artística,primaria,true,8,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-castellano-segunda-lengua,Castellano como Segunda Lengua,Comunicación en castellano para estudiantes de lengua originaria,primaria,true,2,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-ciencia-tecnologia,Ciencia y Tecnología,Indagación científica y diseño tecnológico,primaria,true,5,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-comunicacion,Comunicación,Desarrollo de competencias comunicativas en lengua materna,primaria,true,1,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-educacion-fisica,Educación Física,Desarrollo físico y vida saludable,primaria,true,9,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-educacion-religiosa,Educación Religiosa,Formación religiosa y espiritual,primaria,true,7,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-ingles,Inglés,Comunicación en inglés como lengua extranjera,primaria,true,3,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-matematica,Matemática,Resolución de problemas matemáticos,primaria,true,4,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-personal-social,Personal Social,Construcción de identidad y ciudadanía,primaria,true,6,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+primaria-psicomotriz,Psicomotriz,Desarrollo de la motricidad,primaria,true,10,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-arte-cultura,Arte y Cultura,Apreciación y creación artística,secundaria,true,9,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-castellano-segunda-lengua,Castellano como Segunda Lengua,Comunicación en castellano para estudiantes de lengua originaria,secundaria,true,2,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-ciencia-tecnologia,Ciencia y Tecnología,Indagación científica y diseño tecnológico,secundaria,true,5,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-ciencias-sociales,Ciencias Sociales,Comprensión del tiempo histórico y el espacio geográfico,secundaria,true,6,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-comunicacion,Comunicación,Desarrollo de competencias comunicativas en lengua materna,secundaria,true,1,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-desarrollo-personal,"Desarrollo Personal, Ciudadanía y Cívica",Construcción de identidad y ejercicio ciudadano,secundaria,true,7,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-educacion-fisica,Educación Física,Desarrollo físico y vida saludable,secundaria,true,10,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-educacion-religiosa,Educación Religiosa,Formación religiosa y espiritual,secundaria,true,8,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-educacion-trabajo,Educación para el Trabajo,Gestión de proyectos de emprendimiento,secundaria,true,11,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-ingles,Inglés,Comunicación en inglés como lengua extranjera,secundaria,true,3,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00
+secundaria-matematica,Matemática,Resolución de problemas matemáticos,secundaria,true,4,true,2025-10-30 03:41:30.422139+00,2025-10-30 03:41:30.422139+00

@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OnboardingWizard from '../components/onboarding/OnboardingWizard';
+import curriculoRaw from '../data/curriculo.csv?raw';
+import { parseCurriculumCsv } from '../lib/curriculum';
+
+const curriculum = parseCurriculumCsv(curriculoRaw);
+---
+
+<BaseLayout title="Illari — Preparar mi clase" boxed>
+  <div class="h-full min-h-0">
+    <OnboardingWizard client:load curriculum={curriculum} />
+  </div>
+</BaseLayout>

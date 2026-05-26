@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LoginForm from '../components/auth/LoginForm';
+
+const redirect = Astro.url.searchParams.get('redirect') ?? '/';
+const initialMode = Astro.url.searchParams.has('register') ? 'register' : 'login';
+---
+
+<BaseLayout title="Illari — Iniciar sesión">
+  <div class="flex min-h-[70vh] items-center justify-center py-10">
+    <LoginForm client:load redirectTo={redirect} initialMode={initialMode} />
+  </div>
+</BaseLayout>

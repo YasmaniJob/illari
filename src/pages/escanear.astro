@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScanSessionFlow from '../components/scan/ScanSessionFlow';
+import curriculoRaw from '../data/curriculo.csv?raw';
+import { parseCurriculumCsv } from '../lib/curriculum';
+
+const curriculum = parseCurriculumCsv(curriculoRaw);
+---
+
+<BaseLayout title="Illari — Escanear sesión" fixedViewport>
+  <div class="h-full min-h-0">
+    <ScanSessionFlow client:load curriculum={curriculum} />
+  </div>
+</BaseLayout>

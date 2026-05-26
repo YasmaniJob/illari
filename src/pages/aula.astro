@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LiveClassroom from '../components/aula/LiveClassroom';
+---
+
+<BaseLayout title="Illari — Mi aula" fullWidth={true}>
+  <LiveClassroom client:load />
+</BaseLayout>

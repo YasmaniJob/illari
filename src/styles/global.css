@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --color-cream: #fff8f0;
+  --color-cream-dark: #ffedd5;
+  --color-warm-900: #3d2c29;
+  --color-warm-700: #5c4a42;
+  --color-warm-500: #8b7355;
+  --color-coral-500: #e07a5f;
+  --color-coral-600: #c96a52;
+  --color-honey-200: #fde68a;
+  --color-honey-400: #fbbf24;
+  --color-mint-400: #6ee7b7;
+  --color-sky-300: #7dd3fc;
+  --color-lilac-500: #a78bfa;
+  --color-lilac-600: #8b5cf6;
+  --color-lilac-100: #ede9fe;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-cream text-warm-900 leading-relaxed;
+  }
+}
+
+@layer utilities {
+  .card-warm {
+    @apply bg-white border-2 border-cream-dark rounded-3xl shadow-[0_4px_20px_-4px_rgba(224,122,95,0.12)];
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-coral-500 px-8 py-4 text-lg font-bold text-white shadow-[0_4px_14px_-2px_rgba(224,122,95,0.45)] transition-all duration-200 ease-in-out hover:bg-coral-600 hover:shadow-[0_6px_20px_-2px_rgba(224,122,95,0.5)] active:scale-[0.98] disabled:opacity-45 disabled:cursor-not-allowed disabled:active:scale-100;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-cream-dark bg-white px-8 py-4 text-lg font-bold text-warm-700 transition-all duration-200 ease-in-out hover:bg-cream hover:border-coral-500/30 active:scale-[0.98] disabled:opacity-45 disabled:cursor-not-allowed;
+  }
+
+  .input-warm {
+    @apply w-full rounded-2xl border-2 border-cream-dark bg-white px-5 py-4 text-lg text-warm-900 placeholder:text-warm-500/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none focus:border-lilac-500 focus:ring-4 focus:ring-lilac-500/20;
+  }
+
+  .focus-ring-warm {
+    @apply transition-all duration-200 ease-in-out focus:outline-none focus:ring-4 focus:ring-lilac-500/25 focus:border-lilac-500;
+  }
+
+  .text-display {
+    @apply text-4xl sm:text-5xl font-extrabold text-warm-900 tracking-tight leading-tight;
+  }
+
+  .text-lead {
+    @apply text-xl sm:text-2xl text-warm-700 leading-relaxed;
+  }
+
+  .text-label {
+    @apply text-lg font-bold text-warm-900;
+  }
+}
