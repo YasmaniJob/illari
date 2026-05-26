@@ -47,9 +47,6 @@ export const POST: APIRoute = async ({ request }) => {
     );
   } catch (e) {
     console.error(e);
-    return new Response(
-      JSON.stringify({ error: 'Error al generar evidencia' }),
-      { status: 500 },
-    );
+    return new Response(JSON.stringify({ error: 'Error al generar evidencia' }), { status: 500 });
   }
 };

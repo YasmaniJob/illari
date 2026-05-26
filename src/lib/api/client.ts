@@ -1,5 +1,5 @@
-import type { SessionConfig } from '../curriculum';
 import type { ChatMessage } from '../../components/aula/ChatFeed';
+import type { SessionConfig } from '../curriculum';
 import {
   guestAppendObservations,
   guestCreateSession,
@@ -23,23 +23,28 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
   return data as T;
 }
 
+const CACHE_TTL = 30_000;
 let loggedIn: boolean | null = null;
+let cacheExpires = 0;
 
 export async function isLoggedIn(): Promise<boolean> {
-  if (loggedIn !== null) return loggedIn;
+  if (loggedIn !== null && Date.now() < cacheExpires) return loggedIn;
   try {
     const res = await fetch('/api/me', { credentials: 'include' });
     const data = (await res.json()) as { user: { id: string } | null };
     loggedIn = !!data.user;
+    cacheExpires = Date.now() + CACHE_TTL;
     return loggedIn;
   } catch {
     loggedIn = false;
+    cacheExpires = Date.now() + CACHE_TTL;
     return false;
   }
 }
 
 export function clearAuthCache() {
   loggedIn = null;
+  cacheExpires = 0;
 }
 
 export async function fetchSessions(): Promise<SessionConfig[]> {
@@ -56,9 +61,7 @@ export async function fetchActiveSession(): Promise<SessionConfig | null> {
   return guestGetActiveSession();
 }
 
-export async function createSession(
-  input: Omit<SessionConfig, 'id' | 'createdAt' | 'status'>,
-): Promise<SessionConfig> {
+export async function createSession(input: Omit<SessionConfig, 'id' | 'createdAt' | 'status'>): Promise<SessionConfig> {
   if (await isLoggedIn()) {
     const { session } = await api<{ session: SessionConfig }>('/api/sessions', {
       method: 'POST',
@@ -71,9 +74,7 @@ export async function createSession(
 
 export async function fetchObservations(sessionId: string): Promise<ChatMessage[]> {
   if (await isLoggedIn()) {
-    const { messages } = await api<{ messages: ChatMessage[] }>(
-      `/api/sessions/${sessionId}/observations`,
-    );
+    const { messages } = await api<{ messages: ChatMessage[] }>(`/api/sessions/${sessionId}/observations`);
     return messages;
   }
   return guestGetObservations(sessionId);
@@ -96,18 +97,15 @@ export async function postEvidence(input: {
   const session = input.session ?? guestGetActiveSession();
   if (!session) throw new Error('No hay sesión activa');
 
-  const result = await api<{ userMessage: ChatMessage; aiMessage: ChatMessage }>(
-    '/api/guest/evidence',
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        session,
-        text: input.text,
-        studentName: input.studentName,
-        source: input.source,
-      }),
-    },
-  );
+  const result = await api<{ userMessage: ChatMessage; aiMessage: ChatMessage }>('/api/guest/evidence', {
+    method: 'POST',
+    body: JSON.stringify({
+      session,
+      text: input.text,
+      studentName: input.studentName,
+      source: input.source,
+    }),
+  });
   guestAppendObservations(session.id, result.userMessage, result.aiMessage);
   return result;
 }
@@ -118,25 +116,16 @@ export interface StudentDto {
   active: boolean;
 }
 
-export async function fetchStudents(
-  grado: string,
-  seccion: string,
-): Promise<StudentDto[]> {
+export async function fetchStudents(grado: string, seccion: string): Promise<StudentDto[]> {
   if (await isLoggedIn()) {
     const params = new URLSearchParams({ grado, seccion });
-    const { students } = await api<{ students: StudentDto[] }>(
-      `/api/students?${params}`,
-    );
+    const { students } = await api<{ students: StudentDto[] }>(`/api/students?${params}`);
     return students;
   }
   return guestGetStudents(grado, seccion);
 }
 
-export async function saveStudents(
-  grado: string,
-  seccion: string,
-  names: string[],
-): Promise<StudentDto[]> {
+export async function saveStudents(grado: string, seccion: string, names: string[]): Promise<StudentDto[]> {
   if (await isLoggedIn()) {
     const { students } = await api<{ students: StudentDto[] }>('/api/students', {
       method: 'POST',

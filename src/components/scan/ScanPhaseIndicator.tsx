@@ -1,26 +1,13 @@
-import {
-  SCAN_PHASES,
-  phaseProgress,
-  type ScanWorkflowPhase,
-} from '../../lib/scan/phases';
+import { phaseProgress, SCAN_PHASES, type ScanWorkflowPhase } from '../../lib/scan/phases';
 
 interface ScanPhaseIndicatorProps {
   workflow: ScanWorkflowPhase;
   processingStep?: 'extract' | 'catalog';
 }
 
-export default function ScanPhaseIndicator({
-  workflow,
-  processingStep,
-}: ScanPhaseIndicatorProps) {
+export default function ScanPhaseIndicator({ workflow, processingStep }: ScanPhaseIndicatorProps) {
   const activeIndex =
-    workflow === 'capture'
-      ? 0
-      : workflow === 'processing'
-        ? processingStep === 'catalog'
-          ? 2
-          : 1
-        : 3;
+    workflow === 'capture' ? 0 : workflow === 'processing' ? (processingStep === 'catalog' ? 2 : 1) : 3;
 
   const progress = phaseProgress(workflow, processingStep);
 
@@ -38,9 +25,7 @@ export default function ScanPhaseIndicator({
           style={{ width: `${progress}%` }}
         />
       </div>
-      <p className="mt-2 text-base font-extrabold text-warm-900">
-        {SCAN_PHASES[activeIndex]?.label}
-      </p>
+      <p className="mt-2 text-base font-extrabold text-warm-900">{SCAN_PHASES[activeIndex]?.label}</p>
       <p className="text-sm text-warm-600">{SCAN_PHASES[activeIndex]?.description}</p>
     </div>
   );

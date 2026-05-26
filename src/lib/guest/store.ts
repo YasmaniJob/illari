@@ -1,6 +1,6 @@
 import type { ChatMessage } from '../../components/aula/ChatFeed';
-import type { SessionConfig } from '../curriculum';
 import type { StudentDto } from '../api/client';
+import type { SessionConfig } from '../curriculum';
 
 const STORAGE_KEY = 'illari-guest-v1';
 
@@ -36,9 +36,7 @@ export function guestGetActiveSession(): SessionConfig | null {
   return read().activeSession;
 }
 
-export function guestCreateSession(
-  input: Omit<SessionConfig, 'id' | 'createdAt' | 'status'>,
-): SessionConfig {
+export function guestCreateSession(input: Omit<SessionConfig, 'id' | 'createdAt' | 'status'>): SessionConfig {
   const session: SessionConfig = {
     id: crypto.randomUUID(),
     ...input,
@@ -51,11 +49,7 @@ export function guestCreateSession(
   return session;
 }
 
-export function guestSaveStudents(
-  grado: string,
-  seccion: string,
-  names: string[],
-): StudentDto[] {
+export function guestSaveStudents(grado: string, seccion: string, names: string[]): StudentDto[] {
   const students: StudentDto[] = names.map((name) => ({
     id: crypto.randomUUID(),
     name,
@@ -75,22 +69,14 @@ export function guestGetObservations(sessionId: string): ChatMessage[] {
   return read().observations[sessionId] ?? [];
 }
 
-export function guestAppendObservations(
-  sessionId: string,
-  userMessage: ChatMessage,
-  aiMessage: ChatMessage,
-) {
+export function guestAppendObservations(sessionId: string, userMessage: ChatMessage, aiMessage: ChatMessage) {
   const data = read();
   const list = data.observations[sessionId] ?? [];
   data.observations[sessionId] = [...list, userMessage, aiMessage];
   write(data);
 }
 
-export function guestPatchObservation(
-  id: string,
-  field: 'evidencia' | 'retroalimentacion',
-  value: string,
-) {
+export function guestPatchObservation(id: string, field: 'evidencia' | 'retroalimentacion', value: string) {
   const data = read();
   for (const sessionId of Object.keys(data.observations)) {
     data.observations[sessionId] = data.observations[sessionId].map((m) =>

@@ -26,17 +26,14 @@ function getSpeechRecognition(): SpeechRecognitionCtor | null {
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
-export default function ChatInputBar({
-  onSend,
-  onVoiceTranscript,
-  disabled = false,
-}: ChatInputBarProps) {
+export default function ChatInputBar({ onSend, onVoiceTranscript, disabled = false }: ChatInputBarProps) {
   const [text, setText] = useState('');
   const [recording, setRecording] = useState(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
   const recognitionRef = useRef<InstanceType<SpeechRecognitionCtor> | null>(null);
+  const speechSupported = typeof window !== 'undefined' && getSpeechRecognition() !== null;
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     const trimmed = text.trim();
     if (!trimmed || disabled) return;
@@ -101,22 +98,28 @@ export default function ChatInputBar({
         </p>
       )}
       <div className="mx-auto max-w-2xl md:max-w-none flex items-center gap-3 rounded-3xl border-2 border-cream-dark bg-white/90 backdrop-blur-md px-4 py-3 shadow-[0_8px_32px_-8px_rgba(61,44,41,0.2)] md:bg-white md:rounded-2xl">
-        <button
-          type="button"
-          onClick={handleMic}
-          disabled={disabled}
-          aria-label={recording ? 'Detener dictado' : 'Dictar observación'}
-          className={[
-            'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl transition-all duration-200 focus-ring-warm',
-            recording
-              ? 'bg-red-500 text-white animate-pulse'
-              : 'bg-lilac-100 text-lilac-600 hover:bg-lilac-500 hover:text-white',
-          ].join(' ')}
-        >
-          <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-          </svg>
-        </button>
+        {speechSupported && (
+          <button
+            type="button"
+            onClick={handleMic}
+            disabled={disabled}
+            aria-label={recording ? 'Detener dictado' : 'Dictar observación'}
+            className={[
+              'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl transition-all duration-200 focus-ring-warm',
+              recording
+                ? 'bg-red-500 text-white animate-pulse'
+                : 'bg-lilac-100 text-lilac-600 hover:bg-lilac-500 hover:text-white',
+            ].join(' ')}
+          >
+            <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+              />
+            </svg>
+          </button>
+        )}
 
         <input
           type="text"

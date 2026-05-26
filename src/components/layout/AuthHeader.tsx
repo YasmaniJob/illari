@@ -1,5 +1,5 @@
-import { authClient } from '../../lib/auth-client';
 import { clearAuthCache } from '../../lib/api/client';
+import { authClient } from '../../lib/auth-client';
 
 interface AuthHeaderProps {
   userName?: string | null;

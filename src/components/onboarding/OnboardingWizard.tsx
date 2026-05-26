@@ -1,14 +1,13 @@
-import { useState, useRef } from 'react';
-
+import { useRef, useState } from 'react';
+import { createSession, saveStudents } from '../../lib/api/client';
 import { GRADOS } from '../../lib/classroom';
 import type { CurriculumRow } from '../../lib/curriculum';
-import { createSession, saveStudents } from '../../lib/api/client';
-import { compressImageForScan } from '../../lib/scan/compressImage';
 import type { MatchedScanResult } from '../../lib/curriculumMatch';
-import StudentsRosterInput, { RosterHeaderActions } from './StudentsRosterInput';
+import { compressImageForScan } from '../../lib/scan/compressImage';
 import CardStack, { type CardDirection } from './CardStack';
 import OnboardingStepCard from './OnboardingStepCard';
 import PlanningStep, { type PlanningValues, ScanHeaderAction } from './PlanningStep';
+import StudentsRosterInput, { RosterHeaderActions } from './StudentsRosterInput';
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
@@ -52,9 +51,7 @@ function getCapacidadFromCriterio(
   criterio: string,
 ): string {
   return (
-    curriculum.find(
-      (r) => r.area === area && r.competencia === competencia && r.criterio === criterio,
-    )?.capacidad ?? ''
+    curriculum.find((r) => r.area === area && r.competencia === competencia && r.criterio === criterio)?.capacidad ?? ''
   );
 }
 
@@ -200,7 +197,9 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
 
   async function handleStartSession() {
     const names = studentNames.map((n) => n.trim()).filter((n) => n.length >= 2);
-    const criterio = planning.criterios.find((c) => c.trim().length >= 2) ?? '';
+    const validos = planning.criterios.filter((c) => c.trim().length >= 2);
+    const criterio = validos.join('; ');
+    const primaryCriterio = validos[0] ?? '';
     try {
       await saveStudents(gradoStr, seccionEfectiva, names);
       await createSession({
@@ -209,7 +208,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         seccion: seccionEfectiva,
         area: planning.area,
         competencia: planning.competencia,
-        capacidad: getCapacidadFromCriterio(curriculum, planning.area, planning.competencia, criterio),
+        capacidad: getCapacidadFromCriterio(curriculum, planning.area, planning.competencia, primaryCriterio),
         criterio,
       });
       window.location.href = '/aula';
@@ -226,7 +225,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       content: (
         <OnboardingStepCard title="Tu aula">
           <div className="flex flex-col flex-1 min-h-0 gap-5">
-
             {/* Grado — multiselección, toggle por tarjeta */}
             <div className="grid grid-cols-3 gap-4 flex-1 min-h-0 overflow-visible">
               {GRADOS.map((g) => {
@@ -236,11 +234,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                   <button
                     key={g}
                     type="button"
-                    onClick={() =>
-                      setGrados((prev) =>
-                        prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g],
-                      )
-                    }
+                    onClick={() => setGrados((prev) => (prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]))}
                     aria-pressed={isActive}
                     className={[
                       'relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2',
@@ -257,8 +251,12 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                         ✓
                       </span>
                     )}
-                    <span className="text-5xl leading-none" aria-hidden>{meta.icon}</span>
-                    <span className={`text-base font-extrabold leading-tight text-center ${isActive ? 'text-warm-900' : 'text-warm-500'}`}>
+                    <span className="text-5xl leading-none" aria-hidden>
+                      {meta.icon}
+                    </span>
+                    <span
+                      className={`text-base font-extrabold leading-tight text-center ${isActive ? 'text-warm-900' : 'text-warm-500'}`}
+                    >
                       {g}
                     </span>
                   </button>
@@ -291,7 +289,14 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                 {/* Botón Otro — con reset si ya hay valor personalizado */}
                 <button
                   type="button"
-                  onClick={showSeccionInput && seccionCustom ? () => { setSeccionCustom(''); setShowSeccionInput(false); } : handleSeccionOtro}
+                  onClick={
+                    showSeccionInput && seccionCustom
+                      ? () => {
+                          setSeccionCustom('');
+                          setShowSeccionInput(false);
+                        }
+                      : handleSeccionOtro
+                  }
                   className={[
                     'flex-1 rounded-xl border-2 py-3 text-base font-extrabold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-lilac-500/20',
                     showSeccionInput
@@ -321,7 +326,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                 </div>
               </div>
             </div>
-
           </div>
         </OnboardingStepCard>
       ),
@@ -373,14 +377,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
             </>
           }
         >
-          <PlanningStep
-            curriculum={curriculum}
-            values={planning}
-            onChange={setPlanning}
-            scanning={scanning}
-            scanDone={scanDone}
-            scanError={scanError}
-          />
+          <PlanningStep curriculum={curriculum} values={planning} onChange={setPlanning} />
         </OnboardingStepCard>
       ),
     },
@@ -390,7 +387,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
 
   return (
     <div className="flex h-full min-h-0 overflow-hidden">
-
       {/* ══════════════════════════════════════════
           COLUMNA IZQUIERDA — Pestañas de cuaderno
           ══════════════════════════════════════════ */}
@@ -408,7 +404,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
             <button
               key={s}
               type="button"
-              onClick={() => canClick ? goTo(s) : undefined}
+              onClick={() => (canClick ? goTo(s) : undefined)}
               disabled={!canClick && !isActive}
               aria-current={isActive ? 'step' : undefined}
               title={isActive ? label : canClick ? `Volver a: ${label}` : label}
@@ -439,7 +435,9 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                   {isComplete ? '✓' : s}
                 </span>
                 {isComplete && (
-                  <span className="text-xs leading-none" aria-hidden>{STEP_EMOJI[s]}</span>
+                  <span className="text-xs leading-none" aria-hidden>
+                    {STEP_EMOJI[s]}
+                  </span>
                 )}
               </span>
 
@@ -449,10 +447,12 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                   {getTabSummary(s)}
                 </span>
               ) : (
-                <span className={[
-                  'mt-1 text-[11px] font-bold leading-tight w-full',
-                  isActive ? 'text-warm-900' : 'text-warm-500',
-                ].join(' ')}>
+                <span
+                  className={[
+                    'mt-1 text-[11px] font-bold leading-tight w-full',
+                    isActive ? 'text-warm-900' : 'text-warm-500',
+                  ].join(' ')}
+                >
                   {label}
                 </span>
               )}
@@ -478,7 +478,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
           COLUMNA DERECHA — Tarjeta del paso actual
           ══════════════════════════════════════════ */}
       <div className="flex flex-1 min-h-0 flex-col overflow-hidden py-5 pr-6">
-
         {/* Tarjeta */}
         <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
           <CardStack cards={stackCards} activeStep={step} direction={direction} />
@@ -488,7 +487,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         <footer className="shrink-0 flex gap-3 pt-3">
           <button
             type="button"
-            onClick={() => step > 1 ? goTo(step - 1) : undefined}
+            onClick={() => (step > 1 ? goTo(step - 1) : undefined)}
             disabled={step === 1}
             className="btn-secondary flex-1 py-3 text-base"
           >
@@ -514,7 +513,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
             </button>
           )}
         </footer>
-
       </div>
     </div>
   );

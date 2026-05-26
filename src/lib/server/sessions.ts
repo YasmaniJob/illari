@@ -26,18 +26,11 @@ export async function listSessionsForUser(userId: string): Promise<SessionConfig
   return rows.map(rowToConfig);
 }
 
-export async function getActiveSessionForUser(
-  userId: string,
-): Promise<SessionConfig | null> {
+export async function getActiveSessionForUser(userId: string): Promise<SessionConfig | null> {
   const [row] = await db
     .select()
     .from(schema.classSessions)
-    .where(
-      and(
-        eq(schema.classSessions.userId, userId),
-        eq(schema.classSessions.status, 'active'),
-      ),
-    )
+    .where(and(eq(schema.classSessions.userId, userId), eq(schema.classSessions.status, 'active')))
     .orderBy(desc(schema.classSessions.createdAt))
     .limit(1);
   return row ? rowToConfig(row) : null;
@@ -50,12 +43,7 @@ export async function createClassSession(
   await db
     .update(schema.classSessions)
     .set({ status: 'completed' })
-    .where(
-      and(
-        eq(schema.classSessions.userId, userId),
-        eq(schema.classSessions.status, 'active'),
-      ),
-    );
+    .where(and(eq(schema.classSessions.userId, userId), eq(schema.classSessions.status, 'active')));
 
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
@@ -83,19 +71,11 @@ export async function createClassSession(
   };
 }
 
-export async function getSessionById(
-  userId: string,
-  sessionId: string,
-): Promise<SessionConfig | null> {
+export async function getSessionById(userId: string, sessionId: string): Promise<SessionConfig | null> {
   const [row] = await db
     .select()
     .from(schema.classSessions)
-    .where(
-      and(
-        eq(schema.classSessions.id, sessionId),
-        eq(schema.classSessions.userId, userId),
-      ),
-    )
+    .where(and(eq(schema.classSessions.id, sessionId), eq(schema.classSessions.userId, userId)))
     .limit(1);
   return row ? rowToConfig(row) : null;
 }

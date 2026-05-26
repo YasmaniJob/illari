@@ -16,9 +16,7 @@ export const auth = betterAuth({
     enabled: true,
   },
   baseURL: import.meta.env.BETTER_AUTH_URL ?? 'http://localhost:4321',
-  secret:
-    import.meta.env.BETTER_AUTH_SECRET ??
-    'dev-only-change-me-minimum-32-characters-long',
+  secret: import.meta.env.BETTER_AUTH_SECRET ?? 'dev-only-change-me-minimum-32-characters-long',
 });
 
 export type AuthSession = typeof auth.$Infer.Session;

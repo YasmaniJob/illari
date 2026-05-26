@@ -3,9 +3,7 @@ const DEFAULT_VISION_MODEL = 'gemini-2.0-flash';
 
 export class GeminiNotConfiguredError extends Error {
   constructor() {
-    super(
-      'Configura GOOGLE_GENERATIVE_AI_API_KEY en .env para usar la IA de Illari.',
-    );
+    super('Configura GOOGLE_GENERATIVE_AI_API_KEY en .env para usar la IA de Illari.');
     this.name = 'GeminiNotConfiguredError';
   }
 }
@@ -28,14 +26,26 @@ interface GeminiResponse {
 
 function extractText(json: GeminiResponse): string {
   const text = json.candidates?.[0]?.content?.parts?.[0]?.text ?? '{}';
-  return text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+  return text
+    .replace(/^```json\s*/i, '')
+    .replace(/```\s*$/i, '')
+    .trim();
+}
+
+function safeParseJson(raw: string, fallback: Record<string, unknown>): Record<string, unknown> {
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      return parsed as Record<string, unknown>;
+    }
+    return fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 /** Texto → JSON (evidencia pedagógica, etc.) */
-export async function geminiGenerateJson(
-  systemPrompt: string,
-  userPrompt: string,
-): Promise<Record<string, unknown>> {
+export async function geminiGenerateJson(systemPrompt: string, userPrompt: string): Promise<Record<string, unknown>> {
   const apiKey = requireApiKey();
   const model = import.meta.env.GEMINI_TEXT_MODEL ?? DEFAULT_TEXT_MODEL;
   const res = await fetch(modelUrl(model, apiKey), {
@@ -59,7 +69,7 @@ export async function geminiGenerateJson(
 
   const json = (await res.json()) as GeminiResponse;
   const raw = extractText(json);
-  return JSON.parse(raw) as Record<string, unknown>;
+  return safeParseJson(raw, {});
 }
 
 /** Imagen + prompt → JSON (escaneo de planificación) */
@@ -77,10 +87,7 @@ export async function geminiVisionJson(
       contents: [
         {
           role: 'user',
-          parts: [
-            { text: prompt },
-            { inline_data: { mime_type: mimeType, data: imageBase64 } },
-          ],
+          parts: [{ text: prompt }, { inline_data: { mime_type: mimeType, data: imageBase64 } }],
         },
       ],
       generationConfig: {
@@ -98,5 +105,5 @@ export async function geminiVisionJson(
 
   const json = (await res.json()) as GeminiResponse;
   const raw = extractText(json);
-  return JSON.parse(raw) as Record<string, unknown>;
+  return safeParseJson(raw, {});
 }

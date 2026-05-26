@@ -29,11 +29,7 @@ export async function compressImageForScan(file: File): Promise<{
   bitmap.close();
 
   const blob = await new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob(
-      (b) => (b ? resolve(b) : reject(new Error('Compresión fallida'))),
-      'image/jpeg',
-      JPEG_QUALITY,
-    );
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Compresión fallida'))), 'image/jpeg', JPEG_QUALITY);
   });
 
   const base64 = await readAsBase64(blob);

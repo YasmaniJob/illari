@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { SessionConfig } from '../../lib/curriculum';
 import {
   fetchActiveSession,
   fetchObservations,
@@ -8,6 +7,7 @@ import {
   postEvidence,
   type StudentDto,
 } from '../../lib/api/client';
+import type { SessionConfig } from '../../lib/curriculum';
 import ChatFeed, { type ChatMessage } from './ChatFeed';
 import ChatInputBar from './ChatInputBar';
 import StudentList from './StudentList';
@@ -100,21 +100,14 @@ export default function LiveClassroom() {
     [session, selectedStudent],
   );
 
-  const handleUpdateAI = useCallback(
-    async (id: string, field: 'evidencia' | 'retroalimentacion', value: string) => {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.type === 'ai' && m.id === id ? { ...m, [field]: value } : m,
-        ),
-      );
-      try {
-        await patchObservation(id, field, value);
-      } catch {
-        /* UI ya actualizada; reintento en siguiente blur si se desea */
-      }
-    },
-    [],
-  );
+  const handleUpdateAI = useCallback(async (id: string, field: 'evidencia' | 'retroalimentacion', value: string) => {
+    setMessages((prev) => prev.map((m) => (m.type === 'ai' && m.id === id ? { ...m, [field]: value } : m)));
+    try {
+      await patchObservation(id, field, value);
+    } catch {
+      /* UI ya actualizada; reintento en siguiente blur si se desea */
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -128,9 +121,7 @@ export default function LiveClassroom() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center px-6 py-16">
         <p className="text-3xl font-extrabold text-warm-900">No hay clase activa</p>
-        <p className="mt-4 text-xl text-warm-700 max-w-md">
-          Prepara o escanea una sesión para entrar al aula.
-        </p>
+        <p className="mt-4 text-xl text-warm-700 max-w-md">Prepara o escanea una sesión para entrar al aula.</p>
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
           <a href="/onboarding" className="btn-primary">
             Preparar clase
@@ -215,11 +206,7 @@ export default function LiveClassroom() {
         <div className="flex flex-col min-h-0 relative pb-28 md:pb-0">
           <ChatFeed messages={messages} onUpdateAI={handleUpdateAI} />
           <div ref={feedEndRef} className="h-2" aria-hidden />
-          <ChatInputBar
-            onSend={handleSend}
-            onVoiceTranscript={handleVoiceTranscript}
-            disabled={sending}
-          />
+          <ChatInputBar onSend={handleSend} onVoiceTranscript={handleVoiceTranscript} disabled={sending} />
         </div>
       </div>
     </div>

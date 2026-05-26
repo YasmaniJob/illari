@@ -1,6 +1,6 @@
 import { asc, eq } from 'drizzle-orm';
-import { db, schema } from '../../db';
 import type { ChatMessage } from '../../components/aula/ChatFeed';
+import { db, schema } from '../../db';
 
 function formatTime(iso: string) {
   return new Intl.DateTimeFormat('es-PE', {
@@ -36,11 +36,7 @@ export async function listObservations(sessionId: string): Promise<ChatMessage[]
   });
 }
 
-export async function insertUserObservation(input: {
-  sessionId: string;
-  text: string;
-  studentName?: string;
-}) {
+export async function insertUserObservation(input: { sessionId: string; text: string; studentName?: string }) {
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
   await db.insert(schema.observations).values({
@@ -54,11 +50,7 @@ export async function insertUserObservation(input: {
   return { id, createdAt };
 }
 
-export async function insertAIObservation(input: {
-  sessionId: string;
-  evidencia: string;
-  retroalimentacion: string;
-}) {
+export async function insertAIObservation(input: { sessionId: string; evidencia: string; retroalimentacion: string }) {
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
   await db.insert(schema.observations).values({
@@ -72,11 +64,7 @@ export async function insertAIObservation(input: {
   return { id, createdAt };
 }
 
-export async function updateAIObservation(
-  id: string,
-  field: 'evidencia' | 'retroalimentacion',
-  value: string,
-) {
+export async function updateAIObservation(id: string, field: 'evidencia' | 'retroalimentacion', value: string) {
   await db
     .update(schema.observations)
     .set({ [field]: value })

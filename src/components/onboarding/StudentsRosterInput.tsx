@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 interface StudentsRosterInputProps {
   names: string[];
@@ -31,11 +31,7 @@ interface RosterHeaderActionsProps {
   onFileError: (err: string | null) => void;
 }
 
-export function RosterHeaderActions({
-  onFileImport,
-  fileError,
-  onFileError,
-}: RosterHeaderActionsProps) {
+export function RosterHeaderActions({ onFileImport, fileError, onFileError }: RosterHeaderActionsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -58,9 +54,7 @@ export function RosterHeaderActions({
 
   return (
     <div className="flex items-center gap-2">
-      {fileError && (
-        <span className="text-xs font-semibold text-coral-600">⚠ {fileError}</span>
-      )}
+      {fileError && <span className="text-xs font-semibold text-coral-600">⚠ {fileError}</span>}
       <input
         ref={fileInputRef}
         type="file"
@@ -71,7 +65,10 @@ export function RosterHeaderActions({
       />
       <button
         type="button"
-        onClick={() => { onFileError(null); fileInputRef.current?.click(); }}
+        onClick={() => {
+          onFileError(null);
+          fileInputRef.current?.click();
+        }}
         title="Importar desde Excel o CSV"
         className="flex items-center gap-1.5 rounded-xl border-2 border-cream-dark bg-white px-3 py-1.5 text-xs font-bold text-warm-700 transition-all duration-200 hover:border-lilac-300 hover:bg-lilac-50/60 active:scale-[0.97]"
       >
@@ -128,7 +125,6 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
 
   return (
     <div className="flex flex-col flex-1 min-h-0 gap-3">
-
       {/* Contador */}
       <p className="shrink-0 text-sm font-semibold text-warm-600">
         {validNames.length > 0
@@ -151,7 +147,10 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
                 {name}
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); removeChip(name); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeChip(name);
+                  }}
                   aria-label={`Quitar ${name}`}
                   className="flex h-4 w-4 items-center justify-center rounded-full text-lilac-500 hover:bg-lilac-300 hover:text-lilac-900 transition-colors text-xs font-bold"
                 >
@@ -170,9 +169,7 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           placeholder={
-            validNames.length === 0
-              ? 'Escribe un nombre y pulsa Enter, o pega la lista completa…'
-              : 'Añadir otro…'
+            validNames.length === 0 ? 'Escribe un nombre y pulsa Enter, o pega la lista completa…' : 'Añadir otro…'
           }
           className="w-full bg-transparent text-base text-warm-900 placeholder:text-warm-400 outline-none min-w-[120px]"
           autoComplete="off"
@@ -185,7 +182,6 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
         <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">Ctrl+V</kbd> pega toda la lista ·{' '}
         <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">⌫</kbd> borra el último
       </p>
-
     </div>
   );
 }

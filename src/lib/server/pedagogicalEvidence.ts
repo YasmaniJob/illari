@@ -26,8 +26,7 @@ Observación (${source}): ${observationText}`;
   return {
     evidencia: String(data.evidencia ?? observationText),
     retroalimentacion: String(
-      data.retroalimentacion ??
-        'Amplía la observación con detalles del contexto y del niño/a.',
+      data.retroalimentacion ?? 'Amplía la observación con detalles del contexto y del niño/a.',
     ),
   };
 }

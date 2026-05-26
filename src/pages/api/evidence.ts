@@ -1,9 +1,6 @@
 import type { APIRoute } from 'astro';
-import { requireUser } from '../../lib/server/auth';
-import {
-  insertAIObservation,
-  insertUserObservation,
-} from '../../lib/server/observations';
+import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
+import { insertAIObservation, insertUserObservation } from '../../lib/server/observations';
 import { generatePedagogicalEvidence } from '../../lib/server/pedagogicalEvidence';
 import { getSessionById } from '../../lib/server/sessions';
 
@@ -11,9 +8,7 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   const user = await requireUser(request);
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'No autenticado' }), { status: 401 });
-  }
+  if (!user) return unauthorizedResponse();
 
   try {
     const body = await request.json();
@@ -72,9 +67,6 @@ export const POST: APIRoute = async ({ request }) => {
     );
   } catch (e) {
     console.error(e);
-    return new Response(
-      JSON.stringify({ error: 'Error al generar evidencia' }),
-      { status: 500 },
-    );
+    return new Response(JSON.stringify({ error: 'Error al generar evidencia' }), { status: 500 });
   }
 };

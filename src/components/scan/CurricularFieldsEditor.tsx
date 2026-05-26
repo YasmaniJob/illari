@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
 import type { CurriculumRow } from '../../lib/curriculum';
-import {
-  getAreas,
-  getCapacidades,
-  getCompetencias,
-  getCriterios,
-} from '../../lib/curriculum';
+import { getAreas, getCapacidades, getCompetencias, getCriterios } from '../../lib/curriculum';
 import CustomSelect from '../ui/CustomSelect';
 
 export interface CurricularValues {
@@ -21,21 +16,14 @@ interface CurricularFieldsEditorProps {
   onChange: (values: CurricularValues) => void;
 }
 
-export default function CurricularFieldsEditor({
-  curriculum,
-  values,
-  onChange,
-}: CurricularFieldsEditorProps) {
+export default function CurricularFieldsEditor({ curriculum, values, onChange }: CurricularFieldsEditorProps) {
   const areas = useMemo(() => getAreas(curriculum), [curriculum]);
   const competencias = useMemo(
     () => (values.area ? getCompetencias(curriculum, values.area) : []),
     [curriculum, values.area],
   );
   const capacidades = useMemo(
-    () =>
-      values.area && values.competencia
-        ? getCapacidades(curriculum, values.area, values.competencia)
-        : [],
+    () => (values.area && values.competencia ? getCapacidades(curriculum, values.area, values.competencia) : []),
     [curriculum, values.area, values.competencia],
   );
   const criterios = useMemo(
@@ -59,9 +47,7 @@ export default function CurricularFieldsEditor({
         label="Área"
         value={values.area}
         options={areas}
-        onChange={(area) =>
-          patch({ area, competencia: '', capacidad: '', criterio: '' })
-        }
+        onChange={(area) => patch({ area, competencia: '', capacidad: '', criterio: '' })}
       />
       <CustomSelect
         label="Competencia"

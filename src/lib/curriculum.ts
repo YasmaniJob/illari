@@ -18,7 +18,7 @@ export function parseCurriculumCsv(raw: string): CurriculumRow[] {
       cols.forEach((col, i) => {
         row[col] = values[i] ?? '';
       });
-      return row as CurriculumRow;
+      return row as unknown as CurriculumRow;
     });
 }
 
@@ -31,37 +31,17 @@ export function getAreas(data: CurriculumRow[]): string[] {
 }
 
 export function getCompetencias(data: CurriculumRow[], area: string): string[] {
-  return uniqueSorted(
-    data.filter((r) => r.area === area).map((r) => r.competencia),
-  );
+  return uniqueSorted(data.filter((r) => r.area === area).map((r) => r.competencia));
 }
 
-export function getCapacidades(
-  data: CurriculumRow[],
-  area: string,
-  competencia: string,
-): string[] {
-  return uniqueSorted(
-    data
-      .filter((r) => r.area === area && r.competencia === competencia)
-      .map((r) => r.capacidad),
-  );
+export function getCapacidades(data: CurriculumRow[], area: string, competencia: string): string[] {
+  return uniqueSorted(data.filter((r) => r.area === area && r.competencia === competencia).map((r) => r.capacidad));
 }
 
-export function getCriterios(
-  data: CurriculumRow[],
-  area: string,
-  competencia: string,
-  capacidad: string,
-): string[] {
+export function getCriterios(data: CurriculumRow[], area: string, competencia: string, capacidad: string): string[] {
   return uniqueSorted(
     data
-      .filter(
-        (r) =>
-          r.area === area &&
-          r.competencia === competencia &&
-          r.capacidad === capacidad,
-      )
+      .filter((r) => r.area === area && r.competencia === competencia && r.capacidad === capacidad)
       .map((r) => r.criterio),
   );
 }

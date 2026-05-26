@@ -27,13 +27,9 @@ export default function AICard({ message, onUpdate }: AICardProps) {
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lilac-600 text-lg font-extrabold text-white">
             ✨
           </span>
-          <span className="text-xl font-extrabold text-warm-900 text-left">
-            Apoyo pedagógico
-          </span>
+          <span className="text-xl font-extrabold text-warm-900 text-left">Apoyo pedagógico</span>
         </div>
-        <time className="text-base font-semibold text-warm-500 shrink-0">
-          {message.timestamp}
-        </time>
+        <time className="text-base font-semibold text-warm-500 shrink-0">{message.timestamp}</time>
       </button>
 
       {expanded && (

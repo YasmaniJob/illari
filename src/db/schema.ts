@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 /** Tablas Better Auth */
 export const user = sqliteTable('user', {
@@ -52,44 +52,56 @@ export const verification = sqliteTable('verification', {
 });
 
 /** Sesiones de aula (Illari) */
-export const classSessions = sqliteTable('class_sessions', {
-  id: text('id').primaryKey(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id),
-  titulo: text('titulo'),
-  grado: text('grado'),
-  seccion: text('seccion'),
-  area: text('area').notNull(),
-  competencia: text('competencia').notNull(),
-  capacidad: text('capacidad').notNull(),
-  criterio: text('criterio').notNull(),
-  proposito: text('proposito').notNull().default(''),
-  status: text('status', { enum: ['active', 'completed'] }).notNull(),
-  createdAt: text('created_at').notNull(),
-});
+export const classSessions = sqliteTable(
+  'class_sessions',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id),
+    titulo: text('titulo'),
+    grado: text('grado'),
+    seccion: text('seccion'),
+    area: text('area').notNull(),
+    competencia: text('competencia').notNull(),
+    capacidad: text('capacidad').notNull(),
+    criterio: text('criterio').notNull(),
+    proposito: text('proposito').notNull().default(''),
+    status: text('status', { enum: ['active', 'completed'] }).notNull(),
+    createdAt: text('created_at').notNull(),
+  },
+  (table) => [index('idx_sessions_user_id').on(table.userId)],
+);
 
-export const students = sqliteTable('students', {
-  id: text('id').primaryKey(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id),
-  grado: text('grado').notNull(),
-  seccion: text('seccion').notNull(),
-  name: text('name').notNull(),
-  active: integer('active', { mode: 'boolean' }).notNull().default(true),
-  createdAt: text('created_at').notNull(),
-});
+export const students = sqliteTable(
+  'students',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id),
+    grado: text('grado').notNull(),
+    seccion: text('seccion').notNull(),
+    name: text('name').notNull(),
+    active: integer('active', { mode: 'boolean' }).notNull().default(true),
+    createdAt: text('created_at').notNull(),
+  },
+  (table) => [index('idx_students_aula').on(table.userId, table.grado, table.seccion)],
+);
 
-export const observations = sqliteTable('observations', {
-  id: text('id').primaryKey(),
-  sessionId: text('session_id')
-    .notNull()
-    .references(() => classSessions.id),
-  type: text('type', { enum: ['user', 'ai'] }).notNull(),
-  text: text('text'),
-  evidencia: text('evidencia'),
-  retroalimentacion: text('retroalimentacion'),
-  studentName: text('student_name'),
-  createdAt: text('created_at').notNull(),
-});
+export const observations = sqliteTable(
+  'observations',
+  {
+    id: text('id').primaryKey(),
+    sessionId: text('session_id')
+      .notNull()
+      .references(() => classSessions.id),
+    type: text('type', { enum: ['user', 'ai'] }).notNull(),
+    text: text('text'),
+    evidencia: text('evidencia'),
+    retroalimentacion: text('retroalimentacion'),
+    studentName: text('student_name'),
+    createdAt: text('created_at').notNull(),
+  },
+  (table) => [index('idx_obs_session_id').on(table.sessionId)],
+);

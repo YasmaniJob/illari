@@ -1,6 +1,6 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
 import LoginForm from '../components/auth/LoginForm';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
 const redirect = Astro.url.searchParams.get('redirect') ?? '/';
 const initialMode = Astro.url.searchParams.has('register') ? 'register' : 'login';

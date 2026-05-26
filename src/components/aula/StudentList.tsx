@@ -9,13 +9,7 @@ interface StudentListProps {
 
 function Avatar({ name }: { name: string }) {
   const initial = name.charAt(0).toUpperCase();
-  const colors = [
-    'bg-coral-500',
-    'bg-lilac-500',
-    'bg-sky-300',
-    'bg-honey-400',
-    'bg-mint-400',
-  ];
+  const colors = ['bg-coral-500', 'bg-lilac-500', 'bg-sky-300', 'bg-honey-400', 'bg-mint-400'];
   const idx = name.charCodeAt(0) % colors.length;
   return (
     <span
@@ -26,18 +20,11 @@ function Avatar({ name }: { name: string }) {
   );
 }
 
-export default function StudentList({
-  students,
-  selectedId,
-  onSelect,
-  variant,
-}: StudentListProps) {
+export default function StudentList({ students, selectedId, onSelect, variant }: StudentListProps) {
   if (variant === 'carousel') {
     return (
       <div className="md:hidden">
-        <p className="text-lg font-extrabold text-warm-900 mb-3 px-1">
-          Mis pequeños
-        </p>
+        <p className="text-lg font-extrabold text-warm-900 mb-3 px-1">Mis pequeños</p>
         <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
           {students.map((student) => (
             <button
@@ -54,10 +41,7 @@ export default function StudentList({
               <Avatar name={student.name} />
               <span className="text-base font-bold text-warm-900">{student.name}</span>
               <span
-                className={[
-                  'h-2.5 w-2.5 rounded-full',
-                  student.active ? 'bg-mint-400' : 'bg-cream-dark',
-                ].join(' ')}
+                className={['h-2.5 w-2.5 rounded-full', student.active ? 'bg-mint-400' : 'bg-cream-dark'].join(' ')}
                 title={student.active ? 'Participando' : 'En espera'}
               />
             </button>
@@ -90,18 +74,15 @@ export default function StudentList({
             >
               <Avatar name={student.name} />
               <div className="min-w-0 flex-1">
-                <span className="text-xl font-bold text-warm-900 block truncate">
-                  {student.name}
-                </span>
+                <span className="text-xl font-bold text-warm-900 block truncate">{student.name}</span>
                 <span className="text-base font-semibold text-warm-500">
                   {student.active ? 'Participando' : 'En espera'}
                 </span>
               </div>
               <span
-                className={[
-                  'h-3 w-3 rounded-full shrink-0',
-                  student.active ? 'bg-mint-400' : 'bg-cream-dark',
-                ].join(' ')}
+                className={['h-3 w-3 rounded-full shrink-0', student.active ? 'bg-mint-400' : 'bg-cream-dark'].join(
+                  ' ',
+                )}
               />
             </button>
           </li>

@@ -7,20 +7,12 @@ export interface StudentRow {
   active: boolean;
 }
 
-export async function listStudentsForClass(
-  userId: string,
-  grado: string,
-  seccion: string,
-): Promise<StudentRow[]> {
+export async function listStudentsForClass(userId: string, grado: string, seccion: string): Promise<StudentRow[]> {
   const rows = await db
     .select()
     .from(schema.students)
     .where(
-      and(
-        eq(schema.students.userId, userId),
-        eq(schema.students.grado, grado),
-        eq(schema.students.seccion, seccion),
-      ),
+      and(eq(schema.students.userId, userId), eq(schema.students.grado, grado), eq(schema.students.seccion, seccion)),
     )
     .orderBy(asc(schema.students.name));
 
@@ -38,20 +30,12 @@ export async function saveStudentsRoster(
   seccion: string,
   names: string[],
 ): Promise<StudentRow[]> {
-  const unique = [
-    ...new Set(
-      names.map((n) => n.trim()).filter((n) => n.length >= 2),
-    ),
-  ];
+  const unique = [...new Set(names.map((n) => n.trim()).filter((n) => n.length >= 2))];
 
   await db
     .delete(schema.students)
     .where(
-      and(
-        eq(schema.students.userId, userId),
-        eq(schema.students.grado, grado),
-        eq(schema.students.seccion, seccion),
-      ),
+      and(eq(schema.students.userId, userId), eq(schema.students.grado, grado), eq(schema.students.seccion, seccion)),
     );
 
   if (unique.length === 0) return [];

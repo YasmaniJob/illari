@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { GRADOS, SECCIONES } from '../../lib/classroom';
 import { fetchStudents, saveStudents } from '../../lib/api/client';
-import SelectionCards from '../ui/SelectionCards';
+import { GRADOS, SECCIONES } from '../../lib/classroom';
 import StudentsRosterInput from '../onboarding/StudentsRosterInput';
+import SelectionCards from '../ui/SelectionCards';
 
 export default function ManageClassRoster() {
   const [grado, setGrado] = useState('');
@@ -60,34 +60,18 @@ export default function ManageClassRoster() {
   return (
     <div className="mx-auto max-w-xl flex flex-col gap-6">
       <header>
-        <a
-          href="/"
-          className="inline-flex items-center gap-1.5 text-base font-bold text-warm-700 hover:text-coral-600"
-        >
+        <a href="/" className="inline-flex items-center gap-1.5 text-base font-bold text-warm-700 hover:text-coral-600">
           ← Inicio
         </a>
         <h1 className="text-display mt-4">Mis pequeños</h1>
         <p className="text-lead mt-3">
-          Registra los nombres reales de tu aula por grado y sección. Se usan en el aula
-          en vivo.
+          Registra los nombres reales de tu aula por grado y sección. Se usan en el aula en vivo.
         </p>
       </header>
 
       <div className="card-warm p-6 space-y-5">
-        <SelectionCards
-          label="Grado"
-          value={grado}
-          options={GRADOS}
-          onChange={setGrado}
-          columns={3}
-        />
-        <SelectionCards
-          label="Sección"
-          value={seccion}
-          options={SECCIONES}
-          onChange={setSeccion}
-          columns={4}
-        />
+        <SelectionCards label="Grado" value={grado} options={GRADOS} onChange={setGrado} columns={3} />
+        <SelectionCards label="Sección" value={seccion} options={SECCIONES} onChange={setSeccion} columns={4} />
 
         {grado && seccion && (
           <>

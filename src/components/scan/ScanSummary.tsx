@@ -65,9 +65,7 @@ export default function ScanSummary({
       <header className="shrink-0 mb-3">
         <p className="text-lg font-bold text-coral-600">Fase 4 — Revisión</p>
         <h2 className="text-2xl font-extrabold text-warm-900 mt-0.5">Resumen capturado</h2>
-        <p className="text-sm text-warm-700 mt-1">
-          Sin foto guardada. Ajusta lo necesario y pasa al aula.
-        </p>
+        <p className="text-sm text-warm-700 mt-1">Sin foto guardada. Ajusta lo necesario y pasa al aula.</p>
       </header>
 
       <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1">
@@ -96,23 +94,14 @@ export default function ScanSummary({
           </p>
         )}
 
-        <CurricularFieldsEditor
-          curriculum={curriculum}
-          values={curricular}
-          onChange={onCurricularChange}
-        />
+        <CurricularFieldsEditor curriculum={curriculum} values={curricular} onChange={onCurricularChange} />
       </div>
 
       <footer className="shrink-0 flex flex-col sm:flex-row gap-3 pt-3 border-t-2 border-cream-dark">
         <button type="button" onClick={onRescan} className="btn-secondary flex-1 py-3.5 text-base">
           Fase 1 · Reescanear
         </button>
-        <button
-          type="button"
-          onClick={onStart}
-          disabled={!canStart}
-          className="btn-primary flex-1 py-3.5 text-base"
-        >
+        <button type="button" onClick={onStart} disabled={!canStart} className="btn-primary flex-1 py-3.5 text-base">
           Fase 5 · Empezar sesión
         </button>
       </footer>

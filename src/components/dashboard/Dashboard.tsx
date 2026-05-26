@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-
-import type { SessionConfig } from '../../lib/curriculum';
 import { fetchSessions } from '../../lib/api/client';
+import type { SessionConfig } from '../../lib/curriculum';
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat('es-PE', {
@@ -29,16 +28,12 @@ export default function Dashboard({ userName }: DashboardProps) {
 
   return (
     <div className="h-full flex overflow-hidden">
-
       {/* ── ÁREA PRINCIPAL (70%) ── */}
       <div className="flex-1 flex flex-col items-center justify-center px-10 py-8 gap-8">
-
         {/* Saludo contextual */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-warm-900 tracking-tight leading-tight">
-            {isLoggedIn
-              ? `Hola, ${userName!.split(' ')[0]} 👋`
-              : 'Tu cuaderno de campo'}
+            {isLoggedIn ? `Hola, ${userName!.split(' ')[0]} 👋` : 'Tu cuaderno de campo'}
           </h1>
           <p className="mt-2 text-lg text-warm-700">
             {isLoggedIn
@@ -53,7 +48,9 @@ export default function Dashboard({ userName }: DashboardProps) {
           className="group flex flex-col items-center gap-4 w-full max-w-sm rounded-3xl bg-gradient-to-br from-coral-500 to-coral-600 px-10 py-8 text-white shadow-[0_8px_32px_-4px_rgba(224,122,95,0.5)] transition-all duration-200 hover:shadow-[0_12px_40px_-4px_rgba(224,122,95,0.6)] hover:scale-[1.02] active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-coral-500/30"
           aria-label="Crear nuevo registro de campo"
         >
-          <span className="text-5xl" aria-hidden>➕</span>
+          <span className="text-5xl" aria-hidden>
+            ➕
+          </span>
           <span className="text-2xl font-extrabold tracking-tight text-center leading-snug">
             Crear nuevo registro de campo
           </span>
@@ -62,14 +59,17 @@ export default function Dashboard({ userName }: DashboardProps) {
           </span>
           <span className="mt-1 flex items-center gap-2 text-base font-bold bg-white/20 rounded-2xl px-5 py-2 group-hover:bg-white/30 transition-colors">
             Comenzar ahora
-            <svg className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <svg
+              className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </span>
         </a>
-
-
-
       </div>
 
       {/* ── DIVISOR VERTICAL ── */}
@@ -77,10 +77,11 @@ export default function Dashboard({ userName }: DashboardProps) {
 
       {/* ── PANEL LATERAL DE HISTORIAL (30%) ── */}
       <aside className="w-[320px] shrink-0 flex flex-col bg-[#fdf8f4] overflow-hidden">
-
         <div className="px-6 pt-6 pb-4 border-b border-cream-dark">
           <div className="flex items-center gap-2">
-            <span className="text-xl" aria-hidden>📖</span>
+            <span className="text-xl" aria-hidden>
+              📖
+            </span>
             <h2 className="text-base font-extrabold text-warm-900">Mis clases anteriores</h2>
           </div>
         </div>
@@ -89,7 +90,9 @@ export default function Dashboard({ userName }: DashboardProps) {
           {isLoggedIn ? (
             sessions.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full gap-3 text-center px-4">
-                <span className="text-4xl" aria-hidden>🌱</span>
+                <span className="text-4xl" aria-hidden>
+                  🌱
+                </span>
                 <p className="text-sm font-semibold text-warm-700 leading-relaxed">
                   Todavía no guardaste ninguna clase. ¡La primera será especial!
                 </p>
@@ -107,9 +110,7 @@ export default function Dashboard({ userName }: DashboardProps) {
                           {session.grado} · Sección {session.seccion}
                         </p>
                       )}
-                      <p className="text-sm font-bold text-warm-900 line-clamp-1">
-                        {session.titulo || session.area}
-                      </p>
+                      <p className="text-sm font-bold text-warm-900 line-clamp-1">{session.titulo || session.area}</p>
                       <div className="flex items-center justify-between gap-2 mt-0.5">
                         <span
                           className={[
@@ -133,10 +134,12 @@ export default function Dashboard({ userName }: DashboardProps) {
           ) : (
             /* Usuario no logueado: invitación discreta */
             <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-4">
-              <span className="text-4xl" aria-hidden>☁️</span>
+              <span className="text-4xl" aria-hidden>
+                ☁️
+              </span>
               <p className="text-sm text-warm-700 leading-relaxed">
-                <span className="font-bold text-warm-900">Guarda tu historial en la nube.</span>{' '}
-                Crea una cuenta gratis para recuperar tus clases desde cualquier dispositivo.
+                <span className="font-bold text-warm-900">Guarda tu historial en la nube.</span> Crea una cuenta gratis
+                para recuperar tus clases desde cualquier dispositivo.
               </p>
               <div className="flex flex-col gap-2 w-full">
                 <a
@@ -155,9 +158,7 @@ export default function Dashboard({ userName }: DashboardProps) {
             </div>
           )}
         </div>
-
       </aside>
-
     </div>
   );
 }

@@ -1,14 +1,12 @@
 import type { APIRoute } from 'astro';
-import { requireUser } from '../../../lib/server/auth';
+import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
 import { updateAIObservation } from '../../../lib/server/observations';
 
 export const prerender = false;
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   const user = await requireUser(request);
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'No autenticado' }), { status: 401 });
-  }
+  if (!user) return unauthorizedResponse();
 
   const id = params.id;
   if (!id) {

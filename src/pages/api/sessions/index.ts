@@ -1,17 +1,12 @@
 import type { APIRoute } from 'astro';
-import { requireUser } from '../../../lib/server/auth';
-import {
-  createClassSession,
-  listSessionsForUser,
-} from '../../../lib/server/sessions';
+import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
+import { createClassSession, listSessionsForUser } from '../../../lib/server/sessions';
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request }) => {
   const user = await requireUser(request);
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'No autenticado' }), { status: 401 });
-  }
+  if (!user) return unauthorizedResponse();
   const sessions = await listSessionsForUser(user.id);
   return new Response(JSON.stringify({ sessions }), {
     headers: { 'Content-Type': 'application/json' },
@@ -20,9 +15,7 @@ export const GET: APIRoute = async ({ request }) => {
 
 export const POST: APIRoute = async ({ request }) => {
   const user = await requireUser(request);
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'No autenticado' }), { status: 401 });
-  }
+  if (!user) return unauthorizedResponse();
 
   const body = await request.json();
   const session = await createClassSession(user.id, {

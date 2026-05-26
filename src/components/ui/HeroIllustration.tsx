@@ -1,10 +1,6 @@
 export default function HeroIllustration() {
   return (
-    <svg
-      viewBox="0 0 200 160"
-      className="w-full max-w-[220px] mx-auto sm:mx-0"
-      aria-hidden
-    >
+    <svg viewBox="0 0 200 160" className="w-full max-w-[220px] mx-auto sm:mx-0" aria-hidden>
       <circle cx="100" cy="48" r="32" fill="#FDE68A" />
       <circle cx="100" cy="48" r="24" fill="#FBBF24" opacity="0.6" />
       <rect x="55" y="95" width="90" height="50" rx="16" fill="#EDE9FE" />

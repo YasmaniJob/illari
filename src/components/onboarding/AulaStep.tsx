@@ -66,7 +66,6 @@ export default function AulaStep({ grado, seccion, onGradoChange, onSeccionChang
 
   return (
     <div className="flex flex-col flex-1 min-h-0 justify-center gap-8">
-
       {/* ── Grado: cards verticales grandes ── */}
       <div>
         <div className="grid grid-cols-3 gap-4">
@@ -88,8 +87,12 @@ export default function AulaStep({ grado, seccion, onGradoChange, onSeccionChang
                 ].join(' ')}
                 aria-pressed={isActive}
               >
-                <span className="text-4xl leading-none" aria-hidden>{cfg.emoji}</span>
-                <span className={`text-base font-extrabold leading-tight text-center ${isActive ? '' : 'text-warm-700'}`}>
+                <span className="text-4xl leading-none" aria-hidden>
+                  {cfg.emoji}
+                </span>
+                <span
+                  className={`text-base font-extrabold leading-tight text-center ${isActive ? '' : 'text-warm-700'}`}
+                >
                   {g}
                 </span>
               </button>
@@ -155,7 +158,6 @@ export default function AulaStep({ grado, seccion, onGradoChange, onSeccionChang
           </div>
         )}
       </div>
-
     </div>
   );
 }

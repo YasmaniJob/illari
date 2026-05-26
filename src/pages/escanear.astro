@@ -1,7 +1,7 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
 import ScanSessionFlow from '../components/scan/ScanSessionFlow';
 import curriculoRaw from '../data/curriculo.csv?raw';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { parseCurriculumCsv } from '../lib/curriculum';
 
 const curriculum = parseCurriculumCsv(curriculoRaw);

@@ -1,16 +1,10 @@
 import type { APIRoute } from 'astro';
 import curriculoRaw from '../../data/curriculo.csv?raw';
 import { GRADOS, SECCIONES } from '../../lib/classroom';
-import { buildCatalogPromptAppendix } from '../../lib/scan/catalog';
-import {
-  matchScanToCurriculum,
-  type ExtractedScanFields,
-} from '../../lib/curriculumMatch';
 import { parseCurriculumCsv } from '../../lib/curriculum';
-import {
-  GeminiNotConfiguredError,
-  geminiVisionJson,
-} from '../../lib/server/googleGemini';
+import { type ExtractedScanFields, matchScanToCurriculum } from '../../lib/curriculumMatch';
+import { buildCatalogPromptAppendix } from '../../lib/scan/catalog';
+import { GeminiNotConfiguredError, geminiVisionJson } from '../../lib/server/googleGemini';
 
 export const prerender = false;
 
@@ -32,10 +26,7 @@ Extrae SOLO texto visible. Responde JSON válido sin markdown:
 Usa cadena vacía si no encuentras el campo.
 ${CATALOG_APPENDIX}`;
 
-async function extractWithVision(
-  imageBase64: string,
-  mimeType: string,
-): Promise<ExtractedScanFields> {
+async function extractWithVision(imageBase64: string, mimeType: string): Promise<ExtractedScanFields> {
   const data = await geminiVisionJson(EXTRACT_PROMPT, imageBase64, mimeType);
 
   return {
@@ -70,12 +61,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const extracted = await extractWithVision(imageBase64, mimeType);
-    const matched = matchScanToCurriculum(
-      extracted,
-      curriculum,
-      [...GRADOS],
-      [...SECCIONES],
-    );
+    const matched = matchScanToCurriculum(extracted, curriculum, [...GRADOS], [...SECCIONES]);
 
     return new Response(
       JSON.stringify({

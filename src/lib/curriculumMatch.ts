@@ -38,7 +38,11 @@ function normalize(text: string): string {
 }
 
 function tokenSet(text: string): Set<string> {
-  return new Set(normalize(text).split(' ').filter((t) => t.length > 2));
+  return new Set(
+    normalize(text)
+      .split(' ')
+      .filter((t) => t.length > 0),
+  );
 }
 
 /** Similitud 0–1 por solapamiento de tokens + inclusión */
@@ -60,11 +64,7 @@ export function similarityScore(a: string, b: string): number {
   return inter / Math.max(ta.size, tb.size);
 }
 
-export function bestMatch(
-  query: string | undefined,
-  candidates: string[],
-  minScore = 0.35,
-): MatchedField | null {
+export function bestMatch(query: string | undefined, candidates: string[], minScore = 0.35): MatchedField | null {
   if (!query?.trim()) return null;
 
   let best = { value: '', score: 0 };
@@ -81,10 +81,7 @@ export function bestMatch(
   };
 }
 
-function fieldOrEmpty(
-  matched: MatchedField | null,
-  fallback?: string,
-): MatchedField {
+function fieldOrEmpty(matched: MatchedField | null, fallback?: string): MatchedField {
   if (matched) return matched;
   if (fallback?.trim()) {
     return {
@@ -104,28 +101,16 @@ export function matchScanToCurriculum(
 ): MatchedScanResult {
   const areas = [...new Set(curriculum.map((r) => r.area))];
   const allCompetencias = [...new Set(curriculum.map((r) => r.competencia))];
-  const allCapacidades = [...new Set(curriculum.map((r) => r.capacidad))];
-  const allCriterios = [...new Set(curriculum.map((r) => r.criterio))];
 
   const areaMatch =
-    bestMatch(extracted.area, areas) ??
-    (extracted.competencia
-      ? bestMatch(
-          extracted.competencia,
-          areas,
-          0.2,
-        )
-      : null);
+    bestMatch(extracted.area, areas) ?? (extracted.competencia ? bestMatch(extracted.competencia, areas, 0.2) : null);
 
   const area = areaMatch?.value ?? '';
   const competenciasInArea = area
     ? curriculum.filter((r) => r.area === area).map((r) => r.competencia)
     : allCompetencias;
 
-  const competenciaMatch = bestMatch(
-    extracted.competencia,
-    [...new Set(competenciasInArea)],
-  );
+  const competenciaMatch = bestMatch(extracted.competencia, [...new Set(competenciasInArea)]);
 
   const competencia = competenciaMatch?.value ?? '';
   const capacidadesInBranch = curriculum
@@ -148,13 +133,13 @@ export function matchScanToCurriculum(
 
   const row =
     area && competencia && capacidad && criterioMatch?.value
-      ? curriculum.find(
+      ? (curriculum.find(
           (r) =>
             r.area === area &&
             r.competencia === competencia &&
             r.capacidad === capacidad &&
             r.criterio === criterioMatch.value,
-        ) ?? null
+        ) ?? null)
       : null;
 
   return {

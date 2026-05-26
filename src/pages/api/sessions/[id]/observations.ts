@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { requireUser } from '../../../../lib/server/auth';
+import { requireUser, unauthorizedResponse } from '../../../../lib/server/auth';
 import { listObservations } from '../../../../lib/server/observations';
 import { getSessionById } from '../../../../lib/server/sessions';
 
@@ -7,9 +7,7 @@ export const prerender = false;
 
 export const GET: APIRoute = async ({ params, request }) => {
   const user = await requireUser(request);
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'No autenticado' }), { status: 401 });
-  }
+  if (!user) return unauthorizedResponse();
 
   const sessionId = params.id;
   if (!sessionId) {

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
-import type { CurriculumRow } from '../../lib/curriculum';
 import { createSession } from '../../lib/api/client';
+import type { CurriculumRow } from '../../lib/curriculum';
 import type { MatchedScanResult } from '../../lib/curriculumMatch';
 import { validateCurricularRow } from '../../lib/scan/catalog';
 import { compressImageForScan } from '../../lib/scan/compressImage';
@@ -172,23 +172,19 @@ export default function ScanSessionFlow({ curriculum }: ScanSessionFlowProps) {
             aria-hidden
           />
           <p className="text-lg font-extrabold text-warm-900">
-            {processingStep === 'extract'
-              ? 'Fase 2 · Leyendo planificación…'
-              : 'Fase 3 · Cruzando con catálogo CNEB…'}
+            {processingStep === 'extract' ? 'Fase 2 · Leyendo planificación…' : 'Fase 3 · Cruzando con catálogo CNEB…'}
           </p>
           <p className="text-sm text-warm-700 mt-2 max-w-xs">
-            {processingStep === 'extract'
-              ? 'Extracción en memoria con Gemini.'
-              : 'Emparejando con data/curriculo.csv.'}
+            {processingStep === 'extract' ? 'Extracción en memoria con Gemini.' : 'Emparejando con data/curriculo.csv.'}
           </p>
         </div>
       ) : (
         <div className="card-warm flex flex-1 flex-col items-center justify-center p-6 text-center gap-5 min-h-0">
-          <span className="text-4xl" aria-hidden>📷</span>
+          <span className="text-4xl" aria-hidden>
+            📷
+          </span>
           <p className="text-lg font-extrabold text-warm-900">Fase 1 · Captura</p>
-          <p className="text-sm text-warm-600 max-w-xs">
-            Enfoca título, competencia, capacidad y criterio de la hoja.
-          </p>
+          <p className="text-sm text-warm-600 max-w-xs">Enfoca título, competencia, capacidad y criterio de la hoja.</p>
           <input
             ref={inputRef}
             type="file"
@@ -208,7 +204,9 @@ export default function ScanSessionFlow({ curriculum }: ScanSessionFlowProps) {
             Completar manualmente (wizard)
           </a>
           {error && (
-            <p className="text-sm font-semibold text-coral-600" role="alert">{error}</p>
+            <p className="text-sm font-semibold text-coral-600" role="alert">
+              {error}
+            </p>
           )}
         </div>
       )}

@@ -38,9 +38,7 @@ export default function CustomSelect({
       left: rect.left,
       width: rect.width,
       zIndex: 9999,
-      ...(showAbove
-        ? { bottom: window.innerHeight - rect.top + 4 }
-        : { top: rect.bottom + 4 }),
+      ...(showAbove ? { bottom: window.innerHeight - rect.top + 4 } : { top: rect.bottom + 4 }),
     });
     setOpen(true);
   }
@@ -65,54 +63,55 @@ export default function CustomSelect({
   // Recalcula posición si el scroll cambia mientras está abierto
   useEffect(() => {
     if (!open) return;
-    function handleScroll() { setOpen(false); }
+    function handleScroll() {
+      setOpen(false);
+    }
     window.addEventListener('scroll', handleScroll, true);
     return () => window.removeEventListener('scroll', handleScroll, true);
   }, [open]);
 
   const display = value || placeholder;
 
-  const dropdown = open && options.length > 0 ? (
-    <ul
-      id={listId}
-      role="listbox"
-      style={dropdownStyle}
-      className="max-h-64 overflow-auto rounded-2xl border-2 border-cream-dark bg-white py-2 shadow-[0_12px_32px_-8px_rgba(61,44,41,0.18)]"
-    >
-      {options.map((opt) => (
-        <li key={opt} role="option" aria-selected={value === opt}>
-          <button
-            type="button"
-            onMouseDown={(e) => {
-              // mousedown antes del blur para que el click se registre
-              e.preventDefault();
-              onChange(opt);
-              setOpen(false);
-            }}
-            className={[
-              'flex w-full items-start gap-3 px-5 py-4 text-left text-lg transition-colors duration-200',
-              value === opt
-                ? 'bg-lilac-100 text-lilac-600 font-bold'
-                : 'text-warm-900 hover:bg-cream font-medium',
-            ].join(' ')}
-          >
-            {value === opt && (
-              <svg
-                className="mt-1 h-5 w-5 shrink-0 text-lilac-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={3}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            )}
-            <span className={value === opt ? '' : 'pl-8'}>{opt}</span>
-          </button>
-        </li>
-      ))}
-    </ul>
-  ) : null;
+  const dropdown =
+    open && options.length > 0 ? (
+      <ul
+        id={listId}
+        role="listbox"
+        style={dropdownStyle}
+        className="max-h-64 overflow-auto rounded-2xl border-2 border-cream-dark bg-white py-2 shadow-[0_12px_32px_-8px_rgba(61,44,41,0.18)]"
+      >
+        {options.map((opt) => (
+          <li key={opt} role="option" aria-selected={value === opt}>
+            <button
+              type="button"
+              onMouseDown={(e) => {
+                // mousedown antes del blur para que el click se registre
+                e.preventDefault();
+                onChange(opt);
+                setOpen(false);
+              }}
+              className={[
+                'flex w-full items-start gap-3 px-5 py-4 text-left text-lg transition-colors duration-200',
+                value === opt ? 'bg-lilac-100 text-lilac-600 font-bold' : 'text-warm-900 hover:bg-cream font-medium',
+              ].join(' ')}
+            >
+              {value === opt && (
+                <svg
+                  className="mt-1 h-5 w-5 shrink-0 text-lilac-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={3}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+              <span className={value === opt ? '' : 'pl-8'}>{opt}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    ) : null;
 
   return (
     <div className="relative w-full">
@@ -125,14 +124,12 @@ export default function CustomSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
-        onClick={() => open ? setOpen(false) : openDropdown()}
+        onClick={() => (open ? setOpen(false) : openDropdown())}
         className={[
           'flex w-full min-h-[3.25rem] items-center justify-between gap-3 rounded-2xl border-2 border-cream-dark',
           'bg-white px-4 py-3 text-left text-base shadow-[0_2px_10px_-2px_rgba(61,44,41,0.08)]',
           'focus-ring-warm transition-all duration-200',
-          disabled
-            ? 'cursor-not-allowed opacity-50'
-            : 'cursor-pointer hover:border-coral-500/40',
+          disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:border-coral-500/40',
           value ? 'text-warm-900 font-semibold' : 'text-warm-500',
         ].join(' ')}
       >

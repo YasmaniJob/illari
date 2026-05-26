@@ -10,8 +10,7 @@ export const GET: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
     });
   }
-  return new Response(
-    JSON.stringify({ user: { id: user.id, name: user.name, email: user.email } }),
-    { headers: { 'Content-Type': 'application/json' } },
-  );
+  return new Response(JSON.stringify({ user: { id: user.id, name: user.name, email: user.email } }), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 };

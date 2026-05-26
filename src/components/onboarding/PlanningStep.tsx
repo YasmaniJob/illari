@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo, useCallback } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { CurriculumRow } from '../../lib/curriculum';
 import { getAreas, getCapacidades, getCompetencias } from '../../lib/curriculum';
 import CustomSelect from '../ui/CustomSelect';
@@ -52,14 +52,17 @@ export function ScanHeaderAction({ scanning, scanDone, scanError, onScan }: Scan
           scanning ? 'opacity-70 cursor-wait' : 'cursor-pointer active:scale-[0.97]',
         ].join(' ')}
       >
-        {scanning
-          ? <span className="h-3 w-3 rounded-full border-2 border-lilac-500 border-t-transparent animate-spin block" aria-hidden />
-          : <span aria-hidden>{scanDone ? '✅' : '📷'}</span>}
+        {scanning ? (
+          <span
+            className="h-3 w-3 rounded-full border-2 border-lilac-500 border-t-transparent animate-spin block"
+            aria-hidden
+          />
+        ) : (
+          <span aria-hidden>{scanDone ? '✅' : '📷'}</span>
+        )}
         {scanning ? 'Leyendo…' : scanDone ? 'Completado' : 'Escanear'}
       </button>
-      {scanError && (
-        <span className="text-[10px] font-semibold text-coral-600">⚠ {scanError}</span>
-      )}
+      {scanError && <span className="text-[10px] font-semibold text-coral-600">⚠ {scanError}</span>}
     </div>
   );
 }
@@ -102,7 +105,10 @@ function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
 
   function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
     const text = e.clipboardData.getData('text');
-    const lines = text.split(/[\n\r,;]+/).map((s) => s.trim()).filter((s) => s.length >= 2);
+    const lines = text
+      .split(/[\n\r,;]+/)
+      .map((s) => s.trim())
+      .filter((s) => s.length >= 2);
     if (lines.length > 1) {
       e.preventDefault();
       const merged = [...new Set([...validCriterios, ...lines])];
@@ -126,7 +132,10 @@ function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
               {c}
               <button
                 type="button"
-                onClick={(e) => { e.stopPropagation(); removeAt(i); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeAt(i);
+                }}
                 aria-label={`Quitar criterio: ${c}`}
                 className="flex h-4 w-4 items-center justify-center rounded-full text-coral-400 hover:bg-coral-500/20 hover:text-coral-700 transition-colors font-bold text-xs"
               >
@@ -143,11 +152,7 @@ function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
-        placeholder={
-          validCriterios.length === 0
-            ? 'Escribe un criterio y pulsa Enter…'
-            : 'Añadir otro criterio…'
-        }
+        placeholder={validCriterios.length === 0 ? 'Escribe un criterio y pulsa Enter…' : 'Añadir otro criterio…'}
         className="w-full bg-transparent text-sm text-warm-900 placeholder:text-warm-400 outline-none"
         autoComplete="off"
       />
@@ -158,7 +163,6 @@ function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 export default function PlanningStep({ curriculum, values, onChange }: PlanningStepProps) {
-
   // Cascada curricular
   const areas = useMemo(() => getAreas(curriculum), [curriculum]);
 
@@ -168,10 +172,7 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
   );
 
   const todasCapacidades = useMemo(
-    () =>
-      values.area && values.competencia
-        ? getCapacidades(curriculum, values.area, values.competencia)
-        : [],
+    () => (values.area && values.competencia ? getCapacidades(curriculum, values.area, values.competencia) : []),
     [curriculum, values.area, values.competencia],
   );
 
@@ -202,7 +203,6 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
   return (
     // Sin overflow-hidden ni overflow-y-auto aquí — el scroll lo maneja OnboardingStepCard
     <div className="flex flex-col gap-4">
-
       {/* Título */}
       <div>
         <label htmlFor="plan-titulo" className="text-sm font-bold text-warm-900 mb-1.5 block">
@@ -245,7 +245,8 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
       {values.competencia && todasCapacidades.length > 0 && (
         <div>
           <p className="text-[10px] font-extrabold text-warm-600 uppercase tracking-wide mb-2">
-            Capacidades <span className="normal-case font-semibold text-warm-500">— selecciona las que trabajarás hoy</span>
+            Capacidades{' '}
+            <span className="normal-case font-semibold text-warm-500">— selecciona las que trabajarás hoy</span>
           </p>
           <div className="flex flex-col gap-1.5">
             {todasCapacidades.map((cap) => {
@@ -284,11 +285,10 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
       {/* Criterios — escritura libre con tag input */}
       {values.competencia && (
         <div>
-          <p className="text-sm font-bold text-warm-900 mb-1.5">
-            Criterios de evaluación
-          </p>
+          <p className="text-sm font-bold text-warm-900 mb-1.5">Criterios de evaluación</p>
           <p className="text-xs text-warm-500 font-semibold mb-2">
-            Escribe los criterios de tu sesión y pulsa <kbd className="rounded bg-cream-dark px-1 font-mono text-[10px]">Enter</kbd> para confirmar cada uno
+            Escribe los criterios de tu sesión y pulsa{' '}
+            <kbd className="rounded bg-cream-dark px-1 font-mono text-[10px]">Enter</kbd> para confirmar cada uno
           </p>
           <CriteriosTagInput
             criterios={values.criterios}
@@ -296,7 +296,6 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
           />
         </div>
       )}
-
     </div>
   );
 }

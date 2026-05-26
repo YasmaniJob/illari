@@ -7,3 +7,10 @@ export async function requireUser(request: Request) {
   }
   return session.user;
 }
+
+export function unauthorizedResponse() {
+  return new Response(JSON.stringify({ error: 'No autenticado' }), {
+    status: 401,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
