@@ -1,5 +1,5 @@
 import type { SessionConfig } from '../curriculum';
-import { geminiGenerateJson } from './googleGemini';
+import { groqGenerateJson } from './groq';
 
 const SYSTEM_PROMPT = `Eres un asistente de documentación pedagógica para docentes de educación inicial en Perú (CNEB).
 Tu función es ayudar a la docente a redactar sus notas del Cuaderno de Campo en PRIMERA PERSONA, como si ella misma las hubiera escrito.
@@ -65,7 +65,7 @@ ${previousSection}Registro docente (${source === 'voice' ? 'voz' : 'texto'}): "$
 
 Valida si el nombre mencionado en el registro coincide con la lista. Si no coincide, devuelve el error. Si es correcto, genera la evidencia y retroalimentación en primera persona${previousNote ? ', integrando la nota previa en un resumen compacto' : ''}.`;
 
-  const data = await geminiGenerateJson(SYSTEM_PROMPT, userPrompt);
+  const data = await groqGenerateJson(SYSTEM_PROMPT, userPrompt);
 
   if (data.error) {
     return { error: String(data.error) };
