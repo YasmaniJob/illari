@@ -214,25 +214,25 @@ export default function LiveClassroom() {
     <div className="flex flex-col h-full bg-cream overflow-hidden">
 
       {/* ── Session header ── */}
-      <div className="shrink-0 px-5 sm:px-7 py-3 border-b border-cream-dark bg-white flex items-center gap-4">
+      <div className="shrink-0 px-3 sm:px-5 md:px-7 py-2 sm:py-3 border-b border-cream-dark bg-white flex items-center gap-2 sm:gap-4">
         {/* Session info */}
         <div className="min-w-0 flex-1">
-          <h1 className="text-lg sm:text-xl font-extrabold text-warm-900 truncate leading-snug">
+          <h1 className="text-sm sm:text-lg md:text-xl font-extrabold text-warm-900 truncate leading-snug">
             {session.titulo || session.area}
           </h1>
         </div>
 
-        {/* Action buttons — always visible */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Action buttons */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
 
           {/* Propósito */}
           <button
             type="button"
             onClick={() => setShowProposito(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-honey-400/50 bg-honey-200/40 px-3 py-1.5 text-xs font-bold text-warm-700 hover:bg-honey-200/70 transition-colors focus-ring-warm"
+            className="flex items-center justify-center gap-1.5 rounded-xl border border-honey-400/50 bg-honey-200/40 p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-warm-700 hover:bg-honey-200/70 transition-colors focus-ring-warm"
             title="Ver propósito de aprendizaje"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -244,10 +244,10 @@ export default function LiveClassroom() {
           <button
             type="button"
             onClick={() => setShowEdit(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-cream-dark bg-white px-3 py-1.5 text-xs font-bold text-warm-600 hover:bg-cream transition-colors focus-ring-warm"
+            className="flex items-center justify-center gap-1.5 rounded-xl border border-cream-dark bg-white p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-warm-600 hover:bg-cream transition-colors focus-ring-warm"
             title="Editar sesión"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
@@ -258,23 +258,29 @@ export default function LiveClassroom() {
           <button
             type="button"
             onClick={() => setShowCuaderno(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-lilac-300 bg-lilac-50 px-3 py-1.5 text-xs font-bold text-lilac-700 hover:bg-lilac-100 transition-colors focus-ring-warm"
+            className="flex items-center justify-center gap-1.5 rounded-xl border border-lilac-300 bg-lilac-50 p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-lilac-700 hover:bg-lilac-100 transition-colors focus-ring-warm"
             title="Vista previa del Cuaderno de Campo"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
             <span className="hidden sm:inline">Cuaderno</span>
           </button>
 
-          {/* Salir — solo usuarios con sesión */}
+          {/* Salir */}
           {loggedIn && (
             <a
               href="/"
-              className="rounded-xl border border-cream-dark bg-white px-3 py-1.5 text-xs font-bold text-warm-600 hover:bg-cream transition-colors focus-ring-warm"
+              className="flex items-center justify-center rounded-xl border border-cream-dark bg-white p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-warm-600 hover:bg-cream transition-colors focus-ring-warm"
+              title="Salir del aula"
             >
-              Salir
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span className="hidden sm:inline">Salir</span>
             </a>
           )}
         </div>

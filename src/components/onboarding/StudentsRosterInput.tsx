@@ -5,13 +5,19 @@ interface StudentsRosterInputProps {
   onChange: (names: string[]) => void;
 }
 
-// ─── Parsers ──────────────────────────────────────────────────────────────────
+// ─── Parser robusto ───────────────────────────────────────────────────────────
+// Maneja: saltos de línea, tabs, comas, punto y coma, numeración (1. 2- •),
+// teléfonos, emails, y descarta basura no-nombre.
 
 function parseRawText(raw: string): string[] {
   return raw
-    .split(/[\n\r,;\t]+/)
+    .split(/[\n\r\t,;]+/)
     .map((s) => s.trim())
-    .filter((s) => s.length >= 2);
+    .map((s) => s.replace(/^[\d]+[.):\-\s]+/, '').replace(/^[•\-*]\s*/, '').trim())
+    .filter((s) => !/\d{6,}/.test(s))       // descartar teléfonos
+    .filter((s) => !/@/.test(s))             // descartar emails
+    .filter((s) => s.length >= 2 && s.length <= 60)
+    .filter((s) => /[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]/.test(s)); // al menos una letra
 }
 
 async function parseFile(file: File): Promise<string[]> {
@@ -40,10 +46,7 @@ export function RosterHeaderActions({ onFileImport, fileError, onFileError }: Ro
     onFileError(null);
     try {
       const parsed = await parseFile(file);
-      if (parsed.length === 0) {
-        onFileError('Sin nombres válidos en el archivo');
-        return;
-      }
+      if (parsed.length === 0) { onFileError('Sin nombres válidos en el archivo'); return; }
       onFileImport(parsed);
     } catch {
       onFileError('No se pudo leer el archivo');
@@ -55,20 +58,10 @@ export function RosterHeaderActions({ onFileImport, fileError, onFileError }: Ro
   return (
     <div className="flex items-center gap-2">
       {fileError && <span className="text-xs font-semibold text-coral-600">⚠ {fileError}</span>}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".csv,.txt,.tsv,.xlsx"
-        className="sr-only"
-        onChange={handleFileChange}
-        aria-label="Importar lista desde archivo"
-      />
+      <input ref={fileInputRef} type="file" accept=".csv,.txt,.tsv,.xlsx" className="sr-only" onChange={handleFileChange} aria-label="Importar lista desde archivo" />
       <button
         type="button"
-        onClick={() => {
-          onFileError(null);
-          fileInputRef.current?.click();
-        }}
+        onClick={() => { onFileError(null); fileInputRef.current?.click(); }}
         title="Importar desde Excel o CSV"
         className="flex items-center gap-1.5 rounded-xl border-2 border-cream-dark bg-white px-3 py-1.5 text-xs font-bold text-warm-700 transition-all duration-200 hover:border-lilac-300 hover:bg-lilac-50/60 active:scale-[0.97]"
       >
@@ -99,28 +92,54 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
     onChange(names.filter((n) => n !== name));
   }
 
+  // Confirma el valor actual del input como un nombre
+  function commitInput(value: string) {
+    const trimmed = value.trim().replace(/,$/, '');
+    if (trimmed.length >= 2) mergeNames([trimmed]);
+    setInputValue('');
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
-      const trimmed = inputValue.trim().replace(/,$/, '');
-      if (trimmed.length >= 2) {
-        mergeNames([trimmed]);
-        setInputValue('');
-      }
+      commitInput(inputValue);
     }
     if (e.key === 'Backspace' && inputValue === '' && validNames.length > 0) {
       onChange(names.filter((n) => n !== validNames[validNames.length - 1]));
     }
   }
 
+  // Paste inteligente: detecta automáticamente si es lista o nombre simple
   function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
     const text = e.clipboardData.getData('text');
     const parsed = parseRawText(text);
-    if (parsed.length > 1 || (parsed.length === 1 && text.includes('\n'))) {
+    const isMultiline = text.includes('\n') || text.includes('\r') || text.includes('\t');
+    const isLikelyList = parsed.length > 1 || isMultiline;
+
+    if (isLikelyList) {
       e.preventDefault();
       mergeNames(parsed);
       setInputValue('');
     }
+    // Si es un solo nombre sin separadores, deja que el input lo reciba normalmente
+  }
+
+  // En mobile, onChange puede recibir texto pegado sin disparar onPaste
+  // Detectamos si el nuevo valor contiene separadores y lo procesamos
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value;
+    const hasMultiline = val.includes('\n') || val.includes('\r');
+    const hasSeparators = val.includes('\t') || (val.includes(',') && val.split(',').length > 2);
+
+    if (hasMultiline || hasSeparators) {
+      const parsed = parseRawText(val);
+      if (parsed.length > 1) {
+        mergeNames(parsed);
+        setInputValue('');
+        return;
+      }
+    }
+    setInputValue(val);
   }
 
   return (
@@ -147,10 +166,7 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
                 {name}
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeChip(name);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); removeChip(name); }}
                   aria-label={`Quitar ${name}`}
                   className="flex h-4 w-4 items-center justify-center rounded-full text-lilac-500 hover:bg-lilac-300 hover:text-lilac-900 transition-colors text-xs font-bold"
                 >
@@ -165,22 +181,21 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
           ref={inputRef}
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleChange}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
-          placeholder={
-            validNames.length === 0 ? 'Escribe un nombre y pulsa Enter, o pega la lista completa…' : 'Añadir otro…'
-          }
+          onBlur={() => commitInput(inputValue)}
+          placeholder={validNames.length === 0 ? 'Escribe un nombre o pega la lista completa…' : 'Añadir otro…'}
           className="w-full bg-transparent text-base text-warm-900 placeholder:text-warm-400 outline-none min-w-[120px]"
           autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="words"
         />
       </div>
 
-      {/* Hint */}
+      {/* Hint mínimo */}
       <p className="shrink-0 text-xs text-warm-500 font-semibold">
-        <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">Enter</kbd> confirma ·{' '}
-        <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">Ctrl+V</kbd> pega toda la lista ·{' '}
-        <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">⌫</kbd> borra el último
+        Escribe y pulsa <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">Enter</kbd>, o pega directamente desde WhatsApp, Word o Excel
       </p>
     </div>
   );

@@ -99,47 +99,47 @@ export default function Dashboard({ userName }: DashboardProps) {
     <div className="h-full flex flex-col md:flex-row overflow-hidden">
 
       {/* ── ÁREA PRINCIPAL ── */}
-      <div className="flex-1 flex flex-col p-6 sm:p-8 gap-5 overflow-hidden">
+      <div className="flex-1 flex flex-col p-4 sm:p-6 md:p-8 gap-4 md:gap-5 overflow-hidden">
 
-        {/* Título — alineado a la izquierda, como el mockup */}
+        {/* Título */}
         <div className="shrink-0">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-warm-900 tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-warm-900 tracking-tight leading-tight">
             {isLoggedIn ? `Hola, ${userName!.split(' ')[0]} 👋` : 'Tu cuaderno de campo'}
           </h1>
-          <p className="mt-3 text-lg sm:text-xl text-warm-700">
+          <p className="mt-1.5 text-sm sm:text-base md:text-lg text-warm-700">
             {isLoggedIn
               ? 'Listo para registrar tu clase de hoy.'
               : 'Observa, registra y acompaña mejor a tus niños cada día.'}
           </p>
         </div>
 
-        {/* Card coral — flex-1 para llenar el espacio restante en desktop */}
+        {/* Card coral — flex-1 siempre: llena el espacio en mobile Y desktop */}
         <a
           href="/onboarding"
-          className="group flex flex-col items-center justify-center gap-6 flex-1 min-h-0 w-full rounded-3xl bg-gradient-to-br from-coral-500 to-coral-600 px-10 py-10 text-white shadow-[0_8px_32px_-4px_rgba(224,122,95,0.45)] transition-all duration-200 hover:shadow-[0_16px_48px_-4px_rgba(224,122,95,0.55)] hover:scale-[1.005] active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-coral-500/30"
+          className="group flex flex-col items-center justify-center gap-4 md:gap-6 flex-1 min-h-0 w-full rounded-3xl bg-gradient-to-br from-coral-500 to-coral-600 px-6 py-6 md:px-10 md:py-10 text-white shadow-[0_8px_32px_-4px_rgba(224,122,95,0.45)] transition-all duration-200 hover:shadow-[0_16px_48px_-4px_rgba(224,122,95,0.55)] hover:scale-[1.005] active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-coral-500/30"
           aria-label="Crear nuevo registro de campo"
         >
-          {/* Ícono con tratamiento especial — fondo claro, sombra */}
-          <div className="relative">
+          {/* Ícono */}
+          <div className="relative shrink-0">
             <div className="absolute inset-0 bg-lilac-500 rounded-full blur-xl opacity-40" aria-hidden />
-            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-cream text-4xl font-extrabold text-lilac-600 shadow-lg rotate-3">
+            <div className="relative flex h-14 w-14 md:h-20 md:w-20 items-center justify-center rounded-2xl bg-cream text-3xl md:text-4xl font-extrabold text-lilac-600 shadow-lg rotate-3">
               +
             </div>
           </div>
 
-          <div className="text-center">
-            <span className="block text-3xl sm:text-4xl font-extrabold tracking-tight leading-snug">
+          <div className="text-center shrink-0">
+            <span className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight leading-snug">
               Crear nuevo registro de campo
             </span>
-            <span className="block mt-3 text-base sm:text-lg font-semibold text-white/80">
+            <span className="block mt-2 text-sm md:text-base font-semibold text-white/80">
               Paso a paso: aula, currículo y propósito
             </span>
           </div>
 
-          <span className="flex items-center gap-2 text-base font-bold bg-white/20 rounded-2xl px-6 py-3 group-hover:bg-white/30 transition-colors backdrop-blur-sm border border-white/20">
+          <span className="shrink-0 flex items-center gap-2 text-sm md:text-base font-bold bg-white/20 rounded-2xl px-5 py-2.5 group-hover:bg-white/30 transition-colors backdrop-blur-sm border border-white/20">
             Comenzar ahora
             <svg
-              className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1"
+              className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-200 group-hover:translate-x-1"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

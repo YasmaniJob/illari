@@ -42,23 +42,35 @@
     scrollbar-width: thin;
   }
 
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+  /* Ocultar scrollbar en mobile */
+  @media (max-width: 768px) {
+    html {
+      scrollbar-width: none;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
 
-  ::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 4px;
-  }
+  @media (min-width: 769px) {
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--color-coral-500);
-    border-radius: 10px;
-  }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 4px;
+    }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-coral-600);
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--color-coral-500);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: var(--color-coral-600);
+    }
   }
 }
 

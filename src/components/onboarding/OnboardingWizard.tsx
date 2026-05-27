@@ -464,22 +464,15 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
           <CardStack cards={stackCards} activeStep={step} direction={direction} />
         </div>
 
-        {/* Botones de navegación — apilados en mobile, fila en desktop */}
-        <footer className="shrink-0 flex flex-col-reverse md:flex-row gap-2 md:gap-3 pt-3 pb-4 md:pb-0 bg-white md:bg-transparent border-t border-cream-dark md:border-none">
-          {/* Paso 1 en mobile: oculto. Desktop: siempre visible. En paso 1 navega al inicio. */}
-          <button
-            type="button"
-            onClick={() => step > 1 ? goTo(step - 1) : (window.location.href = '/')}
-            className={['btn-secondary w-full md:flex-1 py-3 text-base', step === 1 ? 'hidden md:inline-flex' : ''].join(' ')}
-          >
-            Volver
-          </button>
+        {/* Navegación — botón primario full-width + Volver como link de texto */}
+        <footer className="shrink-0 pt-3 pb-4 md:pb-0 bg-white md:bg-transparent border-t border-cream-dark md:border-none">
+          {/* Botón primario */}
           {step < TOTAL ? (
             <button
               type="button"
               onClick={() => goTo(step + 1)}
               disabled={!canAdvance()}
-              className="btn-primary w-full md:flex-1 py-3 text-base"
+              className="btn-primary w-full py-3.5 text-base"
             >
               Siguiente →
             </button>
@@ -488,11 +481,26 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
               type="button"
               onClick={handleStartSession}
               disabled={!canAdvance()}
-              className="btn-primary w-full md:flex-1 py-3 text-base"
+              className="btn-primary w-full py-3.5 text-base"
             >
               🚀 ¡Empezar mi clase hoy!
             </button>
           )}
+
+          {/* Volver — link de texto, oculto en paso 1 mobile */}
+          <button
+            type="button"
+            onClick={() => step > 1 ? goTo(step - 1) : (window.location.href = '/')}
+            className={[
+              'flex items-center justify-center gap-1.5 w-full mt-2.5 py-1.5 text-sm font-semibold text-warm-500 hover:text-warm-700 transition-colors rounded-xl focus-ring-warm',
+              step === 1 ? 'hidden md:flex' : '',
+            ].join(' ')}
+          >
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            {step === 1 ? 'Volver al inicio' : 'Volver al paso anterior'}
+          </button>
         </footer>
       </div>
     </div>

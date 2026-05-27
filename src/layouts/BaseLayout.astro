@@ -42,7 +42,7 @@ const {
   <body
     class:list={[
       boxed
-        ? 'min-h-dvh bg-gradient-to-br from-lilac-100/40 via-cream to-honey-200/30'
+        ? 'h-dvh bg-white sm:bg-gradient-to-br sm:from-lilac-100/40 sm:via-cream sm:to-honey-200/30'
         : fixedViewport
           ? 'h-dvh overflow-hidden'
           : 'min-h-screen',
@@ -51,37 +51,39 @@ const {
     {!boxed && <DecorativeBlobs />}
 
     {boxed ? (
-      /* ── BOXED LAYOUT: canvas pastel + marco blanco ── */
-      <div class="h-dvh flex flex-col items-center justify-center px-3 sm:px-6 py-3 sm:py-4">
-        <div class="w-full max-w-[1200px] bg-white rounded-3xl shadow-[0_8px_40px_-8px_rgba(61,44,41,0.14)] flex flex-col overflow-hidden h-full">
+      /* ── BOXED LAYOUT ── */
+      /* Mobile: pantalla completa sin márgenes (app nativa)
+         Desktop: marco flotante con canvas pastel visible */
+      <div class="h-dvh flex flex-col sm:items-center sm:justify-center sm:px-6 sm:py-4">
+        <div class="w-full sm:max-w-[1200px] bg-white sm:rounded-3xl sm:shadow-[0_8px_40px_-8px_rgba(61,44,41,0.14)] flex flex-col overflow-hidden h-full">
 
-          {/* Navbar dentro del marco */}
-          <header class="shrink-0 h-16 border-b border-cream-dark bg-gradient-to-r from-white via-cream to-honey-200/30 px-6 sm:px-8 flex items-center">
-            {/* Logo — izquierda */}
+          {/* Navbar */}
+          <header class="shrink-0 h-14 sm:h-16 border-b border-cream-dark bg-gradient-to-r from-white via-cream to-honey-200/30 px-4 sm:px-8 flex items-center">
+            {/* Logo */}
             <a
               href="/"
-              class="flex items-center gap-3 min-w-0 transition-opacity duration-200 hover:opacity-85 focus-ring-warm rounded-xl -m-1 p-1"
+              class="flex items-center gap-2.5 min-w-0 transition-opacity duration-200 hover:opacity-85 focus-ring-warm rounded-xl -m-1 p-1"
             >
               <span
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lilac-500 to-lilac-600 text-lg font-extrabold text-white shadow-[0_2px_10px_-2px_rgba(139,92,246,0.4)]"
+                class="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lilac-500 to-lilac-600 text-base sm:text-lg font-extrabold text-white shadow-[0_2px_10px_-2px_rgba(139,92,246,0.4)]"
               >
                 I
               </span>
-              <span class="text-xl font-extrabold text-warm-900 tracking-tight truncate">
+              <span class="text-lg sm:text-xl font-extrabold text-warm-900 tracking-tight truncate">
                 Illari
               </span>
             </a>
-            {/* Título — centro absoluto */}
+            {/* Título centro — solo sm+ */}
             <p class="absolute left-1/2 -translate-x-1/2 hidden sm:block text-sm font-semibold text-warm-700 pointer-events-none select-none">
               Cuaderno de Campo Digital
             </p>
-            {/* Auth — derecha */}
+            {/* Auth */}
             <div class="ml-auto">
               <AuthHeader client:load userName={Astro.locals.user?.name ?? null} />
             </div>
           </header>
 
-          {/* Contenido principal dentro del marco */}
+          {/* Contenido */}
           <main class="flex-1 min-h-0 overflow-hidden">
             <slot />
           </main>
