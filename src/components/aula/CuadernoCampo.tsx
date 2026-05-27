@@ -2,7 +2,7 @@
  * CuadernoCampo — Vista previa e impresión del Cuaderno de Campo Digital.
  * PDF generado con @react-pdf/renderer (texto vectorial, A4, seleccionable).
  */
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
 import {
   Document,
   Font,
@@ -228,6 +228,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
   ];
 
   const padRows = Math.max(0, 5 - rows.length);
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
 
   const handleDownload = useCallback(async () => {
     try {
@@ -242,6 +243,106 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Error generando PDF:', err);
+    }
+  }, [session, rows, padRows, fecha]);
+
+  // Copia HTML enriquecido al clipboard — Word, Google Docs y LibreOffice
+  // respetan tablas y estilos cuando se pega desde HTML.
+  const handleCopy = useCallback(async () => {
+    const metaRows = [
+      ['EDAD', session.grado ?? '—', 'SECCIÓN', session.seccion ?? '—', 'FECHA', fecha],
+      ['TÍTULO', session.titulo ?? '—'],
+      ['ÁREA', session.area],
+      ['COMPETENCIA / CAPACIDADES', `${session.competencia}${session.capacidad ? ` — ${session.capacidad}` : ''}`],
+      ['CRITERIO DE EVALUACIÓN', session.criterio ?? '—'],
+    ];
+
+    const metaHtml = metaRows.map((row, i) => {
+      if (i === 0) {
+        return `<tr>
+          <td style="border:1px solid #111;padding:4px 8px;font-weight:bold;width:100px">${row[0]}</td>
+          <td style="border:1px solid #111;padding:4px 8px;width:90px">${row[1]}</td>
+          <td style="border:1px solid #111;padding:4px 8px;font-weight:bold;width:70px">${row[2]}</td>
+          <td style="border:1px solid #111;padding:4px 8px;width:50px">${row[3]}</td>
+          <td style="border:1px solid #111;padding:4px 8px;font-weight:bold;width:50px">${row[4]}</td>
+          <td style="border:1px solid #111;padding:4px 8px">${row[5]}</td>
+        </tr>`;
+      }
+      return `<tr>
+        <td style="border:1px solid #111;padding:4px 8px;font-weight:bold">${row[0]}</td>
+        <td style="border:1px solid #111;padding:4px 8px" colspan="5">${row[1]}</td>
+      </tr>`;
+    }).join('');
+
+    const obsRowsHtml = [
+      ...rows.map(row => `<tr>
+        <td style="border:1px solid #111;padding:4px 6px;text-align:center;color:#888;width:28px">${row.isGroup ? '—' : row.num}</td>
+        <td style="border:1px solid #111;padding:4px 8px;width:130px${row.isGroup ? ';font-style:italic;color:#666' : ''}">${row.name}</td>
+        <td style="border:1px solid #111;padding:4px 8px">${row.evidencia}</td>
+        <td style="border:1px solid #111;padding:4px 8px;width:140px">${row.retroalimentacion}</td>
+      </tr>`),
+      ...Array.from({ length: padRows }).map(() => `<tr>
+        <td style="border:1px solid #111;padding:4px 6px;height:32px"></td>
+        <td style="border:1px solid #111;padding:4px 8px"></td>
+        <td style="border:1px solid #111;padding:4px 8px"></td>
+        <td style="border:1px solid #111;padding:4px 8px"></td>
+      </tr>`),
+    ].join('');
+
+    const html = `
+      <html><body>
+      <p style="text-align:center;font-family:Arial,sans-serif;font-size:11pt;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">
+        CUADERNO DE CAMPO
+      </p>
+      <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:9pt;margin-bottom:12px">
+        <tbody>${metaHtml}</tbody>
+      </table>
+      <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:9pt">
+        <thead>
+          <tr>
+            <th style="border:1px solid #111;padding:5px 6px;background:#efefef;text-align:center;width:28px">Nº</th>
+            <th style="border:1px solid #111;padding:5px 8px;background:#efefef;text-align:center;width:130px">NOMBRE Y APELLIDOS</th>
+            <th style="border:1px solid #111;padding:5px 8px;background:#efefef;text-align:center">DESCRIPCIÓN DE EVIDENCIAS</th>
+            <th style="border:1px solid #111;padding:5px 8px;background:#efefef;text-align:center;width:140px">RETROALIMENTACIÓN</th>
+          </tr>
+        </thead>
+        <tbody>${obsRowsHtml}</tbody>
+      </table>
+      </body></html>`;
+
+    // Texto plano como fallback
+    const plain = [
+      'CUADERNO DE CAMPO',
+      '',
+      `EDAD: ${session.grado ?? '—'} | SECCIÓN: ${session.seccion ?? '—'} | FECHA: ${fecha}`,
+      `TÍTULO: ${session.titulo ?? '—'}`,
+      `ÁREA: ${session.area}`,
+      `COMPETENCIA: ${session.competencia}`,
+      `CRITERIO: ${session.criterio ?? '—'}`,
+      '',
+      'Nº | NOMBRE | EVIDENCIAS | RETROALIMENTACIÓN',
+      ...rows.map(r => `${r.num} | ${r.name} | ${r.evidencia} | ${r.retroalimentacion}`),
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/html': new Blob([html], { type: 'text/html' }),
+          'text/plain': new Blob([plain], { type: 'text/plain' }),
+        }),
+      ]);
+      setCopyState('copied');
+      setTimeout(() => setCopyState('idle'), 2500);
+    } catch {
+      // Fallback para browsers sin ClipboardItem (Firefox sin permiso)
+      try {
+        await navigator.clipboard.writeText(plain);
+        setCopyState('copied');
+        setTimeout(() => setCopyState('idle'), 2500);
+      } catch {
+        setCopyState('error');
+        setTimeout(() => setCopyState('idle'), 2500);
+      }
     }
   }, [session, rows, padRows, fecha]);
 
@@ -265,6 +366,43 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
             <p className="text-sm font-extrabold text-warm-900 leading-tight">Cuaderno de Campo</p>
             <p className="text-xs font-semibold text-warm-500 truncate">{session.titulo || session.area}</p>
           </div>
+          <button
+            type="button"
+            onClick={handleCopy}
+            className={[
+              'flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-colors focus-ring-warm shrink-0',
+              copyState === 'copied'
+                ? 'bg-mint-400/20 text-warm-900 border border-mint-400/50'
+                : copyState === 'error'
+                ? 'bg-coral-500/10 text-coral-600 border border-coral-500/30'
+                : 'bg-white border border-cream-dark text-warm-700 hover:bg-cream',
+            ].join(' ')}
+            title="Copiar para pegar en Word, Google Docs o LibreOffice"
+          >
+            {copyState === 'copied' ? (
+              <>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                ¡Copiado!
+              </>
+            ) : copyState === 'error' ? (
+              <>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Error
+              </>
+            ) : (
+              <>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Copiar
+              </>
+            )}
+          </button>
           <button
             type="button"
             onClick={handleDownload}
