@@ -1,16 +1,16 @@
 /**
  * EditSessionDrawer — Panel lateral deslizante para editar la sesión activa.
- * Secciones colapsables: Aula (grado/sección), Estudiantes, Planificación.
+ * Desktop: drawer lateral derecho con overlay semitransparente.
+ * Mobile: bottom sheet que sube desde abajo.
  */
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { fetchStudents, patchSession, type StudentDto } from '../../lib/api/client';
 import type { CurriculumRow, SessionConfig } from '../../lib/curriculum';
-import { getAreas, getCapacidades, getCompetencias, getCriterios } from '../../lib/curriculum';
+import { getAreas, getCapacidades, getCompetencias } from '../../lib/curriculum';
 import { GRADOS, SECCIONES } from '../../lib/classroom';
 import StudentsRosterInput from '../onboarding/StudentsRosterInput';
 import CustomSelect from '../ui/CustomSelect';
-
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Props {
   session: SessionConfig;
@@ -19,21 +19,14 @@ interface Props {
 }
 
 type Section = 'aula' | 'estudiantes' | 'planificacion';
+type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
 // ─── Section header ───────────────────────────────────────────────────────────
 
 function SectionHeader({
-  label,
-  emoji,
-  open,
-  onToggle,
-  dirty,
+  label, emoji, open, onToggle, dirty,
 }: {
-  label: string;
-  emoji: string;
-  open: boolean;
-  onToggle: () => void;
-  dirty?: boolean;
+  label: string; emoji: string; open: boolean; onToggle: () => void; dirty?: boolean;
 }) {
   return (
     <button
@@ -43,11 +36,8 @@ function SectionHeader({
     >
       <span className="text-xl" aria-hidden>{emoji}</span>
       <span className="flex-1 text-sm font-extrabold text-warm-900">{label}</span>
-      {dirty && (
-        <span className="h-2 w-2 rounded-full bg-coral-500 shrink-0" title="Cambios sin guardar" />
-      )}
+      {dirty && <span className="h-2 w-2 rounded-full bg-coral-500 shrink-0" title="Cambios sin guardar" />}
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         className={`h-4 w-4 text-warm-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
         strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
@@ -58,26 +48,42 @@ function SectionHeader({
   );
 }
 
-// ─── Save button ──────────────────────────────────────────────────────────────
+// ─── Save button with feedback ────────────────────────────────────────────────
 
-function SaveButton({ saving, disabled, onClick }: { saving: boolean; disabled: boolean; onClick: () => void }) {
+function SaveButton({ state, disabled, onClick }: { state: SaveState; disabled: boolean; onClick: () => void }) {
+  const styles = {
+    idle: 'bg-coral-500 hover:bg-coral-600 text-white',
+    saving: 'bg-coral-500 text-white opacity-70 cursor-wait',
+    saved: 'bg-mint-400/20 border border-mint-400/50 text-warm-900',
+    error: 'bg-coral-500/10 border border-coral-500/30 text-coral-600',
+  }[state];
+
   return (
     <button
       type="button"
       onClick={onClick}
-      disabled={disabled || saving}
-      className="flex items-center gap-2 rounded-xl bg-coral-500 px-4 py-2 text-sm font-bold text-white hover:bg-coral-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus-ring-warm"
+      disabled={disabled || state === 'saving'}
+      className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all duration-200 focus-ring-warm ${styles}`}
     >
-      {saving ? (
-        <span className="h-3.5 w-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
-      ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {state === 'saving' && <span className="h-3.5 w-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
+      {state === 'saved' && (
+        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      )}
+      {state === 'error' && (
+        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      )}
+      {state === 'idle' && (
+        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
           <polyline points="17 21 17 13 7 13 7 21" />
           <polyline points="7 3 7 8 15 8" />
         </svg>
       )}
-      {saving ? 'Guardando…' : 'Guardar'}
+      {state === 'saving' ? 'Guardando…' : state === 'saved' ? '¡Guardado!' : state === 'error' ? 'Error' : 'Guardar'}
     </button>
   );
 }
@@ -85,9 +91,11 @@ function SaveButton({ saving, disabled, onClick }: { saving: boolean; disabled: 
 // ─── Main component ───────────────────────────────────────────────────────────
 
 function EditSessionDrawer({ session, onClose, onSaved }: Props) {
-  const [openSection, setOpenSection] = useState<Section>('aula');
+  const [openSection, setOpenSection] = useState<Section>('planificacion');
   const [curriculum, setCurriculum] = useState<CurriculumRow[]>([]);
-  const [saving, setSaving] = useState<Section | null>(null);
+  const [saveStates, setSaveStates] = useState<Record<Section, SaveState>>({
+    aula: 'idle', estudiantes: 'idle', planificacion: 'idle',
+  });
   const [errors, setErrors] = useState<Partial<Record<Section, string>>>({});
 
   // ── Aula state ──────────────────────────────────────────────────────────────
@@ -95,6 +103,9 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
     session.grado ? session.grado.split(',').map((g) => g.trim()).filter(Boolean) : [],
   );
   const [seccion, setSeccion] = useState(session.seccion ?? '');
+  const [showCustomSeccion, setShowCustomSeccion] = useState(
+    !!session.seccion && !SECCIONES.includes(session.seccion as typeof SECCIONES[number]),
+  );
   const gradoStr = grados.join(', ');
   const aulaDirty = gradoStr !== (session.grado ?? '') || seccion !== (session.seccion ?? '');
 
@@ -122,16 +133,13 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
     fetch('/api/curriculum')
       .then((r) => r.json())
       .then((d: { curriculum: CurriculumRow[] }) => setCurriculum(d.curriculum))
-      .catch(() => {/* non-critical */});
+      .catch(() => {});
   }, []);
 
   // ── Load students when section opens ───────────────────────────────────────
   useEffect(() => {
     if (openSection !== 'estudiantes' || studentsLoaded) return;
-    if (!session.grado || !session.seccion) {
-      setStudentsLoaded(true);
-      return;
-    }
+    if (!session.grado || !session.seccion) { setStudentsLoaded(true); return; }
     fetchStudents(session.grado, session.seccion)
       .then((studs) => {
         const names = studs.map((s) => s.name);
@@ -142,7 +150,19 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
       .catch(() => setStudentsLoaded(true));
   }, [openSection, studentsLoaded, session.grado, session.seccion]);
 
-  // Track student changes
+  // ── Block body scroll ───────────────────────────────────────────────────────
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  // ── Escape to close ─────────────────────────────────────────────────────────
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   const handleStudentNamesChange = useCallback((names: string[]) => {
     setStudentNames(names);
     setStudentsDirty(true);
@@ -156,39 +176,35 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
     [curriculum, area, competencia],
   );
 
-  function handleAreaChange(val: string) {
-    setArea(val);
-    setCompetencia('');
-    setCapacidad('');
-    setCriterio('');
-  }
-  function handleCompetenciaChange(val: string) {
-    setCompetencia(val);
-    setCapacidad('');
-    setCriterio('');
-  }
-  function handleCapacidadChange(val: string) {
-    setCapacidad(val);
-    setCriterio('');
-  }
+  function handleAreaChange(val: string) { setArea(val); setCompetencia(''); setCapacidad(''); setCriterio(''); }
+  function handleCompetenciaChange(val: string) { setCompetencia(val); setCapacidad(''); setCriterio(''); }
+  function handleCapacidadChange(val: string) { setCapacidad(val); setCriterio(''); }
 
-  // ── Save handlers ───────────────────────────────────────────────────────────
+  // ── Save helpers ────────────────────────────────────────────────────────────
+  function setSave(s: Section, state: SaveState) {
+    setSaveStates((prev) => ({ ...prev, [s]: state }));
+  }
+  function flashSaved(s: Section) {
+    setSave(s, 'saved');
+    setTimeout(() => setSave(s, 'idle'), 2000);
+  }
 
   async function saveAula() {
-    setSaving('aula');
+    setSave('aula', 'saving');
     setErrors((e) => ({ ...e, aula: undefined }));
     try {
       const updated = await patchSession(session.id, { grado: gradoStr, seccion });
       onSaved(updated, []);
+      flashSaved('aula');
     } catch (err) {
+      setSave('aula', 'error');
       setErrors((e) => ({ ...e, aula: err instanceof Error ? err.message : 'Error al guardar' }));
-    } finally {
-      setSaving(null);
+      setTimeout(() => setSave('aula', 'idle'), 2000);
     }
   }
 
   async function saveEstudiantes() {
-    setSaving('estudiantes');
+    setSave('estudiantes', 'saving');
     setErrors((e) => ({ ...e, estudiantes: undefined }));
     try {
       const validNames = studentNames.filter((n) => n.trim().length >= 2);
@@ -197,53 +213,65 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
         seccion: seccion || session.seccion,
         studentNames: validNames,
       });
-      // Refresh student list
       const studs = await fetchStudents(updated.grado ?? '', updated.seccion ?? '');
       originalNamesRef.current = studs.map((s) => s.name);
       setStudentsDirty(false);
       onSaved(updated, studs);
+      flashSaved('estudiantes');
     } catch (err) {
+      setSave('estudiantes', 'error');
       setErrors((e) => ({ ...e, estudiantes: err instanceof Error ? err.message : 'Error al guardar' }));
-    } finally {
-      setSaving(null);
+      setTimeout(() => setSave('estudiantes', 'idle'), 2000);
     }
   }
 
   async function savePlanificacion() {
-    setSaving('planificacion');
+    setSave('planificacion', 'saving');
     setErrors((e) => ({ ...e, planificacion: undefined }));
     try {
       const updated = await patchSession(session.id, { titulo, area, competencia, capacidad, criterio });
       onSaved(updated, []);
+      flashSaved('planificacion');
     } catch (err) {
+      setSave('planificacion', 'error');
       setErrors((e) => ({ ...e, planificacion: err instanceof Error ? err.message : 'Error al guardar' }));
-    } finally {
-      setSaving(null);
+      setTimeout(() => setSave('planificacion', 'idle'), 2000);
     }
   }
 
   function toggle(s: Section) {
-    setOpenSection((prev) => (prev === s ? 'aula' : s));
+    setOpenSection((prev) => (prev === s ? 'planificacion' : s));
   }
 
-  // ── Render ──────────────────────────────────────────────────────────────────
-
-  return (
+  // ── Inner content ───────────────────────────────────────────────────────────
+  const drawerContent = (
     <>
-      {/* Overlay */}
+      {/* Overlay — semitransparente en desktop, más oscuro en mobile */}
       <div
-        className="fixed inset-0 z-40 bg-black/40"
+        className="fixed inset-0 z-40 bg-black/20 sm:bg-black/30 backdrop-blur-[1px]"
         aria-hidden="true"
         onClick={onClose}
       />
 
-      {/* Drawer */}
+      {/* Drawer — lateral en desktop, bottom sheet en mobile */}
       <aside
-        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col w-full max-w-sm bg-white shadow-2xl border-l border-cream-dark"
+        className={[
+          'fixed z-50 flex flex-col bg-white shadow-2xl',
+          // Mobile: bottom sheet
+          'bottom-0 left-0 right-0 rounded-t-3xl max-h-[90dvh]',
+          // Desktop: right drawer
+          'sm:bottom-0 sm:top-0 sm:left-auto sm:right-0 sm:rounded-none sm:rounded-l-2xl sm:w-[380px] sm:max-h-none sm:h-full',
+        ].join(' ')}
+        style={{ animation: 'slideUp 0.28s cubic-bezier(0.32,0.72,0,1) both' }}
         role="dialog"
         aria-modal="true"
         aria-label="Editar sesión"
       >
+        {/* Handle — solo mobile */}
+        <div className="flex justify-center pt-3 pb-1 sm:hidden shrink-0">
+          <div className="h-1 w-10 rounded-full bg-warm-500/20" />
+        </div>
+
         {/* Header */}
         <div className="shrink-0 flex items-center gap-3 px-5 py-4 border-b border-cream-dark">
           <div className="flex-1 min-w-0">
@@ -256,27 +284,20 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
             aria-label="Cerrar"
             className="flex h-8 w-8 items-center justify-center rounded-lg text-warm-400 hover:bg-gray-100 hover:text-warm-900 transition-colors focus-ring-warm"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
 
         {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto divide-y divide-cream-dark">
+        <div className="flex-1 overflow-y-auto divide-y divide-cream-dark overscroll-contain">
 
-          {/* ── Sección: Tu aula ── */}
+          {/* ── Tu aula ── */}
           <div>
-            <SectionHeader
-              label="Tu aula"
-              emoji="🏫"
-              open={openSection === 'aula'}
-              onToggle={() => toggle('aula')}
-              dirty={aulaDirty}
-            />
+            <SectionHeader label="Tu aula" emoji="🏫" open={openSection === 'aula'} onToggle={() => toggle('aula')} dirty={aulaDirty} />
             {openSection === 'aula' && (
               <div className="px-5 pb-5 space-y-4">
-                {/* Grado */}
                 <div>
                   <p className="text-xs font-bold text-warm-700 mb-2">Grado</p>
                   <div className="grid grid-cols-3 gap-2">
@@ -286,18 +307,9 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                         <button
                           key={g}
                           type="button"
-                          onClick={() =>
-                            setGrados((prev) =>
-                              prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g],
-                            )
-                          }
+                          onClick={() => setGrados((prev) => prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g])}
                           aria-pressed={active}
-                          className={[
-                            'rounded-xl border-2 py-2.5 text-sm font-bold transition-all duration-150 focus-ring-warm',
-                            active
-                              ? 'border-coral-500 bg-coral-500/10 text-coral-700'
-                              : 'border-cream-dark bg-white text-warm-600 hover:border-lilac-300',
-                          ].join(' ')}
+                          className={['rounded-xl border-2 py-2.5 text-sm font-bold transition-all duration-150 focus-ring-warm', active ? 'border-coral-500 bg-coral-500/10 text-coral-700' : 'border-cream-dark bg-white text-warm-600 hover:border-lilac-300'].join(' ')}
                         >
                           {g}
                         </button>
@@ -306,7 +318,6 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                   </div>
                 </div>
 
-                {/* Sección */}
                 <div>
                   <p className="text-xs font-bold text-warm-700 mb-2">Sección</p>
                   <div className="grid grid-cols-4 gap-2">
@@ -314,50 +325,51 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                       <button
                         key={s}
                         type="button"
-                        onClick={() => setSeccion(s)}
-                        aria-pressed={seccion === s}
-                        className={[
-                          'rounded-xl border-2 py-2.5 text-sm font-bold transition-all duration-150 focus-ring-warm',
-                          seccion === s
-                            ? 'border-coral-500 bg-coral-500/10 text-coral-700'
-                            : 'border-cream-dark bg-white text-warm-600 hover:border-lilac-300',
-                        ].join(' ')}
+                        onClick={() => { setSeccion(s); setShowCustomSeccion(false); }}
+                        aria-pressed={seccion === s && !showCustomSeccion}
+                        className={['rounded-xl border-2 py-2.5 text-sm font-bold transition-all duration-150 focus-ring-warm', seccion === s && !showCustomSeccion ? 'border-coral-500 bg-coral-500/10 text-coral-700' : 'border-cream-dark bg-white text-warm-600 hover:border-lilac-300'].join(' ')}
                       >
                         {s}
                       </button>
                     ))}
+                    <button
+                      type="button"
+                      onClick={() => setShowCustomSeccion((v) => !v)}
+                      className={['rounded-xl border-2 py-2.5 text-sm font-bold transition-all duration-150 focus-ring-warm', showCustomSeccion ? 'border-lilac-400 bg-lilac-100/60 text-lilac-700' : 'border-cream-dark bg-white text-warm-500 hover:border-lilac-300'].join(' ')}
+                    >
+                      Otro…
+                    </button>
                   </div>
-                  {/* Custom section */}
-                  {!SECCIONES.includes(seccion as typeof SECCIONES[number]) && seccion && (
-                    <p className="mt-2 text-xs font-semibold text-warm-500">Sección personalizada: <strong>{seccion}</strong></p>
-                  )}
-                  <input
-                    type="text"
-                    value={SECCIONES.includes(seccion as typeof SECCIONES[number]) ? '' : seccion}
-                    onChange={(e) => setSeccion(e.target.value)}
-                    placeholder="Otra sección…"
-                    className="input-warm mt-2 text-sm"
-                    maxLength={20}
-                  />
+                  {/* Input personalizado — solo visible cuando se activa */}
+                  <div
+                    className="grid transition-all duration-300 ease-in-out"
+                    style={{ gridTemplateRows: showCustomSeccion ? '1fr' : '0fr' }}
+                  >
+                    <div className="overflow-hidden">
+                      <input
+                        type="text"
+                        value={showCustomSeccion ? seccion : ''}
+                        onChange={(e) => setSeccion(e.target.value)}
+                        placeholder="Ej. D, Celeste, Pollitos…"
+                        className="input-warm mt-2 text-sm"
+                        maxLength={20}
+                        tabIndex={showCustomSeccion ? 0 : -1}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {errors.aula && <p className="text-xs font-semibold text-coral-600">{errors.aula}</p>}
                 <div className="flex justify-end">
-                  <SaveButton saving={saving === 'aula'} disabled={!aulaDirty || grados.length === 0 || !seccion} onClick={saveAula} />
+                  <SaveButton state={saveStates.aula} disabled={!aulaDirty || grados.length === 0 || !seccion} onClick={saveAula} />
                 </div>
               </div>
             )}
           </div>
 
-          {/* ── Sección: Estudiantes ── */}
+          {/* ── Estudiantes ── */}
           <div>
-            <SectionHeader
-              label="Mis estudiantes"
-              emoji="👥"
-              open={openSection === 'estudiantes'}
-              onToggle={() => toggle('estudiantes')}
-              dirty={studentsDirty}
-            />
+            <SectionHeader label="Mis estudiantes" emoji="👥" open={openSection === 'estudiantes'} onToggle={() => toggle('estudiantes')} dirty={studentsDirty} />
             {openSection === 'estudiantes' && (
               <div className="px-5 pb-5 space-y-3">
                 {!studentsLoaded ? (
@@ -372,7 +384,7 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                 {errors.estudiantes && <p className="text-xs font-semibold text-coral-600">{errors.estudiantes}</p>}
                 <div className="flex justify-end">
                   <SaveButton
-                    saving={saving === 'estudiantes'}
+                    state={saveStates.estudiantes}
                     disabled={!studentsDirty || studentNames.filter((n) => n.trim().length >= 2).length === 0}
                     onClick={saveEstudiantes}
                   />
@@ -381,22 +393,13 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
             )}
           </div>
 
-          {/* ── Sección: Planificación ── */}
+          {/* ── Planificación ── */}
           <div>
-            <SectionHeader
-              label="Planificación"
-              emoji="📚"
-              open={openSection === 'planificacion'}
-              onToggle={() => toggle('planificacion')}
-              dirty={planDirty}
-            />
+            <SectionHeader label="Planificación" emoji="📚" open={openSection === 'planificacion'} onToggle={() => toggle('planificacion')} dirty={planDirty} />
             {openSection === 'planificacion' && (
               <div className="px-5 pb-5 space-y-4">
-                {/* Título */}
                 <div>
-                  <label htmlFor="edit-titulo" className="text-xs font-bold text-warm-700 mb-1.5 block">
-                    Título de la sesión
-                  </label>
+                  <label htmlFor="edit-titulo" className="text-xs font-bold text-warm-700 mb-1.5 block">Título de la sesión</label>
                   <input
                     id="edit-titulo"
                     type="text"
@@ -407,41 +410,15 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                   />
                 </div>
 
-                {/* Área */}
-                <CustomSelect
-                  label="Área"
-                  value={area}
-                  options={areas}
-                  placeholder="Elegir área…"
-                  onChange={handleAreaChange}
-                />
+                <CustomSelect label="Área" value={area} options={areas} placeholder="Elegir área…" onChange={handleAreaChange} />
+                <CustomSelect label="Competencia" value={competencia} options={competencias} placeholder={area ? 'Elegir competencia…' : 'Primero elige área'} disabled={!area} onChange={handleCompetenciaChange} />
 
-                {/* Competencia */}
-                <CustomSelect
-                  label="Competencia"
-                  value={competencia}
-                  options={competencias}
-                  placeholder={area ? 'Elegir competencia…' : 'Primero elige área'}
-                  disabled={!area}
-                  onChange={handleCompetenciaChange}
-                />
-
-                {/* Capacidad */}
                 {competencia && capacidades.length > 0 && (
-                  <CustomSelect
-                    label="Capacidad"
-                    value={capacidad}
-                    options={capacidades}
-                    placeholder="Elegir capacidad…"
-                    onChange={handleCapacidadChange}
-                  />
+                  <CustomSelect label="Capacidad" value={capacidad} options={capacidades} placeholder="Elegir capacidad…" onChange={handleCapacidadChange} />
                 )}
 
-                {/* Criterio */}
                 <div>
-                  <label htmlFor="edit-criterio" className="text-xs font-bold text-warm-700 mb-1.5 block">
-                    Criterio de evaluación
-                  </label>
+                  <label htmlFor="edit-criterio" className="text-xs font-bold text-warm-700 mb-1.5 block">Criterio de evaluación</label>
                   <textarea
                     id="edit-criterio"
                     value={criterio}
@@ -454,15 +431,20 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
 
                 {errors.planificacion && <p className="text-xs font-semibold text-coral-600">{errors.planificacion}</p>}
                 <div className="flex justify-end">
-                  <SaveButton saving={saving === 'planificacion'} disabled={!planDirty || !area || !competencia} onClick={savePlanificacion} />
+                  <SaveButton state={saveStates.planificacion} disabled={!planDirty || !area || !competencia} onClick={savePlanificacion} />
                 </div>
               </div>
             )}
           </div>
+
+          {/* Safe area bottom */}
+          <div style={{ height: 'env(safe-area-inset-bottom, 1rem)' }} />
         </div>
       </aside>
     </>
   );
+
+  return typeof document !== 'undefined' ? createPortal(drawerContent, document.body) : null;
 }
 
 export default memo(EditSessionDrawer);

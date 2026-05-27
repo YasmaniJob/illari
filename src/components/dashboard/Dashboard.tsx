@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchSessions } from '../../lib/api/client';
 import type { SessionConfig } from '../../lib/curriculum';
+import AuthModal from '../auth/AuthModal';
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat('es-PE', {
@@ -18,6 +19,7 @@ interface DashboardProps {
 export default function Dashboard({ userName }: DashboardProps) {
   const [sessions, setSessions] = useState<SessionConfig[]>([]);
   const [historialOpen, setHistorialOpen] = useState(false);
+  const [authModal, setAuthModal] = useState<'login' | 'register' | null>(null);
   const isLoggedIn = !!userName;
 
   useEffect(() => {
@@ -78,18 +80,20 @@ export default function Dashboard({ userName }: DashboardProps) {
           Crea una cuenta gratis para recuperar tus clases desde cualquier dispositivo.
         </p>
         <div className="flex flex-col gap-3 mt-6">
-          <a
-            href="/login?register=1"
+          <button
+            type="button"
+            onClick={() => setAuthModal('register')}
             className="w-full rounded-xl bg-lilac-600 px-4 py-3 text-sm font-bold text-white text-center shadow-[0_4px_14px_0_rgba(139,92,246,0.35)] transition-all duration-200 hover:bg-lilac-500 active:scale-[0.98]"
           >
             Crear cuenta gratis
-          </a>
-          <a
-            href="/login"
+          </button>
+          <button
+            type="button"
+            onClick={() => setAuthModal('login')}
             className="w-full rounded-xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 text-center transition-all duration-200 hover:bg-cream active:scale-[0.98]"
           >
             Ya tengo cuenta
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -201,6 +205,11 @@ export default function Dashboard({ userName }: DashboardProps) {
           {sidebarInner}
         </div>
       </aside>
+
+      {/* Auth modal */}
+      {authModal && (
+        <AuthModal initialMode={authModal} onClose={() => setAuthModal(null)} />
+      )}
     </div>
   );
 }
