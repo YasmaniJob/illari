@@ -1,53 +1,58 @@
 area,competencia,capacidad,criterio
-Comunicación,Se comunica oralmente en su lengua materna,Obtiene información del texto oral,Identifica información básica en textos orales cotidianos
-Comunicación,Se comunica oralmente en su lengua materna,Infiere e interpreta información del texto oral,Deduce el tema o propósito de lo que escucha
-Comunicación,Se comunica oralmente en su lengua materna,Adecúa organiza y desarrolla el texto oral,Expresa sus ideas con claridad adaptando su lenguaje al interlocutor
-Comunicación,Se comunica oralmente en su lengua materna,Utiliza recursos no verbales y paraverbales,Acompaña su discurso con gestos y entonación adecuados
-Comunicación,Se comunica oralmente en su lengua materna,Interactúa estratégicamente con distintos interlocutores,Participa en conversaciones respetando turnos y escuchando a los demás
-Comunicación,Lee diversos tipos de textos escritos en su lengua materna,Obtiene información del texto escrito,Identifica información explícita en imágenes y textos de su entorno
-Comunicación,Lee diversos tipos de textos escritos en su lengua materna,Infiere e interpreta información del texto,Anticipa el contenido del texto a partir de imágenes y títulos
-Comunicación,Lee diversos tipos de textos escritos en su lengua materna,Reflexiona y evalúa la forma el contenido y contexto del texto,Opina sobre personajes o situaciones del texto leído
-Comunicación,Escribe diversos tipos de textos en su lengua materna,Adecúa el texto a la situación comunicativa,Produce textos con intención comunicativa usando su escritura espontánea
-Comunicación,Escribe diversos tipos de textos en su lengua materna,Organiza y desarrolla las ideas de forma coherente,Dicta o escribe textos breves con ideas relacionadas al tema
-Comunicación,Escribe diversos tipos de textos en su lengua materna,Utiliza convenciones del lenguaje escrito de forma pertinente,Usa el espacio gráfico y la direccionalidad en su escritura
-Matemática,Resuelve problemas de cantidad,Traduce cantidades a expresiones numéricas,Agrupa y cuenta objetos estableciendo correspondencia uno a uno
-Matemática,Resuelve problemas de cantidad,Comunica su comprensión sobre los números y las operaciones,Expresa la cantidad de objetos usando los números del 1 al 10
-Matemática,Resuelve problemas de cantidad,Usa estrategias y procedimientos de estimación y cálculo,Compara colecciones de objetos usando más que menos que e igual que
-Matemática,Resuelve problemas de cantidad,Argumenta afirmaciones sobre las relaciones numéricas y las operaciones,Explica con sus palabras cómo resolvió un problema de cantidad
-Matemática,Resuelve problemas de regularidad equivalencia y cambio,Traduce datos y condiciones a expresiones algebraicas,Identifica y continúa patrones de objetos por color forma o tamaño
-Matemática,Resuelve problemas de regularidad equivalencia y cambio,Comunica su comprensión sobre las relaciones algebraicas,Describe el patrón que identificó usando sus propias palabras
-Matemática,Resuelve problemas de forma movimiento y localización,Modela objetos con formas geométricas y sus transformaciones,Identifica y nombra formas geométricas en objetos de su entorno
-Matemática,Resuelve problemas de forma movimiento y localización,Comunica su comprensión sobre las formas y relaciones geométricas,Describe la posición de objetos usando nociones espaciales
-Matemática,Resuelve problemas de gestión de datos e incertidumbre,Representa datos con gráficos y medidas estadísticas,Recolecta datos y los representa en pictogramas sencillos
-Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Problematiza situaciones para hacer indagación,Formula preguntas sobre características de seres vivos y objetos
-Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Diseña estrategias para hacer indagación,Propone acciones para explorar y observar fenómenos naturales
-Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Genera y registra datos e información,Registra sus observaciones mediante dibujos o dictado al docente
-Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Analiza datos e información,Compara sus predicciones con los resultados obtenidos
-Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Evalúa y comunica el proceso y resultados de su indagación,Comunica lo que descubrió usando sus propias palabras
-Ciencia y Tecnología,Explica el mundo físico basándose en conocimientos sobre los seres vivos materia y energía,Comprende y usa conocimientos sobre los seres vivos materia y energía,Describe características de seres vivos y objetos de su entorno
-Ciencia y Tecnología,Explica el mundo físico basándose en conocimientos sobre los seres vivos materia y energía,Evalúa las implicancias del saber y del quehacer científico y tecnológico,Reconoce cómo la ciencia ayuda a cuidar el ambiente y la salud
-Ciencia y Tecnología,Diseña y construye soluciones tecnológicas para resolver problemas de su entorno,Determina una alternativa de solución tecnológica,Propone ideas para resolver un problema usando materiales del entorno
-Ciencia y Tecnología,Diseña y construye soluciones tecnológicas para resolver problemas de su entorno,Implementa y valida alternativas de solución tecnológica,Construye objetos o artefactos sencillos con materiales reciclados
-Personal Social,Construye su identidad,Se valora a sí mismo,Reconoce sus características físicas y cualidades personales
-Personal Social,Construye su identidad,Autorregula sus emociones,Identifica y expresa sus emociones en distintas situaciones
-Personal Social,Construye su identidad,Reflexiona y argumenta éticamente,Distingue acciones que están bien o mal en situaciones cotidianas
-Personal Social,Construye su identidad,Vive su sexualidad de manera plena y responsable,Reconoce las partes de su cuerpo y las diferencias entre niños y niñas
-Personal Social,Convive y participa democráticamente en la búsqueda del bien común,Interactúa con todas las personas,Juega y trabaja con sus compañeros respetando las diferencias
+Personal Social,Construye su identidad,Se valora a sí mismo,Reconoce sus características físicas y cualidades personales con agrado
+Personal Social,Construye su identidad,Se valora a sí mismo,Expresa sus emociones e identifica las causas que las generan
+Personal Social,Construye su identidad,Autorregula sus emociones,Reconoce las emociones de sus compañeros y actúa con empatía
+Personal Social,Construye su identidad,Autorregula sus emociones,Busca la compañía del adulto en situaciones que le generan malestar
+Personal Social,Construye su identidad,Reflexiona y argumenta éticamente,Distingue acciones que están bien o mal según las normas del aula
+Personal Social,Construye su identidad,Vive su sexualidad de manera plena y responsable,Reconoce las partes de su cuerpo y las diferencias entre niños y niñas con naturalidad
+Personal Social,Convive y participa democráticamente en la búsqueda del bien común,Interactúa con todas las personas,Juega y trabaja con sus compañeros respetando diferencias y acuerdos
 Personal Social,Convive y participa democráticamente en la búsqueda del bien común,Construye y asume acuerdos y normas,Participa en la elaboración de normas de convivencia del aula
 Personal Social,Convive y participa democráticamente en la búsqueda del bien común,Participa en acciones que promueven el bienestar común,Colabora en actividades grupales y cuida los espacios compartidos
 Personal Social,Construye interpretaciones históricas,Interpreta críticamente fuentes diversas,Reconoce que tiene una historia personal y familiar
 Personal Social,Gestiona responsablemente el espacio y el ambiente,Comprende las relaciones entre los elementos naturales y sociales,Describe características del lugar donde vive y su entorno natural
 Personal Social,Gestiona responsablemente los recursos económicos,Comprende las relaciones entre los elementos del sistema económico y financiero,Reconoce el valor del trabajo y los oficios de las personas de su comunidad
-Arte y Cultura,Aprecia de manera crítica manifestaciones artístico-culturales,Percibe manifestaciones artístico-culturales,Observa y describe obras de arte expresando lo que siente y piensa
-Arte y Cultura,Aprecia de manera crítica manifestaciones artístico-culturales,Contextualiza las manifestaciones culturales,Reconoce manifestaciones artísticas de su comunidad y región
-Arte y Cultura,Aprecia de manera crítica manifestaciones artístico-culturales,Reflexiona creativa y críticamente sobre las manifestaciones artístico-culturales,Expresa su opinión sobre obras de arte usando sus propias palabras
-Arte y Cultura,Crea proyectos desde los lenguajes artísticos,Explora y experimenta los lenguajes del arte,Experimenta con materiales plásticos sonoros y corporales de forma libre
-Arte y Cultura,Crea proyectos desde los lenguajes artísticos,Aplica procesos creativos,Crea representaciones usando dibujo pintura modelado o construcción
-Arte y Cultura,Crea proyectos desde los lenguajes artísticos,Socializa sus procesos y proyectos,Comparte y explica sus creaciones artísticas con sus compañeros
-Psicomotricidad,Se desenvuelve de manera autónoma a través de su motricidad,Comprende su cuerpo,Reconoce las partes de su cuerpo y sus posibilidades de movimiento
-Psicomotricidad,Se desenvuelve de manera autónoma a través de su motricidad,Se expresa corporalmente,Expresa emociones e ideas a través del movimiento y el juego corporal
-Psicomotricidad,Se desenvuelve de manera autónoma a través de su motricidad,Comprende su cuerpo,Coordina movimientos de equilibrio desplazamiento y manipulación de objetos
-Psicomotricidad,Se desenvuelve de manera autónoma a través de su motricidad,Se expresa corporalmente,Participa con agrado en actividades de juego libre y dirigido
-Educación Religiosa,Construye su identidad como persona humana amada por Dios,Conoce a Dios y asume su identidad religiosa,Reconoce que es amado por Dios y que forma parte de una comunidad de fe
-Educación Religiosa,Construye su identidad como persona humana amada por Dios,Cultiva y valora las manifestaciones religiosas de su entorno,Participa con respeto en celebraciones y tradiciones religiosas de su comunidad
-Educación Religiosa,Asume la experiencia del encuentro personal y comunitario con Dios,Transforma su entorno desde el encuentro con Dios,Practica valores de respeto solidaridad y cuidado hacia los demás
+Personal Social,Asume la experiencia del encuentro personal y comunitario con Dios,Conoce a Dios y asume su identidad religiosa y espiritual,Reconoce que es amado por Dios y que forma parte de una comunidad de fe
+Personal Social,Asume la experiencia del encuentro personal y comunitario con Dios,Cultiva y valora las manifestaciones religiosas de su entorno argumentando su fe,Participa con respeto en celebraciones y tradiciones religiosas de su comunidad
+Psicomotriz,Se desenvuelve de manera autónoma a través de su motricidad,Comprende su cuerpo,Reconoce las partes de su cuerpo y sus posibilidades de movimiento en distintas situaciones
+Psicomotriz,Se desenvuelve de manera autónoma a través de su motricidad,Comprende su cuerpo,Identifica las sensaciones que experimenta su cuerpo durante el movimiento y el juego
+Psicomotriz,Se desenvuelve de manera autónoma a través de su motricidad,Se expresa corporalmente,Expresa emociones e ideas a través del movimiento el juego y la danza
+Psicomotriz,Se desenvuelve de manera autónoma a través de su motricidad,Se expresa corporalmente,Coordina sus movimientos en actividades de equilibrio desplazamiento y manipulación de objetos
+Psicomotriz,Se desenvuelve de manera autónoma a través de su motricidad,Se expresa corporalmente,Participa con agrado en actividades de juego libre y dirigido mostrando iniciativa
+Comunicación,Se comunica oralmente en su lengua materna,Obtiene información del texto oral,Identifica información básica en textos orales cotidianos como cuentos canciones y conversaciones
+Comunicación,Se comunica oralmente en su lengua materna,Infiere e interpreta información del texto oral,Deduce el tema o propósito de lo que escucha en situaciones comunicativas cotidianas
+Comunicación,Se comunica oralmente en su lengua materna,Adecúa organiza y desarrolla el texto oral de forma coherente y cohesionada,Expresa sus ideas con claridad adaptando su lenguaje al interlocutor y al contexto
+Comunicación,Se comunica oralmente en su lengua materna,Utiliza recursos no verbales y paraverbales de forma estratégica,Acompaña su discurso con gestos entonación y expresión corporal adecuados
+Comunicación,Se comunica oralmente en su lengua materna,Interactúa estratégicamente con distintos interlocutores,Participa en conversaciones respetando turnos y escuchando activamente a los demás
+Comunicación,Lee diversos tipos de textos escritos en su lengua materna,Obtiene información del texto escrito,Identifica información explícita en imágenes y textos de su entorno cotidiano
+Comunicación,Lee diversos tipos de textos escritos en su lengua materna,Infiere e interpreta información del texto,Anticipa el contenido del texto a partir de imágenes títulos y portadas
+Comunicación,Lee diversos tipos de textos escritos en su lengua materna,Reflexiona y evalúa la forma el contenido y contexto del texto,Opina sobre personajes o situaciones del texto leído expresando sus preferencias
+Comunicación,Escribe diversos tipos de textos en su lengua materna,Adecúa el texto a la situación comunicativa,Produce textos con intención comunicativa usando su escritura espontánea o convencional
+Comunicación,Escribe diversos tipos de textos en su lengua materna,Organiza y desarrolla las ideas de forma coherente y cohesionada,Dicta o escribe textos breves con ideas relacionadas al tema y al propósito
+Comunicación,Escribe diversos tipos de textos en su lengua materna,Utiliza convenciones del lenguaje escrito de forma pertinente,Usa el espacio gráfico la linealidad y la direccionalidad en su escritura
+Comunicación,Crea proyectos desde los lenguajes artísticos,Explora y experimenta los lenguajes del arte,Experimenta con materiales plásticos sonoros y corporales de forma libre y creativa
+Comunicación,Crea proyectos desde los lenguajes artísticos,Aplica procesos creativos,Crea representaciones usando dibujo pintura modelado construcción o expresión corporal
+Comunicación,Crea proyectos desde los lenguajes artísticos,Socializa sus procesos y proyectos,Comparte y explica sus creaciones artísticas con sus compañeros y docente
+Comunicación,Aprecia de manera crítica manifestaciones artístico-culturales,Percibe manifestaciones artístico-culturales,Observa y describe obras de arte expresando lo que siente y piensa
+Comunicación,Aprecia de manera crítica manifestaciones artístico-culturales,Contextualiza las manifestaciones culturales,Reconoce manifestaciones artísticas de su comunidad y región
+Castellano como Segunda Lengua,Se comunica oralmente en castellano como segunda lengua,Obtiene información del texto oral,Identifica palabras y expresiones básicas en castellano en situaciones cotidianas
+Castellano como Segunda Lengua,Se comunica oralmente en castellano como segunda lengua,Infiere e interpreta información del texto oral,Comprende mensajes sencillos en castellano apoyándose en gestos e imágenes
+Castellano como Segunda Lengua,Se comunica oralmente en castellano como segunda lengua,Adecúa organiza y desarrolla el texto oral de forma coherente,Expresa necesidades e ideas básicas en castellano usando vocabulario aprendido
+Castellano como Segunda Lengua,Se comunica oralmente en castellano como segunda lengua,Interactúa estratégicamente con distintos interlocutores,Participa en intercambios orales sencillos en castellano con apoyo del docente
+Matemática,Resuelve problemas de cantidad,Traduce cantidades a expresiones numéricas,Agrupa y cuenta objetos estableciendo correspondencia uno a uno hasta el 10
+Matemática,Resuelve problemas de cantidad,Comunica su comprensión sobre los números y las operaciones,Expresa la cantidad de objetos usando los números del 1 al 10 en situaciones cotidianas
+Matemática,Resuelve problemas de cantidad,Usa estrategias y procedimientos de estimación y cálculo,Compara colecciones de objetos usando más que menos que e igual que
+Matemática,Resuelve problemas de cantidad,Argumenta afirmaciones sobre las relaciones numéricas y las operaciones,Explica con sus palabras cómo resolvió un problema de cantidad usando materiales concretos
+Matemática,Resuelve problemas de regularidad equivalencia y cambio,Traduce datos y condiciones a expresiones algebraicas y gráficas,Identifica y continúa patrones de objetos por color forma tamaño o posición
+Matemática,Resuelve problemas de regularidad equivalencia y cambio,Comunica su comprensión sobre las relaciones algebraicas,Describe el patrón que identificó usando sus propias palabras
+Matemática,Resuelve problemas de forma movimiento y localización,Modela objetos con formas geométricas y sus transformaciones,Identifica y nombra formas geométricas en objetos de su entorno cotidiano
+Matemática,Resuelve problemas de forma movimiento y localización,Comunica su comprensión sobre las formas y relaciones geométricas,Describe la posición de objetos usando nociones espaciales como arriba abajo dentro fuera
+Matemática,Resuelve problemas de gestión de datos e incertidumbre,Representa datos con gráficos y medidas estadísticas o probabilísticas,Recolecta datos y los representa en pictogramas o tablas sencillas con apoyo
+Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Problematiza situaciones para hacer indagación,Formula preguntas sobre características de seres vivos objetos y fenómenos de su entorno
+Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Diseña estrategias para hacer indagación,Propone acciones para explorar y observar fenómenos naturales con materiales del entorno
+Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Genera y registra datos e información,Registra sus observaciones mediante dibujos dictado al docente o marcas propias
+Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Analiza datos e información,Compara sus predicciones con los resultados obtenidos y los comenta
+Ciencia y Tecnología,Indaga mediante métodos científicos para construir conocimientos,Evalúa y comunica el proceso y resultados de su indagación,Comunica lo que descubrió usando sus propias palabras dibujos o gestos
+Ciencia y Tecnología,Explica el mundo físico basándose en conocimientos sobre los seres vivos materia y energía,Comprende y usa conocimientos sobre los seres vivos materia y energía,Describe características de seres vivos y objetos de su entorno usando sus sentidos
+Ciencia y Tecnología,Explica el mundo físico basándose en conocimientos sobre los seres vivos materia y energía,Evalúa las implicancias del saber y del quehacer científico y tecnológico,Reconoce cómo la ciencia ayuda a cuidar el ambiente y la salud de las personas
+Ciencia y Tecnología,Diseña y construye soluciones tecnológicas para resolver problemas de su entorno,Determina una alternativa de solución tecnológica,Propone ideas para resolver un problema usando materiales del entorno
+Ciencia y Tecnología,Diseña y construye soluciones tecnológicas para resolver problemas de su entorno,Implementa y valida alternativas de solución tecnológica,Construye objetos o artefactos sencillos con materiales reciclados evaluando su funcionalidad
