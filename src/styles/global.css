@@ -26,6 +26,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  @media (max-width: 640px) {
+    html {
+      font-size: 16px;
+    }
+  }
+
   body {
     @apply bg-cream text-warm-900 leading-relaxed;
   }
@@ -54,6 +60,11 @@
   ::-webkit-scrollbar-thumb:hover {
     background-color: var(--color-coral-600);
   }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
 }
 
 @layer utilities {

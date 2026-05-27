@@ -15,6 +15,7 @@ import CuadernoCampo from './CuadernoCampo';
 import EditSessionDrawer from './EditSessionDrawer';
 import PropositoModal from './PropositoModal';
 import StudentList from './StudentList';
+import StudentPickerSheet from './StudentPickerSheet';
 
 export default function LiveClassroom() {
   const [session, setSession] = useState<SessionConfig | null>(null);
@@ -28,6 +29,7 @@ export default function LiveClassroom() {
   const [showCuaderno, setShowCuaderno] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showProposito, setShowProposito] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
   const [errorModal, setErrorModal] = useState<{ title: string; message: string; name?: string } | null>(null);
 
 
@@ -284,30 +286,6 @@ export default function LiveClassroom() {
         </div>
       )}
 
-      {/* ── Mobile: student carousel ── */}
-      {students.length > 0 && (
-        <div className="shrink-0 md:hidden px-4 pt-3 pb-1">
-          <StudentList
-            students={students}
-            selectedId={selectedStudentId}
-            onSelect={(id) => setSelectedStudentId(id)}
-            variant="carousel"
-            grado={session.grado ?? undefined}
-            seccion={session.seccion ?? undefined}
-          />
-        </div>
-      )}
-
-      {/* ── No students banner (mobile) ── */}
-      {students.length === 0 && (
-        <div className="shrink-0 md:hidden mx-4 mt-3 rounded-xl border border-coral-500/30 bg-coral-500/10 px-3 py-2 text-center">
-          <p className="text-sm font-bold text-warm-900">Sin estudiantes registrados.</p>
-          <a href="/mis-pequenos" className="text-sm font-bold text-coral-600 underline">
-            Registrar estudiantes
-          </a>
-        </div>
-      )}
-
       {/* ── Main: sidebar + chat ── */}
       <div className="flex flex-1 min-h-0 md:grid md:grid-cols-[300px_1fr]">
 
@@ -339,6 +317,7 @@ export default function LiveClassroom() {
             disabled={sending}
             selectedStudent={selectedStudent ?? null}
             onClearStudent={() => setSelectedStudentId(null)}
+            onOpenPicker={students.length > 0 ? () => setShowPicker(true) : undefined}
           />
         </div>
       </div>
@@ -421,6 +400,18 @@ export default function LiveClassroom() {
         <PropositoModal
           session={session}
           onClose={() => setShowProposito(false)}
+        />
+      )}
+
+      {/* Student picker — bottom sheet */}
+      {showPicker && (
+        <StudentPickerSheet
+          students={students}
+          selectedId={selectedStudentId}
+          grado={session.grado ?? undefined}
+          seccion={session.seccion ?? undefined}
+          onSelect={(id) => setSelectedStudentId(id)}
+          onClose={() => setShowPicker(false)}
         />
       )}
     </div>

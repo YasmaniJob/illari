@@ -218,9 +218,9 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
         />
       </div>
 
-      {/* Área + Competencia en fila 40/60 */}
-      <div className="flex gap-3 items-start">
-        <div className="w-[40%] shrink-0">
+      {/* Área + Competencia: columna en mobile, fila en desktop */}
+      <div className="flex flex-col sm:flex-row gap-3 items-start">
+        <div className="w-full sm:w-[40%] sm:shrink-0">
           <CustomSelect
             label="Área"
             value={values.area}
@@ -229,7 +229,7 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
             onChange={handleAreaChange}
           />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="w-full sm:flex-1 sm:min-w-0">
           <CustomSelect
             label="Competencia"
             value={values.competencia}

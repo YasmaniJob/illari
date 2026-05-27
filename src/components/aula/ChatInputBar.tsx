@@ -6,6 +6,7 @@ interface ChatInputBarProps {
   disabled?: boolean;
   selectedStudent?: { id: string; name: string } | null;
   onClearStudent?: () => void;
+  onOpenPicker?: () => void;
 }
 
 /** Convierte un Blob de audio a base64 */
@@ -39,6 +40,7 @@ export default function ChatInputBar({
   disabled = false,
   selectedStudent,
   onClearStudent,
+  onOpenPicker,
 }: ChatInputBarProps) {
   const [text, setText] = useState('');
   const [recording, setRecording] = useState(false);
@@ -161,30 +163,49 @@ export default function ChatInputBar({
 
   return (
     <div className="shrink-0 px-4 pb-4 pt-2 md:px-6 md:pb-5">
-      {/* ── Indicador pedagógico de seguimiento ── */}
+      {/* ── Selector de estudiante — botón que abre el picker ── */}
       <div className="mx-auto max-w-2xl md:max-w-none mb-3 flex items-center gap-2">
-        {selectedStudent ? (
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-lilac-50 border border-lilac-200 px-3 py-1.5 text-xs font-extrabold text-lilac-800 transition-all duration-200 animate-fade-in shadow-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-lilac-500 shrink-0" aria-hidden />
-            Observando a: <span className="text-lilac-600 font-extrabold">{selectedStudent.name}</span>
-            {onClearStudent && (
-              <button
-                type="button"
-                onClick={onClearStudent}
-                aria-label="Volver a observación grupal"
-                className="ml-1 flex h-4 w-4 items-center justify-center rounded-full text-lilac-400 hover:bg-lilac-200/50 hover:text-lilac-700 transition-colors"
-              >
-                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            )}
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-honey-50 border border-honey-200 px-3 py-1.5 text-xs font-extrabold text-honey-850 shadow-sm">
-            <span className="text-sm animate-pulse" aria-hidden>🏫</span>
-            Observación general del grupo
-          </span>
+        <button
+          type="button"
+          onClick={onOpenPicker}
+          className={[
+            'inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all duration-200 shadow-sm',
+            'focus:outline-none focus:ring-4 focus:ring-lilac-500/20 active:scale-[0.97]',
+            selectedStudent
+              ? 'bg-lilac-50 border border-lilac-200 text-lilac-800 hover:bg-lilac-100'
+              : 'bg-honey-50 border border-honey-200 text-honey-850 hover:bg-honey-100',
+          ].join(' ')}
+          aria-label="Cambiar estudiante seleccionado"
+        >
+          {selectedStudent ? (
+            <>
+              <span className="h-1.5 w-1.5 rounded-full bg-lilac-500 shrink-0" aria-hidden />
+              Observando a: <span className="text-lilac-600 font-extrabold">{selectedStudent.name}</span>
+            </>
+          ) : (
+            <>
+              <span className="text-sm" aria-hidden>🏫</span>
+              Aula General
+            </>
+          )}
+          {/* Chevron — indica que es clickeable */}
+          <svg className="h-3.5 w-3.5 text-current opacity-60 ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {/* Botón X para limpiar selección individual */}
+        {selectedStudent && onClearStudent && (
+          <button
+            type="button"
+            onClick={onClearStudent}
+            aria-label="Volver a observación grupal"
+            className="flex h-6 w-6 items-center justify-center rounded-full text-warm-400 hover:bg-cream hover:text-warm-700 transition-colors"
+          >
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         )}
       </div>
 

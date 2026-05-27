@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { createSession, saveStudents } from '../../lib/api/client';
-import { GRADOS } from '../../lib/classroom';
 import type { CurriculumRow } from '../../lib/curriculum';
 import type { MatchedScanResult } from '../../lib/curriculumMatch';
 import { compressImageForScan } from '../../lib/scan/compressImage';
@@ -16,28 +15,6 @@ const STEPS = ['Tu aula', 'Mis estudiantes', 'Planificación'] as const;
 const STEP_EMOJI: Record<number, string> = { 1: '🏫', 2: '👥', 3: '📚' };
 
 const TOTAL = STEPS.length;
-
-/** Metadatos visuales de cada grado */
-const GRADO_META: Record<string, { icon: string; activeBg: string; activeBorder: string; activeText: string }> = {
-  '3 años': {
-    icon: '🐣',
-    activeBg: 'bg-honey-200/60',
-    activeBorder: 'border-honey-400',
-    activeText: 'text-warm-900',
-  },
-  '4 años': {
-    icon: '🌱',
-    activeBg: 'bg-mint-400/20',
-    activeBorder: 'border-mint-400',
-    activeText: 'text-warm-900',
-  },
-  '5 años': {
-    icon: '🦋',
-    activeBg: 'bg-sky-300/20',
-    activeBorder: 'border-sky-300',
-    activeText: 'text-warm-900',
-  },
-};
 
 /** Secciones fijas + opción "Otro…" */
 const SECCIONES_FIJAS = ['A', 'B', 'C', 'Única'] as const;
@@ -220,40 +197,30 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       content: (
         <OnboardingStepCard title="Tu aula">
           <div className="flex flex-col flex-1 min-h-0 gap-5">
-            {/* Grado — multiselección, toggle por tarjeta */}
-            <div className="grid grid-cols-3 gap-4 flex-1 min-h-0 overflow-visible">
-              {GRADOS.map((g) => {
-                const meta = GRADO_META[g];
-                const isActive = grados.includes(g);
+            {/* Grado — Selección única con radio cards */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              {[
+                { key: '3 años', emoji: '🐣', className: '' },
+                { key: '4 años', emoji: '🌱', className: '' },
+                { key: '5 años', emoji: '🦋', className: 'col-span-2' },
+              ].map((item) => {
+                const isActive = grados.includes(item.key);
                 return (
                   <button
-                    key={g}
+                    key={item.key}
                     type="button"
-                    onClick={() => setGrados((prev) => (prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]))}
+                    onClick={() => setGrados([item.key])}
                     aria-pressed={isActive}
                     className={[
-                      'relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2',
-                      'transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-lilac-500/20',
-                      'w-full h-full',
+                      'rounded-2xl border-2 p-6 flex flex-col items-center justify-center gap-4 transition-all hover:shadow-md h-40 active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#f97316]/20',
+                      item.className,
                       isActive
-                        ? `${meta.activeBg} ${meta.activeBorder} shadow-md`
-                        : 'border-cream-dark bg-white hover:border-lilac-200 hover:bg-cream/60',
+                        ? 'border-[#f97316] bg-[#fff7ed]'
+                        : 'border-[#fde6d5] bg-white text-[#4a3f35]',
                     ].join(' ')}
                   >
-                    {/* Check badge */}
-                    {isActive && (
-                      <span className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-coral-500 text-white text-[10px] font-extrabold shadow-sm">
-                        ✓
-                      </span>
-                    )}
-                    <span className="text-5xl leading-none" aria-hidden>
-                      {meta.icon}
-                    </span>
-                    <span
-                      className={`text-base font-extrabold leading-tight text-center ${isActive ? 'text-warm-900' : 'text-warm-500'}`}
-                    >
-                      {g}
-                    </span>
+                    <div className="text-5xl leading-none">{item.emoji}</div>
+                    <span className="font-bold text-lg text-[#4a3f35]">{item.key}</span>
                   </button>
                 );
               })}
@@ -261,8 +228,8 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
 
             {/* Sección */}
             <div className="shrink-0">
-              <p className="text-sm font-bold text-warm-900 mb-2.5">Sección</p>
-              <div className="flex gap-2">
+              <p className="text-base font-bold text-[#4a3f35] mb-4">Sección</p>
+              <div className="flex flex-wrap gap-3">
                 {SECCIONES_FIJAS.map((s) => {
                   const isActive = !showSeccionInput && seccion === s;
                   return (
@@ -271,10 +238,10 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                       type="button"
                       onClick={() => handleSeccionFija(s)}
                       className={[
-                        'flex-1 rounded-xl border-2 py-3 text-base font-extrabold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-lilac-500/20',
+                        'rounded-xl border-2 py-3 px-4 text-center font-bold transition-all hover:bg-gray-50 flex-1 min-w-[70px] cursor-pointer active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#f97316]/20',
                         isActive
-                          ? 'border-coral-500 bg-coral-500/10 text-coral-600 shadow-sm'
-                          : 'border-cream-dark bg-white text-warm-700 hover:border-lilac-300',
+                          ? 'border-[#f97316] bg-[#fff7ed] text-[#f97316]'
+                          : 'border-[#fde6d5] bg-white text-[#4a3f35]',
                       ].join(' ')}
                     >
                       {s}
@@ -293,13 +260,13 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                       : handleSeccionOtro
                   }
                   className={[
-                    'flex-1 rounded-xl border-2 py-3 text-base font-extrabold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-lilac-500/20',
+                    'rounded-xl border-2 py-3 px-4 text-center font-bold transition-all hover:bg-gray-50 flex-1 min-w-[70px] cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus:ring-4 focus:ring-[#f97316]/20',
                     showSeccionInput
-                      ? 'border-lilac-400 bg-lilac-100/60 text-lilac-700'
-                      : 'border-cream-dark bg-white text-warm-500 hover:border-lilac-300',
+                      ? 'border-[#f97316] bg-[#fff7ed] text-[#f97316]'
+                      : 'border-[#fde6d5] bg-white text-[#f97316]',
                   ].join(' ')}
                 >
-                  {showSeccionInput && seccionCustom ? '✕ Limpiar' : '✨ Otro…'}
+                  {showSeccionInput && seccionCustom ? '✕ Limpiar' : '✨ Otro...'}
                 </button>
               </div>
 
@@ -314,7 +281,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                     value={seccionCustom}
                     onChange={(e) => setSeccionCustom(e.target.value)}
                     placeholder="Ej. D, G, Celeste, Pollitos…"
-                    className="input-warm mt-3"
+                    className="w-full rounded-2xl border-2 border-[#fde6d5] bg-white px-5 py-4 text-lg text-[#4a3f35] placeholder:text-[#8b7355]/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none focus:border-[#8b5cf6] focus:ring-4 focus:ring-[#8b5cf6]/20 mt-3"
                     tabIndex={showSeccionInput ? 0 : -1}
                     maxLength={20}
                   />
@@ -381,13 +348,35 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="flex h-full min-h-0 overflow-hidden">
+    <div className="flex h-full min-h-0 overflow-hidden flex-col md:flex-row">
+
       {/* ══════════════════════════════════════════
-          COLUMNA IZQUIERDA — Pestañas de cuaderno
+          MOBILE — Stepper indicator (solo < md)
+          ══════════════════════════════════════════ */}
+      <div className="md:hidden shrink-0 px-6 pt-6 flex flex-col gap-2">
+        <div className="flex justify-between items-center text-sm font-semibold">
+          <span className="text-[#f97316] bg-orange-100 px-3 py-1 rounded-full flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-[#f97316] text-white flex items-center justify-center text-xs">
+              {step}
+            </span>
+            {STEPS[step - 1]}
+          </span>
+          <span className="text-gray-400 font-bold">{step} / {TOTAL}</span>
+        </div>
+        <div className="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+          <div
+            className="bg-[#f97316] h-1.5 rounded-full transition-all duration-500 ease-out"
+            style={{ width: `${(step / TOTAL) * 100}%` }}
+          />
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          DESKTOP — Pestañas de cuaderno (solo ≥ md)
           ══════════════════════════════════════════ */}
       <nav
         aria-label="Pasos del asistente"
-        className="w-[160px] shrink-0 flex flex-col justify-center gap-1.5 py-8 pl-6 pr-0"
+        className="hidden md:flex md:w-[160px] shrink-0 md:flex-col md:justify-center gap-1.5 md:py-8 md:pl-6 md:pr-0"
       >
         {STEPS.map((label, index) => {
           const s = index + 1;
@@ -404,7 +393,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
               aria-current={isActive ? 'step' : undefined}
               title={isActive ? label : canClick ? `Volver a: ${label}` : label}
               className={[
-                'relative flex flex-col items-start text-left w-full',
+                'relative flex flex-col items-start text-left',
                 'rounded-l-2xl px-3 py-2.5 transition-all duration-200',
                 'border-y-2 border-l-2 border-r-0',
                 isActive
@@ -414,7 +403,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                     : 'bg-cream/50 border-cream-dark/40 cursor-default opacity-50',
               ].join(' ')}
             >
-              {/* Número + emoji */}
               <span className="flex items-center gap-1.5 w-full">
                 <span
                   className={[
@@ -435,8 +423,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                   </span>
                 )}
               </span>
-
-              {/* Texto */}
               {isComplete ? (
                 <span className="mt-1 text-[11px] font-bold text-lilac-700 leading-tight line-clamp-2 w-full">
                   {getTabSummary(s)}
@@ -455,7 +441,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
           );
         })}
 
-        {/* Barra de progreso */}
+        {/* Barra de progreso desktop */}
         <div className="mt-5 pl-1 pr-3">
           <div className="h-1 w-full rounded-full bg-cream-dark overflow-hidden">
             <div
@@ -472,19 +458,19 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       {/* ══════════════════════════════════════════
           COLUMNA DERECHA — Tarjeta del paso actual
           ══════════════════════════════════════════ */}
-      <div className="flex flex-1 min-h-0 flex-col overflow-hidden py-5 pr-6">
-        {/* Tarjeta */}
+      <div className="flex flex-1 min-h-0 flex-col overflow-hidden px-4 pb-0 md:py-5 md:pr-6 md:pl-0">
+        {/* Tarjeta — scrollable en mobile */}
         <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
           <CardStack cards={stackCards} activeStep={step} direction={direction} />
         </div>
 
-        {/* Botones de navegación */}
-        <footer className="shrink-0 flex gap-3 pt-3">
+        {/* Botones de navegación — apilados en mobile, fila en desktop */}
+        <footer className="shrink-0 flex flex-col-reverse md:flex-row gap-2 md:gap-3 pt-3 pb-4 md:pb-0 bg-white md:bg-transparent border-t border-cream-dark md:border-none">
+          {/* Paso 1 en mobile: oculto. Desktop: siempre visible. En paso 1 navega al inicio. */}
           <button
             type="button"
-            onClick={() => (step > 1 ? goTo(step - 1) : undefined)}
-            disabled={step === 1}
-            className="btn-secondary flex-1 py-3 text-base"
+            onClick={() => step > 1 ? goTo(step - 1) : (window.location.href = '/')}
+            className={['btn-secondary w-full md:flex-1 py-3 text-base', step === 1 ? 'hidden md:inline-flex' : ''].join(' ')}
           >
             Volver
           </button>
@@ -493,7 +479,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
               type="button"
               onClick={() => goTo(step + 1)}
               disabled={!canAdvance()}
-              className="btn-primary flex-1 py-3 text-base"
+              className="btn-primary w-full md:flex-1 py-3 text-base"
             >
               Siguiente →
             </button>
@@ -502,7 +488,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
               type="button"
               onClick={handleStartSession}
               disabled={!canAdvance()}
-              className="btn-primary flex-1 py-3 text-base"
+              className="btn-primary w-full md:flex-1 py-3 text-base"
             >
               🚀 ¡Empezar mi clase hoy!
             </button>

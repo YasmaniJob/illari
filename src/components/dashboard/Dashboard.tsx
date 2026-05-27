@@ -17,6 +17,7 @@ interface DashboardProps {
 
 export default function Dashboard({ userName }: DashboardProps) {
   const [sessions, setSessions] = useState<SessionConfig[]>([]);
+  const [historialOpen, setHistorialOpen] = useState(false);
   const isLoggedIn = !!userName;
 
   useEffect(() => {
@@ -26,38 +27,116 @@ export default function Dashboard({ userName }: DashboardProps) {
       .catch(() => setSessions([]));
   }, [isLoggedIn]);
 
+  // ── Sidebar content (shared between desktop aside and mobile accordion) ──────
+  const sidebarInner = isLoggedIn ? (
+    sessions.length === 0 ? (
+      <div className="flex flex-col items-center justify-center flex-1 gap-3 text-center px-4 py-8">
+        <span className="text-4xl" aria-hidden>🌱</span>
+        <p className="text-sm font-semibold text-warm-700 leading-relaxed">
+          Todavía no guardaste ninguna clase. ¡La primera será especial!
+        </p>
+      </div>
+    ) : (
+      <ul className="flex flex-col gap-2 px-4 py-4 overflow-y-auto flex-1">
+        {sessions.map((session) => (
+          <li key={session.id}>
+            <a
+              href={session.status === 'active' ? '/aula' : '#'}
+              className="flex flex-col gap-1 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 transition-all duration-200 hover:border-lilac-400/50 hover:shadow-sm"
+            >
+              {session.grado && session.seccion && (
+                <p className="text-xs font-bold text-coral-600 uppercase tracking-wide">
+                  {session.grado} · Sección {session.seccion}
+                </p>
+              )}
+              <p className="text-sm font-bold text-warm-900 line-clamp-1">{session.titulo || session.area}</p>
+              <div className="flex items-center justify-between gap-2 mt-0.5">
+                <span
+                  className={[
+                    'text-xs font-bold px-2 py-0.5 rounded-full',
+                    session.status === 'active' ? 'bg-mint-400/30 text-warm-900' : 'bg-cream-dark text-warm-700',
+                  ].join(' ')}
+                >
+                  {session.status === 'active' ? 'En el aula' : 'Terminada'}
+                </span>
+                <time className="text-xs text-warm-500 font-semibold shrink-0">
+                  {formatDate(session.createdAt)}
+                </time>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  ) : (
+    /* No logueado — cloud promo card */
+    <div className="flex-1 overflow-y-auto px-4 py-4">
+      <div className="rounded-3xl bg-white border border-cream-dark p-6 text-center shadow-sm">
+        <span className="text-4xl" aria-hidden>☁️</span>
+        <p className="mt-4 text-sm text-warm-700 leading-relaxed">
+          <span className="font-bold text-warm-900">Guarda tu historial en la nube.</span>{' '}
+          Crea una cuenta gratis para recuperar tus clases desde cualquier dispositivo.
+        </p>
+        <div className="flex flex-col gap-3 mt-6">
+          <a
+            href="/login?register=1"
+            className="w-full rounded-xl bg-lilac-600 px-4 py-3 text-sm font-bold text-white text-center shadow-[0_4px_14px_0_rgba(139,92,246,0.35)] transition-all duration-200 hover:bg-lilac-500 active:scale-[0.98]"
+          >
+            Crear cuenta gratis
+          </a>
+          <a
+            href="/login"
+            className="w-full rounded-xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 text-center transition-all duration-200 hover:bg-cream active:scale-[0.98]"
+          >
+            Ya tengo cuenta
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="h-full flex overflow-hidden">
-      {/* ── ÁREA PRINCIPAL (70%) ── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-10 py-8 gap-8">
-        {/* Saludo contextual */}
-        <div className="text-center">
-          <h1 className="text-4xl font-extrabold text-warm-900 tracking-tight leading-tight">
+    <div className="h-full flex flex-col md:flex-row overflow-hidden">
+
+      {/* ── ÁREA PRINCIPAL ── */}
+      <div className="flex-1 flex flex-col p-6 sm:p-8 gap-5 overflow-hidden">
+
+        {/* Título — alineado a la izquierda, como el mockup */}
+        <div className="shrink-0">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-warm-900 tracking-tight leading-tight">
             {isLoggedIn ? `Hola, ${userName!.split(' ')[0]} 👋` : 'Tu cuaderno de campo'}
           </h1>
-          <p className="mt-2 text-lg text-warm-700">
+          <p className="mt-3 text-lg sm:text-xl text-warm-700">
             {isLoggedIn
               ? 'Listo para registrar tu clase de hoy.'
               : 'Observa, registra y acompaña mejor a tus niños cada día.'}
           </p>
         </div>
 
-        {/* Botón de acción principal */}
+        {/* Card coral — flex-1 para llenar el espacio restante en desktop */}
         <a
           href="/onboarding"
-          className="group flex flex-col items-center gap-4 w-full max-w-sm rounded-3xl bg-gradient-to-br from-coral-500 to-coral-600 px-10 py-8 text-white shadow-[0_8px_32px_-4px_rgba(224,122,95,0.5)] transition-all duration-200 hover:shadow-[0_12px_40px_-4px_rgba(224,122,95,0.6)] hover:scale-[1.02] active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-coral-500/30"
+          className="group flex flex-col items-center justify-center gap-6 flex-1 min-h-0 w-full rounded-3xl bg-gradient-to-br from-coral-500 to-coral-600 px-10 py-10 text-white shadow-[0_8px_32px_-4px_rgba(224,122,95,0.45)] transition-all duration-200 hover:shadow-[0_16px_48px_-4px_rgba(224,122,95,0.55)] hover:scale-[1.005] active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-coral-500/30"
           aria-label="Crear nuevo registro de campo"
         >
-          <span className="text-5xl" aria-hidden>
-            ➕
-          </span>
-          <span className="text-2xl font-extrabold tracking-tight text-center leading-snug">
-            Crear nuevo registro de campo
-          </span>
-          <span className="text-base font-semibold text-white/80 text-center">
-            Paso a paso: aula, currículo y propósito
-          </span>
-          <span className="mt-1 flex items-center gap-2 text-base font-bold bg-white/20 rounded-2xl px-5 py-2 group-hover:bg-white/30 transition-colors">
+          {/* Ícono con tratamiento especial — fondo claro, sombra */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-lilac-500 rounded-full blur-xl opacity-40" aria-hidden />
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-cream text-4xl font-extrabold text-lilac-600 shadow-lg rotate-3">
+              +
+            </div>
+          </div>
+
+          <div className="text-center">
+            <span className="block text-3xl sm:text-4xl font-extrabold tracking-tight leading-snug">
+              Crear nuevo registro de campo
+            </span>
+            <span className="block mt-3 text-base sm:text-lg font-semibold text-white/80">
+              Paso a paso: aula, currículo y propósito
+            </span>
+          </div>
+
+          <span className="flex items-center gap-2 text-base font-bold bg-white/20 rounded-2xl px-6 py-3 group-hover:bg-white/30 transition-colors backdrop-blur-sm border border-white/20">
             Comenzar ahora
             <svg
               className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1"
@@ -70,93 +149,56 @@ export default function Dashboard({ userName }: DashboardProps) {
             </svg>
           </span>
         </a>
+
+        {/* ── Historial colapsable — solo mobile ── */}
+        <div className="md:hidden shrink-0">
+          <button
+            type="button"
+            onClick={() => setHistorialOpen((v) => !v)}
+            className="w-full flex items-center justify-between gap-2 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 transition-all duration-200 hover:bg-cream active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-lilac-500/20"
+            aria-expanded={historialOpen}
+          >
+            <span className="flex items-center gap-2">
+              <span aria-hidden>📖</span>
+              Mis clases anteriores
+              {sessions.length > 0 && (
+                <span className="rounded-full bg-coral-500/15 px-2 py-0.5 text-xs font-extrabold text-coral-600">
+                  {sessions.length}
+                </span>
+              )}
+            </span>
+            <svg
+              className={`h-4 w-4 shrink-0 transition-transform duration-200 ${historialOpen ? 'rotate-180' : ''}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {historialOpen && (
+            <div className="mt-2 rounded-2xl border-2 border-cream-dark bg-[#fdf8f4] overflow-hidden max-h-72 overflow-y-auto">
+              {sidebarInner}
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* ── DIVISOR VERTICAL ── */}
-      <div className="w-px bg-cream-dark shrink-0 my-6" aria-hidden />
+      {/* ── DIVISOR VERTICAL — solo desktop ── */}
+      <div className="hidden md:block w-px bg-cream-dark shrink-0 my-6" aria-hidden />
 
-      {/* ── PANEL LATERAL DE HISTORIAL (30%) ── */}
-      <aside className="w-[320px] shrink-0 flex flex-col bg-[#fdf8f4] overflow-hidden">
-        <div className="px-6 pt-6 pb-4 border-b border-cream-dark">
+      {/* ── PANEL LATERAL — solo desktop ── */}
+      <aside className="hidden md:flex w-[300px] shrink-0 flex-col bg-[#fdf8f4] overflow-hidden">
+        <div className="px-6 pt-6 pb-4 border-b border-cream-dark shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-xl" aria-hidden>
-              📖
-            </span>
+            <span className="text-xl" aria-hidden>📖</span>
             <h2 className="text-base font-extrabold text-warm-900">Mis clases anteriores</h2>
           </div>
         </div>
-
-        <div className="flex-1 overflow-y-auto px-4 py-4">
-          {isLoggedIn ? (
-            sessions.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full gap-3 text-center px-4">
-                <span className="text-4xl" aria-hidden>
-                  🌱
-                </span>
-                <p className="text-sm font-semibold text-warm-700 leading-relaxed">
-                  Todavía no guardaste ninguna clase. ¡La primera será especial!
-                </p>
-              </div>
-            ) : (
-              <ul className="flex flex-col gap-2">
-                {sessions.map((session) => (
-                  <li key={session.id}>
-                    <a
-                      href={session.status === 'active' ? '/aula' : '#'}
-                      className="flex flex-col gap-1 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 transition-all duration-200 hover:border-lilac-400/50 hover:shadow-sm"
-                    >
-                      {session.grado && session.seccion && (
-                        <p className="text-xs font-bold text-coral-600 uppercase tracking-wide">
-                          {session.grado} · Sección {session.seccion}
-                        </p>
-                      )}
-                      <p className="text-sm font-bold text-warm-900 line-clamp-1">{session.titulo || session.area}</p>
-                      <div className="flex items-center justify-between gap-2 mt-0.5">
-                        <span
-                          className={[
-                            'text-xs font-bold px-2 py-0.5 rounded-full',
-                            session.status === 'active'
-                              ? 'bg-mint-400/30 text-warm-900'
-                              : 'bg-cream-dark text-warm-700',
-                          ].join(' ')}
-                        >
-                          {session.status === 'active' ? 'En el aula' : 'Terminada'}
-                        </span>
-                        <time className="text-xs text-warm-500 font-semibold shrink-0">
-                          {formatDate(session.createdAt)}
-                        </time>
-                      </div>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )
-          ) : (
-            /* Usuario no logueado: invitación discreta */
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-4">
-              <span className="text-4xl" aria-hidden>
-                ☁️
-              </span>
-              <p className="text-sm text-warm-700 leading-relaxed">
-                <span className="font-bold text-warm-900">Guarda tu historial en la nube.</span> Crea una cuenta gratis
-                para recuperar tus clases desde cualquier dispositivo.
-              </p>
-              <div className="flex flex-col gap-2 w-full">
-                <a
-                  href="/login?register=1"
-                  className="w-full rounded-2xl bg-lilac-600 px-4 py-2.5 text-sm font-bold text-white text-center shadow-sm transition-all duration-200 hover:bg-lilac-500 active:scale-[0.98]"
-                >
-                  Crear cuenta gratis
-                </a>
-                <a
-                  href="/login"
-                  className="w-full rounded-2xl border-2 border-cream-dark bg-white px-4 py-2.5 text-sm font-bold text-warm-700 text-center transition-all duration-200 hover:bg-cream active:scale-[0.98]"
-                >
-                  Ya tengo cuenta
-                </a>
-              </div>
-            </div>
-          )}
+        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+          {sidebarInner}
         </div>
       </aside>
     </div>

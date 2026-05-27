@@ -42,7 +42,7 @@ const {
   <body
     class:list={[
       boxed
-        ? 'h-dvh overflow-hidden bg-gradient-to-br from-lilac-100/40 via-cream to-honey-200/30'
+        ? 'min-h-dvh bg-gradient-to-br from-lilac-100/40 via-cream to-honey-200/30'
         : fixedViewport
           ? 'h-dvh overflow-hidden'
           : 'min-h-screen',
@@ -52,8 +52,8 @@ const {
 
     {boxed ? (
       /* ── BOXED LAYOUT: canvas pastel + marco blanco ── */
-      <div class="h-dvh flex flex-col items-center justify-center px-4 py-4">
-        <div class="w-full max-w-[1200px] h-full max-h-[820px] bg-white rounded-3xl shadow-[0_8px_40px_-8px_rgba(61,44,41,0.14)] flex flex-col overflow-hidden">
+      <div class="h-dvh flex flex-col items-center justify-center px-3 sm:px-6 py-3 sm:py-4">
+        <div class="w-full max-w-[1200px] bg-white rounded-3xl shadow-[0_8px_40px_-8px_rgba(61,44,41,0.14)] flex flex-col overflow-hidden h-full">
 
           {/* Navbar dentro del marco */}
           <header class="shrink-0 h-16 border-b border-cream-dark bg-gradient-to-r from-white via-cream to-honey-200/30 px-6 sm:px-8 flex items-center">
@@ -82,7 +82,7 @@ const {
           </header>
 
           {/* Contenido principal dentro del marco */}
-          <main class="flex-1 overflow-hidden">
+          <main class="flex-1 min-h-0 overflow-hidden">
             <slot />
           </main>
 
