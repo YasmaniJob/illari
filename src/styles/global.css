@@ -29,6 +29,31 @@
   body {
     @apply bg-cream text-warm-900 leading-relaxed;
   }
+
+  /* Scrollbars personalizadas - Fijas y Finas */
+  html {
+    scrollbar-color: var(--color-coral-500) transparent;
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-coral-500);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-coral-600);
+  }
 }
 
 @layer utilities {

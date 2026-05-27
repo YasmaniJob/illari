@@ -11,7 +11,7 @@ import StudentsRosterInput, { RosterHeaderActions } from './StudentsRosterInput'
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
-const STEPS = ['Tu aula', 'Mis pequeños', 'Planificación'] as const;
+const STEPS = ['Tu aula', 'Mis estudiantes', 'Planificación'] as const;
 
 const STEP_EMOJI: Record<number, string> = { 1: '🏫', 2: '👥', 3: '📚' };
 
@@ -76,7 +76,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   // Grado serializado para la DB (ej. "3 años, 4 años")
   const gradoStr = grados.join(', ');
 
-  // Paso 2 — Mis pequeños
+  // Paso 2 — Mis estudiantes
   const [studentNames, setStudentNames] = useState<string[]>([]);
   const [rosterFileError, setRosterFileError] = useState<string | null>(null);
 
@@ -119,12 +119,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   }
 
   function isStep3Complete(): boolean {
-    return (
-      !!planning.area &&
-      !!planning.competencia &&
-      planning.capacidades.length >= 1 &&
-      planning.criterios.filter((c) => c.trim().length >= 2).length >= 1
-    );
+    return !!planning.titulo.trim() && !!planning.area;
   }
 
   function canAdvance(): boolean {
@@ -334,7 +329,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       id: 2,
       content: (
         <OnboardingStepCard
-          title="Mis pequeños"
+          title="Mis estudiantes"
           headerActions={
             <RosterHeaderActions
               fileError={rosterFileError}

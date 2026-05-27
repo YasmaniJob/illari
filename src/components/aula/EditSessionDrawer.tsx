@@ -1,0 +1,468 @@
+/**
+ * EditSessionDrawer — Panel lateral deslizante para editar la sesión activa.
+ * Secciones colapsables: Aula (grado/sección), Estudiantes, Planificación.
+ */
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { fetchStudents, patchSession, type StudentDto } from '../../lib/api/client';
+import type { CurriculumRow, SessionConfig } from '../../lib/curriculum';
+import { getAreas, getCapacidades, getCompetencias, getCriterios } from '../../lib/curriculum';
+import { GRADOS, SECCIONES } from '../../lib/classroom';
+import StudentsRosterInput from '../onboarding/StudentsRosterInput';
+import CustomSelect from '../ui/CustomSelect';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface Props {
+  session: SessionConfig;
+  onClose: () => void;
+  onSaved: (updated: SessionConfig, students: StudentDto[]) => void;
+}
+
+type Section = 'aula' | 'estudiantes' | 'planificacion';
+
+// ─── Section header ───────────────────────────────────────────────────────────
+
+function SectionHeader({
+  label,
+  emoji,
+  open,
+  onToggle,
+  dirty,
+}: {
+  label: string;
+  emoji: string;
+  open: boolean;
+  onToggle: () => void;
+  dirty?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="flex w-full items-center gap-3 px-5 py-3.5 text-left hover:bg-cream/60 transition-colors focus-ring-warm"
+    >
+      <span className="text-xl" aria-hidden>{emoji}</span>
+      <span className="flex-1 text-sm font-extrabold text-warm-900">{label}</span>
+      {dirty && (
+        <span className="h-2 w-2 rounded-full bg-coral-500 shrink-0" title="Cambios sin guardar" />
+      )}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={`h-4 w-4 text-warm-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+      >
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </button>
+  );
+}
+
+// ─── Save button ──────────────────────────────────────────────────────────────
+
+function SaveButton({ saving, disabled, onClick }: { saving: boolean; disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled || saving}
+      className="flex items-center gap-2 rounded-xl bg-coral-500 px-4 py-2 text-sm font-bold text-white hover:bg-coral-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus-ring-warm"
+    >
+      {saving ? (
+        <span className="h-3.5 w-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
+      )}
+      {saving ? 'Guardando…' : 'Guardar'}
+    </button>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
+function EditSessionDrawer({ session, onClose, onSaved }: Props) {
+  const [openSection, setOpenSection] = useState<Section>('aula');
+  const [curriculum, setCurriculum] = useState<CurriculumRow[]>([]);
+  const [saving, setSaving] = useState<Section | null>(null);
+  const [errors, setErrors] = useState<Partial<Record<Section, string>>>({});
+
+  // ── Aula state ──────────────────────────────────────────────────────────────
+  const [grados, setGrados] = useState<string[]>(
+    session.grado ? session.grado.split(',').map((g) => g.trim()).filter(Boolean) : [],
+  );
+  const [seccion, setSeccion] = useState(session.seccion ?? '');
+  const gradoStr = grados.join(', ');
+  const aulaDirty = gradoStr !== (session.grado ?? '') || seccion !== (session.seccion ?? '');
+
+  // ── Estudiantes state ───────────────────────────────────────────────────────
+  const [studentNames, setStudentNames] = useState<string[]>([]);
+  const [studentsLoaded, setStudentsLoaded] = useState(false);
+  const [studentsDirty, setStudentsDirty] = useState(false);
+  const originalNamesRef = useRef<string[]>([]);
+
+  // ── Planificación state ─────────────────────────────────────────────────────
+  const [titulo, setTitulo] = useState(session.titulo ?? '');
+  const [area, setArea] = useState(session.area);
+  const [competencia, setCompetencia] = useState(session.competencia);
+  const [capacidad, setCapacidad] = useState(session.capacidad);
+  const [criterio, setCriterio] = useState(session.criterio);
+  const planDirty =
+    titulo !== (session.titulo ?? '') ||
+    area !== session.area ||
+    competencia !== session.competencia ||
+    capacidad !== session.capacidad ||
+    criterio !== session.criterio;
+
+  // ── Load curriculum ─────────────────────────────────────────────────────────
+  useEffect(() => {
+    fetch('/api/curriculum')
+      .then((r) => r.json())
+      .then((d: { curriculum: CurriculumRow[] }) => setCurriculum(d.curriculum))
+      .catch(() => {/* non-critical */});
+  }, []);
+
+  // ── Load students when section opens ───────────────────────────────────────
+  useEffect(() => {
+    if (openSection !== 'estudiantes' || studentsLoaded) return;
+    if (!session.grado || !session.seccion) {
+      setStudentsLoaded(true);
+      return;
+    }
+    fetchStudents(session.grado, session.seccion)
+      .then((studs) => {
+        const names = studs.map((s) => s.name);
+        setStudentNames(names);
+        originalNamesRef.current = names;
+        setStudentsLoaded(true);
+      })
+      .catch(() => setStudentsLoaded(true));
+  }, [openSection, studentsLoaded, session.grado, session.seccion]);
+
+  // Track student changes
+  const handleStudentNamesChange = useCallback((names: string[]) => {
+    setStudentNames(names);
+    setStudentsDirty(true);
+  }, []);
+
+  // ── Curriculum cascades ─────────────────────────────────────────────────────
+  const areas = useMemo(() => getAreas(curriculum), [curriculum]);
+  const competencias = useMemo(() => (area ? getCompetencias(curriculum, area) : []), [curriculum, area]);
+  const capacidades = useMemo(
+    () => (area && competencia ? getCapacidades(curriculum, area, competencia) : []),
+    [curriculum, area, competencia],
+  );
+
+  function handleAreaChange(val: string) {
+    setArea(val);
+    setCompetencia('');
+    setCapacidad('');
+    setCriterio('');
+  }
+  function handleCompetenciaChange(val: string) {
+    setCompetencia(val);
+    setCapacidad('');
+    setCriterio('');
+  }
+  function handleCapacidadChange(val: string) {
+    setCapacidad(val);
+    setCriterio('');
+  }
+
+  // ── Save handlers ───────────────────────────────────────────────────────────
+
+  async function saveAula() {
+    setSaving('aula');
+    setErrors((e) => ({ ...e, aula: undefined }));
+    try {
+      const updated = await patchSession(session.id, { grado: gradoStr, seccion });
+      onSaved(updated, []);
+    } catch (err) {
+      setErrors((e) => ({ ...e, aula: err instanceof Error ? err.message : 'Error al guardar' }));
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  async function saveEstudiantes() {
+    setSaving('estudiantes');
+    setErrors((e) => ({ ...e, estudiantes: undefined }));
+    try {
+      const validNames = studentNames.filter((n) => n.trim().length >= 2);
+      const updated = await patchSession(session.id, {
+        grado: gradoStr || session.grado,
+        seccion: seccion || session.seccion,
+        studentNames: validNames,
+      });
+      // Refresh student list
+      const studs = await fetchStudents(updated.grado ?? '', updated.seccion ?? '');
+      originalNamesRef.current = studs.map((s) => s.name);
+      setStudentsDirty(false);
+      onSaved(updated, studs);
+    } catch (err) {
+      setErrors((e) => ({ ...e, estudiantes: err instanceof Error ? err.message : 'Error al guardar' }));
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  async function savePlanificacion() {
+    setSaving('planificacion');
+    setErrors((e) => ({ ...e, planificacion: undefined }));
+    try {
+      const updated = await patchSession(session.id, { titulo, area, competencia, capacidad, criterio });
+      onSaved(updated, []);
+    } catch (err) {
+      setErrors((e) => ({ ...e, planificacion: err instanceof Error ? err.message : 'Error al guardar' }));
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  function toggle(s: Section) {
+    setOpenSection((prev) => (prev === s ? 'aula' : s));
+  }
+
+  // ── Render ──────────────────────────────────────────────────────────────────
+
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        className="fixed inset-0 z-40 bg-black/40"
+        aria-hidden="true"
+        onClick={onClose}
+      />
+
+      {/* Drawer */}
+      <aside
+        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col w-full max-w-sm bg-white shadow-2xl border-l border-cream-dark"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Editar sesión"
+      >
+        {/* Header */}
+        <div className="shrink-0 flex items-center gap-3 px-5 py-4 border-b border-cream-dark">
+          <div className="flex-1 min-w-0">
+            <p className="text-base font-extrabold text-warm-900">Editar sesión</p>
+            <p className="text-xs font-semibold text-warm-500 truncate">{session.titulo || session.area}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-warm-400 hover:bg-gray-100 hover:text-warm-900 transition-colors focus-ring-warm"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto divide-y divide-cream-dark">
+
+          {/* ── Sección: Tu aula ── */}
+          <div>
+            <SectionHeader
+              label="Tu aula"
+              emoji="🏫"
+              open={openSection === 'aula'}
+              onToggle={() => toggle('aula')}
+              dirty={aulaDirty}
+            />
+            {openSection === 'aula' && (
+              <div className="px-5 pb-5 space-y-4">
+                {/* Grado */}
+                <div>
+                  <p className="text-xs font-bold text-warm-700 mb-2">Grado</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {GRADOS.map((g) => {
+                      const active = grados.includes(g);
+                      return (
+                        <button
+                          key={g}
+                          type="button"
+                          onClick={() =>
+                            setGrados((prev) =>
+                              prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g],
+                            )
+                          }
+                          aria-pressed={active}
+                          className={[
+                            'rounded-xl border-2 py-2.5 text-sm font-bold transition-all duration-150 focus-ring-warm',
+                            active
+                              ? 'border-coral-500 bg-coral-500/10 text-coral-700'
+                              : 'border-cream-dark bg-white text-warm-600 hover:border-lilac-300',
+                          ].join(' ')}
+                        >
+                          {g}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Sección */}
+                <div>
+                  <p className="text-xs font-bold text-warm-700 mb-2">Sección</p>
+                  <div className="grid grid-cols-4 gap-2">
+                    {SECCIONES.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSeccion(s)}
+                        aria-pressed={seccion === s}
+                        className={[
+                          'rounded-xl border-2 py-2.5 text-sm font-bold transition-all duration-150 focus-ring-warm',
+                          seccion === s
+                            ? 'border-coral-500 bg-coral-500/10 text-coral-700'
+                            : 'border-cream-dark bg-white text-warm-600 hover:border-lilac-300',
+                        ].join(' ')}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                  {/* Custom section */}
+                  {!SECCIONES.includes(seccion as typeof SECCIONES[number]) && seccion && (
+                    <p className="mt-2 text-xs font-semibold text-warm-500">Sección personalizada: <strong>{seccion}</strong></p>
+                  )}
+                  <input
+                    type="text"
+                    value={SECCIONES.includes(seccion as typeof SECCIONES[number]) ? '' : seccion}
+                    onChange={(e) => setSeccion(e.target.value)}
+                    placeholder="Otra sección…"
+                    className="input-warm mt-2 text-sm"
+                    maxLength={20}
+                  />
+                </div>
+
+                {errors.aula && <p className="text-xs font-semibold text-coral-600">{errors.aula}</p>}
+                <div className="flex justify-end">
+                  <SaveButton saving={saving === 'aula'} disabled={!aulaDirty || grados.length === 0 || !seccion} onClick={saveAula} />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ── Sección: Estudiantes ── */}
+          <div>
+            <SectionHeader
+              label="Mis estudiantes"
+              emoji="👥"
+              open={openSection === 'estudiantes'}
+              onToggle={() => toggle('estudiantes')}
+              dirty={studentsDirty}
+            />
+            {openSection === 'estudiantes' && (
+              <div className="px-5 pb-5 space-y-3">
+                {!studentsLoaded ? (
+                  <div className="flex justify-center py-6">
+                    <span className="h-6 w-6 rounded-full border-2 border-coral-500 border-t-transparent animate-spin" />
+                  </div>
+                ) : (
+                  <div className="min-h-[160px] flex flex-col">
+                    <StudentsRosterInput names={studentNames} onChange={handleStudentNamesChange} />
+                  </div>
+                )}
+                {errors.estudiantes && <p className="text-xs font-semibold text-coral-600">{errors.estudiantes}</p>}
+                <div className="flex justify-end">
+                  <SaveButton
+                    saving={saving === 'estudiantes'}
+                    disabled={!studentsDirty || studentNames.filter((n) => n.trim().length >= 2).length === 0}
+                    onClick={saveEstudiantes}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ── Sección: Planificación ── */}
+          <div>
+            <SectionHeader
+              label="Planificación"
+              emoji="📚"
+              open={openSection === 'planificacion'}
+              onToggle={() => toggle('planificacion')}
+              dirty={planDirty}
+            />
+            {openSection === 'planificacion' && (
+              <div className="px-5 pb-5 space-y-4">
+                {/* Título */}
+                <div>
+                  <label htmlFor="edit-titulo" className="text-xs font-bold text-warm-700 mb-1.5 block">
+                    Título de la sesión
+                  </label>
+                  <input
+                    id="edit-titulo"
+                    type="text"
+                    value={titulo}
+                    onChange={(e) => setTitulo(e.target.value)}
+                    placeholder="Ej.: Jugamos con los números"
+                    className="input-warm text-sm"
+                  />
+                </div>
+
+                {/* Área */}
+                <CustomSelect
+                  label="Área"
+                  value={area}
+                  options={areas}
+                  placeholder="Elegir área…"
+                  onChange={handleAreaChange}
+                />
+
+                {/* Competencia */}
+                <CustomSelect
+                  label="Competencia"
+                  value={competencia}
+                  options={competencias}
+                  placeholder={area ? 'Elegir competencia…' : 'Primero elige área'}
+                  disabled={!area}
+                  onChange={handleCompetenciaChange}
+                />
+
+                {/* Capacidad */}
+                {competencia && capacidades.length > 0 && (
+                  <CustomSelect
+                    label="Capacidad"
+                    value={capacidad}
+                    options={capacidades}
+                    placeholder="Elegir capacidad…"
+                    onChange={handleCapacidadChange}
+                  />
+                )}
+
+                {/* Criterio */}
+                <div>
+                  <label htmlFor="edit-criterio" className="text-xs font-bold text-warm-700 mb-1.5 block">
+                    Criterio de evaluación
+                  </label>
+                  <textarea
+                    id="edit-criterio"
+                    value={criterio}
+                    onChange={(e) => setCriterio(e.target.value)}
+                    rows={3}
+                    placeholder="Describe el criterio de evaluación…"
+                    className="input-warm text-sm resize-none"
+                  />
+                </div>
+
+                {errors.planificacion && <p className="text-xs font-semibold text-coral-600">{errors.planificacion}</p>}
+                <div className="flex justify-end">
+                  <SaveButton saving={saving === 'planificacion'} disabled={!planDirty || !area || !competencia} onClick={savePlanificacion} />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </aside>
+    </>
+  );
+}
+
+export default memo(EditSessionDrawer);

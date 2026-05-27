@@ -63,7 +63,7 @@ export default function ManageClassRoster() {
         <a href="/" className="inline-flex items-center gap-1.5 text-base font-bold text-warm-700 hover:text-coral-600">
           ← Inicio
         </a>
-        <h1 className="text-display mt-4">Mis pequeños</h1>
+        <h1 className="text-display mt-4">Mis estudiantes</h1>
         <p className="text-lead mt-3">
           Registra los nombres reales de tu aula por grado y sección. Se usan en el aula en vivo.
         </p>

@@ -85,3 +85,14 @@ export function guestPatchObservation(id: string, field: 'evidencia' | 'retroali
   }
   write(data);
 }
+
+export function guestPatchSession(updates: Partial<SessionConfig>): SessionConfig {
+  const data = read();
+  if (!data.activeSession) throw new Error('No hay sesión activa');
+  data.activeSession = {
+    ...data.activeSession,
+    ...updates,
+  };
+  write(data);
+  return data.activeSession;
+}

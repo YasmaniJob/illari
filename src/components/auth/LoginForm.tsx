@@ -78,7 +78,7 @@ export default function LoginForm({ redirectTo, initialMode = 'login' }: LoginFo
           </>
         ) : (
           <>
-            Crea tu cuenta para guardar clases anteriores y tu listado de pequeños. No necesitas registrarte para
+            Crea tu cuenta para guardar clases anteriores y tu listado de estudiantes. No necesitas registrarte para
             preparar una clase y entrar al aula hoy.
           </>
         )}

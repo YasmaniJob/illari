@@ -258,7 +258,7 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
                   onClick={() => toggleCapacidad(cap)}
                   aria-pressed={selected}
                   className={[
-                    'flex items-start gap-2.5 rounded-xl border-2 px-3 py-2 text-left transition-all duration-150',
+                    'w-full flex items-start gap-2.5 rounded-xl border-2 px-4 py-3 text-left transition-all duration-150',
                     'focus:outline-none focus:ring-4 focus:ring-lilac-500/20',
                     selected
                       ? 'border-mint-400 bg-mint-400/15 text-warm-900'

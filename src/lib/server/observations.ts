@@ -1,4 +1,4 @@
-import { asc, eq } from 'drizzle-orm';
+import { and, asc, eq, isNull } from 'drizzle-orm';
 import type { ChatMessage } from '../../components/aula/ChatFeed';
 import { db, schema } from '../../db';
 
@@ -31,6 +31,7 @@ export async function listObservations(sessionId: string): Promise<ChatMessage[]
       type: 'ai' as const,
       evidencia: row.evidencia ?? '',
       retroalimentacion: row.retroalimentacion ?? '',
+      studentName: row.studentName ?? undefined,
       timestamp: formatTime(row.createdAt),
     };
   });
@@ -69,4 +70,76 @@ export async function updateAIObservation(id: string, field: 'evidencia' | 'retr
     .update(schema.observations)
     .set({ [field]: value })
     .where(eq(schema.observations.id, id));
+}
+
+/**
+ * Returns the existing AI observation row for a specific student in a session,
+ * or null if none exists yet. Used to decide whether to INSERT or UPDATE.
+ */
+export async function findExistingAIObs(
+  sessionId: string,
+  studentName: string | null,
+): Promise<{ id: string; evidencia: string | null; retroalimentacion: string | null } | null> {
+  const condition =
+    studentName != null
+      ? and(
+          eq(schema.observations.sessionId, sessionId),
+          eq(schema.observations.type, 'ai'),
+          eq(schema.observations.studentName, studentName),
+        )
+      : and(
+          eq(schema.observations.sessionId, sessionId),
+          eq(schema.observations.type, 'ai'),
+          isNull(schema.observations.studentName),
+        );
+
+  const rows = await db
+    .select({
+      id: schema.observations.id,
+      evidencia: schema.observations.evidencia,
+      retroalimentacion: schema.observations.retroalimentacion,
+    })
+    .from(schema.observations)
+    .where(condition)
+    .limit(1);
+
+  return rows[0] ?? null;
+}
+
+/**
+ * Updates an existing AI observation row, or inserts a new one if none exists.
+ * Also attaches studentName to AI rows so we can look them up later.
+ */
+export async function upsertAIObservation(input: {
+  sessionId: string;
+  evidencia: string;
+  retroalimentacion: string;
+  studentName?: string;
+  existingId?: string;
+}): Promise<{ id: string; createdAt: string }> {
+  const createdAt = new Date().toISOString();
+
+  if (input.existingId) {
+    await db
+      .update(schema.observations)
+      .set({
+        evidencia: input.evidencia,
+        retroalimentacion: input.retroalimentacion,
+        createdAt, // bump timestamp so ordering stays consistent
+      })
+      .where(eq(schema.observations.id, input.existingId));
+    return { id: input.existingId, createdAt };
+  }
+
+  const id = crypto.randomUUID();
+  await db.insert(schema.observations).values({
+    id,
+    sessionId: input.sessionId,
+    type: 'ai',
+    evidencia: input.evidencia,
+    retroalimentacion: input.retroalimentacion,
+    studentName: input.studentName ?? null,
+    createdAt,
+  });
+  return { id, createdAt };
 }

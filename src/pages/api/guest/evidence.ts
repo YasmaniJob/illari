@@ -16,6 +16,7 @@ export const POST: APIRoute = async ({ request }) => {
     const body = await request.json();
     const text = (body.text as string)?.trim();
     const studentName = body.studentName as string | undefined;
+    const students = body.students as string[] | undefined;
     const source = (body.source as 'text' | 'voice') ?? 'text';
     const session = body.session as SessionConfig | undefined;
 
@@ -23,7 +24,14 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Datos incompletos' }), { status: 400 });
     }
 
-    const ai = await generatePedagogicalEvidence(session, text, studentName, source);
+    const ai = await generatePedagogicalEvidence(session, text, studentName, source, students);
+
+    // If Gemini returned a validation error, abort
+    if (ai.error) {
+      return new Response(JSON.stringify({ error: ai.error }), { status: 400 });
+    }
+
+    const resolvedStudentName = ai.studentNameMatch || studentName;
     const now = new Date().toISOString();
 
     return new Response(
@@ -32,7 +40,7 @@ export const POST: APIRoute = async ({ request }) => {
           id: crypto.randomUUID(),
           type: 'user',
           text,
-          studentName,
+          studentName: resolvedStudentName,
           timestamp: formatTime(now),
         },
         aiMessage: {
@@ -40,13 +48,16 @@ export const POST: APIRoute = async ({ request }) => {
           type: 'ai',
           evidencia: ai.evidencia,
           retroalimentacion: ai.retroalimentacion,
+          studentName: resolvedStudentName,
           timestamp: formatTime(now),
         },
+        studentNameMatch: ai.studentNameMatch,
       }),
       { headers: { 'Content-Type': 'application/json' } },
     );
   } catch (e) {
-    console.error(e);
-    return new Response(JSON.stringify({ error: 'Error al generar evidencia' }), { status: 500 });
+    console.error('[guest/evidence]', e);
+    const message = e instanceof Error ? e.message : 'Error al generar evidencia';
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 };

@@ -1,6 +1,10 @@
 import type { APIRoute } from 'astro';
 import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
-import { insertAIObservation, insertUserObservation } from '../../lib/server/observations';
+import {
+  findExistingAIObs,
+  insertUserObservation,
+  upsertAIObservation,
+} from '../../lib/server/observations';
 import { generatePedagogicalEvidence } from '../../lib/server/pedagogicalEvidence';
 import { getSessionById } from '../../lib/server/sessions';
 
@@ -15,6 +19,7 @@ export const POST: APIRoute = async ({ request }) => {
     const sessionId = body.sessionId as string;
     const text = (body.text as string)?.trim();
     const studentName = body.studentName as string | undefined;
+    const students = body.students as string[] | undefined;
     const source = (body.source as 'text' | 'voice') ?? 'text';
 
     if (!sessionId || !text) {
@@ -26,18 +31,57 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Sesión no encontrada' }), { status: 404 });
     }
 
-    const userObs = await insertUserObservation({
+    // First validate student name via AI (quick check before DB lookup)
+    // We do a two-step approach: validate + find existing note in parallel
+    const existingAIObs = await findExistingAIObs(
       sessionId,
+      studentName ?? null,
+    );
+
+    // Build previousNote context if one exists
+    const previousNote =
+      existingAIObs?.evidencia
+        ? {
+            evidencia: existingAIObs.evidencia,
+            retroalimentacion: existingAIObs.retroalimentacion ?? '',
+          }
+        : undefined;
+
+    // Generate pedagogical evidence via AI (with optional prior note for synthesis)
+    const ai = await generatePedagogicalEvidence(
+      session,
       text,
       studentName,
-    });
+      source,
+      students,
+      previousNote,
+    );
 
-    const ai = await generatePedagogicalEvidence(session, text, studentName, source);
-    const aiObs = await insertAIObservation({
-      sessionId,
-      evidencia: ai.evidencia,
-      retroalimentacion: ai.retroalimentacion,
-    });
+    // If Gemini returned a validation error (student not in class), abort
+    if (ai.error) {
+      return new Response(JSON.stringify({ error: ai.error }), { status: 400 });
+    }
+
+    // If AI matched a different student, re-check for that student's existing note
+    const resolvedStudentName = ai.studentNameMatch || studentName;
+    let resolvedExisting = existingAIObs;
+    if (ai.studentNameMatch && ai.studentNameMatch !== studentName) {
+      resolvedExisting = await findExistingAIObs(sessionId, resolvedStudentName ?? null);
+    }
+
+    // Save user message + upsert AI note in parallel
+    const [userObs, aiObs] = await Promise.all([
+      insertUserObservation({ sessionId, text, studentName: resolvedStudentName }),
+      upsertAIObservation({
+        sessionId,
+        evidencia: ai.evidencia || text,
+        retroalimentacion: ai.retroalimentacion || '',
+        studentName: resolvedStudentName,
+        existingId: resolvedExisting?.id,
+      }),
+    ]);
+
+    const isUpdate = Boolean(resolvedExisting?.id);
 
     function formatTime(iso: string) {
       return new Intl.DateTimeFormat('es-PE', {
@@ -52,7 +96,7 @@ export const POST: APIRoute = async ({ request }) => {
           id: userObs.id,
           type: 'user',
           text,
-          studentName,
+          studentName: resolvedStudentName,
           timestamp: formatTime(userObs.createdAt),
         },
         aiMessage: {
@@ -60,13 +104,17 @@ export const POST: APIRoute = async ({ request }) => {
           type: 'ai',
           evidencia: ai.evidencia,
           retroalimentacion: ai.retroalimentacion,
+          studentName: resolvedStudentName,
           timestamp: formatTime(aiObs.createdAt),
         },
+        studentNameMatch: ai.studentNameMatch,
+        isUpdate,
       }),
       { headers: { 'Content-Type': 'application/json' } },
     );
   } catch (e) {
-    console.error(e);
-    return new Response(JSON.stringify({ error: 'Error al generar evidencia' }), { status: 500 });
+    console.error('[evidence]', e);
+    const message = e instanceof Error ? e.message : 'Error al generar evidencia';
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 };

@@ -23,6 +23,7 @@ export default function CustomSelect({
   const [open, setOpen] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLUListElement>(null);
   const listId = useId();
 
   // Calcula posición del dropdown relativa al viewport (escapa overflow-hidden)
@@ -48,7 +49,10 @@ export default function CustomSelect({
     if (!open) return;
     function handleClickOutside(e: MouseEvent) {
       const target = e.target as Node;
-      if (triggerRef.current && !triggerRef.current.contains(target)) {
+      const clickedTrigger = triggerRef.current && triggerRef.current.contains(target);
+      const clickedDropdown = dropdownRef.current && dropdownRef.current.contains(target);
+      
+      if (!clickedTrigger && !clickedDropdown) {
         setOpen(false);
       }
     }
@@ -60,10 +64,13 @@ export default function CustomSelect({
     };
   }, [open]);
 
-  // Recalcula posición si el scroll cambia mientras está abierto
+  // Cierra si se hace scroll fuera del dropdown
   useEffect(() => {
     if (!open) return;
-    function handleScroll() {
+    function handleScroll(e: Event) {
+      if (dropdownRef.current && dropdownRef.current.contains(e.target as Node)) {
+        return; // Ignorar scroll interno
+      }
       setOpen(false);
     }
     window.addEventListener('scroll', handleScroll, true);
@@ -75,6 +82,7 @@ export default function CustomSelect({
   const dropdown =
     open && options.length > 0 ? (
       <ul
+        ref={dropdownRef}
         id={listId}
         role="listbox"
         style={dropdownStyle}

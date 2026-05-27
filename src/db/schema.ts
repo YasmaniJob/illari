@@ -70,7 +70,11 @@ export const classSessions = sqliteTable(
     status: text('status', { enum: ['active', 'completed'] }).notNull(),
     createdAt: text('created_at').notNull(),
   },
-  (table) => [index('idx_sessions_user_id').on(table.userId)],
+  (table) => [
+    index('idx_sessions_user_id').on(table.userId),
+    // Composite index for getActiveSessionForUser (userId + status filter)
+    index('idx_sessions_user_status').on(table.userId, table.status),
+  ],
 );
 
 export const students = sqliteTable(
@@ -103,5 +107,9 @@ export const observations = sqliteTable(
     studentName: text('student_name'),
     createdAt: text('created_at').notNull(),
   },
-  (table) => [index('idx_obs_session_id').on(table.sessionId)],
+  (table) => [
+    index('idx_obs_session_id').on(table.sessionId),
+    // Composite index for listObservations ordered scan (sessionId + createdAt)
+    index('idx_obs_session_created').on(table.sessionId, table.createdAt),
+  ],
 );

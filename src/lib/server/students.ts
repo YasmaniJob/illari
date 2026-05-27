@@ -32,26 +32,35 @@ export async function saveStudentsRoster(
 ): Promise<StudentRow[]> {
   const unique = [...new Set(names.map((n) => n.trim()).filter((n) => n.length >= 2))];
 
-  await db
-    .delete(schema.students)
-    .where(
-      and(eq(schema.students.userId, userId), eq(schema.students.grado, grado), eq(schema.students.seccion, seccion)),
-    );
-
-  if (unique.length === 0) return [];
+  if (unique.length === 0) {
+    await db
+      .delete(schema.students)
+      .where(
+        and(eq(schema.students.userId, userId), eq(schema.students.grado, grado), eq(schema.students.seccion, seccion)),
+      );
+    return [];
+  }
 
   const createdAt = new Date().toISOString();
-  await db.insert(schema.students).values(
-    unique.map((name) => ({
-      id: crypto.randomUUID(),
-      userId,
-      grado,
-      seccion,
-      name,
-      active: true,
-      createdAt,
-    })),
-  );
+  const newRows = unique.map((name) => ({
+    id: crypto.randomUUID(),
+    userId,
+    grado,
+    seccion,
+    name,
+    active: true,
+    createdAt,
+  }));
 
-  return listStudentsForClass(userId, grado, seccion);
+  await db.transaction(async (tx) => {
+    await tx
+      .delete(schema.students)
+      .where(
+        and(eq(schema.students.userId, userId), eq(schema.students.grado, grado), eq(schema.students.seccion, seccion)),
+      );
+    await tx.insert(schema.students).values(newRows);
+  });
+
+  // Return directly — no extra query needed
+  return newRows.map((r) => ({ id: r.id, name: r.name, active: r.active }));
 }

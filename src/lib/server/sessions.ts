@@ -40,27 +40,29 @@ export async function createClassSession(
   userId: string,
   input: Omit<SessionConfig, 'id' | 'createdAt' | 'status'> & { status?: 'active' },
 ): Promise<SessionConfig> {
-  await db
-    .update(schema.classSessions)
-    .set({ status: 'completed' })
-    .where(and(eq(schema.classSessions.userId, userId), eq(schema.classSessions.status, 'active')));
-
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();
 
-  await db.insert(schema.classSessions).values({
-    id,
-    userId,
-    titulo: input.titulo ?? null,
-    grado: input.grado ?? null,
-    seccion: input.seccion ?? null,
-    area: input.area,
-    competencia: input.competencia,
-    capacidad: input.capacidad,
-    criterio: input.criterio,
-    proposito: '',
-    status: 'active',
-    createdAt,
+  await db.transaction(async (tx) => {
+    await tx
+      .update(schema.classSessions)
+      .set({ status: 'completed' })
+      .where(and(eq(schema.classSessions.userId, userId), eq(schema.classSessions.status, 'active')));
+
+    await tx.insert(schema.classSessions).values({
+      id,
+      userId,
+      titulo: input.titulo ?? null,
+      grado: input.grado ?? null,
+      seccion: input.seccion ?? null,
+      area: input.area,
+      competencia: input.competencia,
+      capacidad: input.capacidad,
+      criterio: input.criterio,
+      proposito: '',
+      status: 'active',
+      createdAt,
+    });
   });
 
   return {
