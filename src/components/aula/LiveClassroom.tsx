@@ -36,20 +36,34 @@ export default function LiveClassroom() {
   useEffect(() => {
     async function load() {
       try {
-        const [active, logged] = await Promise.all([fetchActiveSession(), isLoggedIn()]);
+        const logged = await isLoggedIn();
         setLoggedIn(logged);
-        setSession(active);
-        if (active?.grado && active?.seccion) {
-          const [msgs, studs] = await Promise.all([
-            fetchObservations(active.id),
-            fetchStudents(active.grado, active.seccion),
-          ]);
-          setMessages(msgs);
-          setStudents(studs);
-          setSelectedStudentId(null);
-        } else if (active) {
-          const msgs = await fetchObservations(active.id);
-          setMessages(msgs);
+
+        if (logged) {
+          // Single round-trip: session + messages + students in one request
+          const res = await fetch('/api/aula/init', { credentials: 'include' });
+          const data = (await res.json()) as {
+            session: SessionConfig | null;
+            messages: ChatMessage[];
+            students: StudentDto[];
+          };
+          setSession(data.session);
+          setMessages(data.messages);
+          setStudents(data.students);
+        } else {
+          // Guest mode — local store, no network
+          const active = await fetchActiveSession();
+          setSession(active);
+          if (active) {
+            const [msgs, studs] = await Promise.all([
+              fetchObservations(active.id),
+              active.grado && active.seccion
+                ? fetchStudents(active.grado, active.seccion)
+                : Promise.resolve([]),
+            ]);
+            setMessages(msgs);
+            setStudents(studs);
+          }
         }
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Error al cargar la sesión');
