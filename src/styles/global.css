@@ -116,7 +116,7 @@
   }
 
   .input-warm {
-    @apply w-full rounded-2xl border-2 border-cream-dark bg-white px-5 py-4 text-lg text-warm-900 placeholder:text-warm-500/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none focus:border-warm-300 focus:shadow-[0_4px_16px_-4px_rgba(61,44,41,0.12)];
+    @apply w-full rounded-2xl border-2 border-cream-dark bg-white px-5 py-4 text-lg text-warm-900 placeholder:text-warm-500/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none;
   }
 
   .focus-ring-warm {
