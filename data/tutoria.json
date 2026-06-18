@@ -1,0 +1,53 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección IV: Tutoría y orientación educativa en el nivel de Educación Inicial, págs. 48-53.",
+  "nivel": "inicial",
+  "tutoria": {
+    "definicion": "En el nivel de Educación Inicial, el docente es quien desarrolla la tutoría de manera permanente, y garantiza el acompañamiento socioafectivo de los niños y niñas a lo largo del año escolar. Este acompañamiento se define como la interacción que se establece entre el docente y los niños, y se sustenta en la construcción de un vínculo afectivo.",
+    "proposito": "La tutoría promueve el reconocimiento de los niños y las niñas como personas con características propias, y busca acompañarlos de manera personalizada de acuerdo con sus necesidades, intereses y expectativas atendiendo la diversidad y promoviendo la inclusión de todos. La tutoría implica promover y fortalecer las habilidades socioemocionales, las mismas que van a contribuir con el desarrollo de la autonomía de los niños y las niñas potenciando su interacción con los demás y la valoración de sí mismos.",
+    "nota": "La manera en que el docente se relaciona con los niños es un modelo de las interacciones que estos construirán en su vida. Las relaciones de confianza, afecto y respeto permiten que los niños y las niñas se sientan aceptados, y puedan expresarse libremente y con seguridad.",
+    "dimensiones": [
+      {
+        "id": "dim-personal",
+        "nombre": "Dimensión personal",
+        "descripcion": "Está relacionada con el conocimiento y valoración de sí mismos, y el fortalecimiento de capacidades para expresar sentimientos, deseos y emociones, lo que contribuirá al logro de estilos de vida saludables. En forma específica, esta dimensión considera el desarrollo socioafectivo."
+      },
+      {
+        "id": "dim-social",
+        "nombre": "Dimensión social",
+        "descripcion": "Considera las relaciones de los niños y las niñas con las personas de su entorno, para establecer una convivencia armoniosa que fortalezca el sentido de pertenencia y la búsqueda del bien común. En forma específica, contempla el desarrollo de habilidades interpersonales, habilidades sociales y habilidades para prevenir situaciones de riesgo."
+      },
+      {
+        "id": "dim-aprendizajes",
+        "nombre": "Dimensión de los aprendizajes",
+        "descripcion": "Está vinculada con el desarrollo de los aprendizajes como un proceso activo. En este sentido, el docente debe conocer las características de los procesos de maduración y desarrollo de sus niños, sus fortalezas y necesidades y estar atento a sus ritmos y estilos de aprendizaje, para acompañarlos de manera pertinente."
+      }
+    ],
+    "acompanamiento_familias": {
+      "definicion": "Al ser los padres de familia los principales educadores y cuidadores de los niños y las niñas, a través de la tutoría, se busca fortalecer el rol protagónico y la capacidad educativa de la familia y la comunidad, movilizando y comprometiendo su participación en las acciones que favorecen el desarrollo y la educación de los niños, así como la protección de sus derechos y mejoramiento de su calidad de vida.",
+      "momentos": [
+        {
+          "momento": "Primer contacto",
+          "descripcion": "La docente toma contacto con las familias con la finalidad de conocer más sobre la historia de cada niño, sus costumbres y formas de vivir. Este momento da una idea de cómo es el niño o niña, qué percepción tiene la familia acerca de ellos, si tienen alguna preocupación, así como también sus expectativas sobre la IE. Tiene la finalidad de establecer acuerdos comunes para el bienestar de los niños y las niñas."
+        },
+        {
+          "momento": "Presentación del trabajo anual",
+          "descripcion": "Se busca que las familias conozcan a través de la institución educativa y del docente cuál es el trabajo que se realizará durante el año, qué se ha planificado y cómo ellos podrán colaborar y acompañar ese año a sus hijos e hijas en la IE."
+        },
+        {
+          "momento": "Integración entre familias",
+          "descripcion": "Se procura que los padres y madres del grupo se conozcan, se relacionen y compartan sus experiencias en la crianza, en el acompañamiento que hacen a sus hijos e hijas, y puedan darse cuenta de que no están solos, que sus experiencias sirven a los demás y que ellos pueden también aprender de otros padres de familia."
+        }
+      ],
+      "modalidades": [
+        {
+          "tipo": "Individual",
+          "descripcion": "Se lleva a cabo con cada familia, de manera individual, con el objetivo de acompañarla y tratar temas relacionados con el proceso de desarrollo y aprendizaje de su hijo o hija."
+        },
+        {
+          "tipo": "Grupal",
+          "descripcion": "Se realiza con todas las familias del aula, para que puedan comprometerse en acciones que favorezcan al desarrollo y la educación de sus hijos e hijas, así como a proteger sus derechos para su bienestar."
+        }
+      ]
+    }
+  }
+}

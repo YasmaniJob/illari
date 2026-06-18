@@ -1,4 +1,4 @@
-# Fases del escaneo de sesión — Illari
+# Fases del escaneo de sesión — Mi Wawita
 
 ## Principio
 

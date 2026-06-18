@@ -1,8 +1,12 @@
 import type { APIRoute } from 'astro';
+import curriculoRaw from '../../../data/curriculo.csv?raw';
+import { parseCurriculumCsv } from '../../../lib/curriculum';
 import type { SessionConfig } from '../../../lib/curriculum';
 import { generatePedagogicalEvidence } from '../../../lib/server/pedagogicalEvidence';
 
 export const prerender = false;
+
+const curriculum = parseCurriculumCsv(curriculoRaw);
 
 function formatTime(iso: string) {
   return new Intl.DateTimeFormat('es-PE', {
@@ -24,14 +28,21 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Datos incompletos' }), { status: 400 });
     }
 
-    const ai = await generatePedagogicalEvidence(session, text, studentName, source, students);
+    const result = await generatePedagogicalEvidence(
+      session,
+      text,
+      curriculum,
+      studentName,
+      source,
+      students,
+    );
 
-    // If Gemini returned a validation error, abort
-    if (ai.error) {
-      return new Response(JSON.stringify({ error: ai.error }), { status: 400 });
+    if (result.error) {
+      return new Response(JSON.stringify({ error: result.error }), { status: 400 });
     }
 
-    const resolvedStudentName = ai.studentNameMatch || studentName;
+    const cai = result.cai!;
+    const resolvedStudentName = result.studentNameMatch || studentName;
     const now = new Date().toISOString();
 
     return new Response(
@@ -46,12 +57,11 @@ export const POST: APIRoute = async ({ request }) => {
         aiMessage: {
           id: crypto.randomUUID(),
           type: 'ai',
-          evidencia: ai.evidencia,
-          retroalimentacion: ai.retroalimentacion,
+          cai,
           studentName: resolvedStudentName,
           timestamp: formatTime(now),
         },
-        studentNameMatch: ai.studentNameMatch,
+        studentNameMatch: result.studentNameMatch,
       }),
       { headers: { 'Content-Type': 'application/json' } },
     );

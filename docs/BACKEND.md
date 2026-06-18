@@ -1,4 +1,4 @@
-# Backend Illari — Drizzle, Turso, Better Auth
+# Backend Mi Wawita — Drizzle, Turso, Better Auth
 
 ## Verificación (antes vs ahora)
 

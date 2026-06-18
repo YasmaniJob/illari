@@ -39,8 +39,15 @@ function buildStudentEvidence(
         const key = msg.studentName ?? '__grupo__';
         if (!map.has(key)) map.set(key, { evidencia: '', retroalimentacion: '' });
         const entry = map.get(key)!;
-        if (aiMsg.evidencia) entry.evidencia = aiMsg.evidencia;
-        if (aiMsg.retroalimentacion) entry.retroalimentacion = aiMsg.retroalimentacion;
+        const cai = aiMsg.cai;
+        // Build readable evidencia from C+A+I
+        const parts = [
+          cai.contexto && `[C] ${cai.contexto}`,
+          cai.accion && `[A] ${cai.accion}`,
+          cai.interpretacion && `[I] ${cai.interpretacion}`,
+        ].filter(Boolean);
+        if (parts.length) entry.evidencia = parts.join('\n');
+        if (cai.retroalimentacion) entry.retroalimentacion = cai.retroalimentacion;
       }
     }
   }

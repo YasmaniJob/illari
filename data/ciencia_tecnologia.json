@@ -1,0 +1,95 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección VI, 6.7 Área de Ciencia y Tecnología, págs. 185-193.",
+  "nivel": "inicial",
+  "area": {
+    "id": "ini-cyt",
+    "nombre": "Ciencia y Tecnología",
+    "sigla": "CYT",
+    "descripcion": "Los niños y niñas, desde sus primeros años, sienten curiosidad, asombro y fascinación por todo aquello que se presenta ante sus ojos; es así que exploran y experimentan diversas sensaciones que les permiten descubrirse y descubrir el mundo que los rodea para conocerlo y comprenderlo mejor. A partir de estas experiencias, comienzan a reconocer y a diferenciar sensaciones internas y externas de su cuerpo, a explorar el espacio y los objetos que hay en él; así descubren texturas, formas y otras características. En el nivel de Educación Inicial, la tecnología se centra en la satisfacción de necesidades y en la resolución de situaciones problemáticas que los impulsan a imaginar, diseñar, inventar y crear posibles alternativas de solución.",
+    "enfoques": ["ea-indagacion-cientifica"],
+    "nota": "Esta área atiende solo el Ciclo II. En el Ciclo I esta competencia pertenece al Área de Descubrimiento del Mundo.",
+    "competencias": [
+      {
+        "id": "ini-cyt-comp1",
+        "nombre": "Indaga mediante métodos científicos para construir sus conocimientos",
+        "descripcion": "Esta competencia se visualiza cuando los niños y niñas, desde pequeños, exploran de manera activa su entorno y como resultado de estas acciones obtienen un primer registro sensible sobre el cual construirán sus futuros conocimientos y representaciones. A medida que el niño y la niña evolucionan en su desarrollo, las actividades de exploración y manipulación que emprenden se van volviendo más complejas, y les permiten descubrir características, hacer comparaciones y establecer relaciones.",
+        "capacidades": [
+          {
+            "id": "ini-cyt-comp1-cap1",
+            "nombre": "Problematiza situaciones para hacer indagación",
+            "descripcion": "Plantea preguntas sobre hechos y fenómenos naturales, interpreta situaciones y formula hipótesis."
+          },
+          {
+            "id": "ini-cyt-comp1-cap2",
+            "nombre": "Diseña estrategias para hacer indagación",
+            "descripcion": "Propone actividades que permitan construir un procedimiento; seleccionar materiales, instrumentos e información para comprobar o refutar las hipótesis."
+          },
+          {
+            "id": "ini-cyt-comp1-cap3",
+            "nombre": "Genera y registra datos o información",
+            "descripcion": "Obtiene, organiza y registra datos fiables en función de las variables, utilizando instrumentos y diversas técnicas que permitan explorar el entorno."
+          },
+          {
+            "id": "ini-cyt-comp1-cap4",
+            "nombre": "Analiza datos e información",
+            "descripcion": "Interpreta los datos obtenidos en la indagación, los contrasta con las hipótesis e información relacionada al problema para elaborar conclusiones."
+          },
+          {
+            "id": "ini-cyt-comp1-cap5",
+            "nombre": "Evalúa y comunica el proceso y resultado de su indagación",
+            "descripcion": "Identifica y da a conocer las dificultades técnicas y los conocimientos logrados para cuestionar el grado de satisfacción que la respuesta da a la pregunta de indagación."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora los objetos, el espacio y hechos que acontecen en su entorno, los observa y manipula con todos sus sentidos para obtener información sobre sus características o usos, experimenta y observa los efectos que sus acciones causan sobre ellos.",
+            "nota": "En el Ciclo I esta competencia pertenece al Área de Descubrimiento del Mundo."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Explora los objetos, el espacio y hechos que acontecen en su entorno, hace preguntas con base en su curiosidad, propone posibles respuestas, obtiene información al observar, manipular y describir; compara aspectos del objeto o fenómeno para comprobar la respuesta y expresa en forma oral o gráfica lo que hizo y aprendió."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Hace preguntas que expresan su curiosidad sobre los objetos, seres vivos, hechos o fenómenos que acontecen en su ambiente.",
+              "Obtiene información sobre las características de los objetos y materiales que explora a través de sus sentidos. Usa algunos objetos y herramientas en su exploración.",
+              "Comunica los descubrimientos que hace cuando explora. Utiliza gestos o señas, movimientos corporales o lo hace oralmente."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Hace preguntas que expresan su curiosidad sobre los objetos, seres vivos, hechos o fenómenos que acontecen en su ambiente; y, al responder, da a conocer lo que sabe acerca de ellos.",
+              "Propone acciones, y el uso de materiales e instrumentos para buscar información del objeto, ser vivo o hecho de interés que le genera interrogantes.",
+              "Obtiene información sobre las características de los objetos, seres vivos o fenómenos naturales que observa y/o explora, y establece relaciones entre ellos. Registra la información de diferentes formas (dibujos, fotos, modelados).",
+              "Compara su respuesta inicial respecto al objeto, ser vivo o hecho de interés, con la información obtenida posteriormente.",
+              "Comunica las acciones que realizó para obtener información y comparte sus resultados. Utiliza sus registros (dibujos, fotos u otras formas de representación) o lo hace verbalmente."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Hace preguntas que expresan su curiosidad sobre los objetos, seres vivos, hechos o fenómenos que acontecen en su ambiente; da a conocer lo que sabe y las ideas que tiene acerca de ellos. Plantea posibles explicaciones y/o alternativas de solución frente a una pregunta o situación problemática.",
+              "Propone acciones, y el uso de materiales e instrumentos para buscar información del objeto, ser vivo o hecho de interés que genera interrogantes, o para resolver un problema planteado.",
+              "Obtiene información sobre las características de los objetos, seres vivos, hechos y fenómenos de la naturaleza, y establece relaciones entre ellos a través de la observación, experimentación y otras fuentes proporcionadas. Describe sus características, necesidades, funciones, relaciones o cambios en su apariencia física. Registra la información de diferentes formas (con fotos, dibujos, modelado o de acuerdo con su nivel de escritura).",
+              "Compara sus explicaciones y predicciones con los datos e información que ha obtenido, y participa en la construcción de las conclusiones.",
+              "Comunica —de manera verbal, a través de dibujos, fotos, modelado o según su nivel de escritura— las acciones que realizó para obtener información. Comparte sus resultados y lo que aprendió."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

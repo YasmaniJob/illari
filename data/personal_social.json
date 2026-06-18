@@ -1,0 +1,290 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección VI, 6.1 Área de Personal Social, págs. 70-95.",
+  "nivel": "inicial",
+  "area": {
+    "id": "ini-ps",
+    "nombre": "Personal Social",
+    "sigla": "PS",
+    "descripcion": "El desarrollo personal y social de los niños y niñas es un proceso que se inicia en la familia y se construye sobre la base de las relaciones seguras y afectivas que establecen con las personas que los cuidan. La atención educativa en este nivel se orienta a favorecer la formación personal y social de los niños y niñas promoviendo y acompañando procesos como la construcción de su identidad a partir del conocimiento y valoración de sí mismos; el reconocimiento de las creencias y costumbres de su familia; así como la expresión y el reconocimiento de sus emociones. De igual manera, promueve el establecimiento de relaciones seguras, la integración de valores, límites y normas que les permitan aprender a cuidarse, y cuidar los espacios y recursos comunes; a convivir con otros, respetar diferencias tanto culturales, de creencias y costumbres, como conocer y ejercer sus derechos.",
+    "enfoques": ["ea-desarrollo-personal", "ea-ciudadania-activa"],
+    "nota_ciclos": "Para el ciclo I se desarrollan: Construye su identidad y Convive y participa democráticamente. Para el ciclo II se añade además: Construye su identidad como persona humana, amada por Dios.",
+    "competencias": [
+      {
+        "id": "ini-ps-comp1",
+        "nombre": "Construye su identidad",
+        "descripcion": "La competencia Construye su identidad parte del conocimiento que los niños y niñas van adquiriendo sobre sí mismos. El proceso de desarrollo de esta competencia se inicia desde que el niño nace, a partir de los primeros cuidados y atenciones que recibe de su familia, que le permite la construcción de vínculos seguros. En la medida que estos vínculos estén bien establecidos, el niño será capaz de relacionarse con otros con mayor seguridad e iniciativa.",
+        "capacidades": [
+          {
+            "id": "ini-ps-comp1-cap1",
+            "nombre": "Se valora a sí mismo",
+            "descripcion": "El estudiante reconoce sus características, cualidades, limitaciones y potencialidades que lo hacen ser quien es, que le permiten aceptarse, sentirse bien consigo mismo y ser capaz de asumir retos y alcanzar sus metas. Además, se reconoce como integrante de una colectividad sociocultural específica y tiene sentido de pertenencia a su familia, escuela, comunidad, país y mundo."
+          },
+          {
+            "id": "ini-ps-comp1-cap2",
+            "nombre": "Autorregula sus emociones",
+            "descripcion": "El estudiante reconoce y toma conciencia de sus emociones, a fin de poder expresarlas de manera adecuada según el contexto, los patrones culturales diversos y las consecuencias que estas tienen para sí mismo y para los demás."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Construye su identidad al tomar conciencia de los aspectos que lo hacen único. Se identifica con algunas de sus características físicas, sus gustos, disgustos e intereses, su nombre y los miembros de su familia. Participa en sus cuidados personales y en diversas actividades desde su iniciativa y posibilidades. Busca y acepta el consuelo y compañía de su adulto significativo cuando se siente vulnerado e inseguro, así como cuando algunas de sus acciones afectan a otro."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Construye su identidad al tomar conciencia de los aspectos que lo hacen único. Se identifica en algunas de sus características físicas, así como sus cualidades e intereses, gustos y preferencias. Se siente miembro de su familia y del grupo de aula al que pertenece. Practica hábitos saludables reconociendo que son importantes para él. Actúa de manera autónoma en las actividades que realiza y es capaz de tomar decisiones, desde sus posibilidades y considerando a los demás. Expresa sus emociones e identifica el motivo que las originan. Busca y acepta la compañía de un adulto significativo ante situaciones que lo hacen sentir vulnerable, inseguro, con ira, triste o alegre."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "9 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Diferencia su cuerpo del cuerpo del adulto que lo cuida y reconoce su nombre cuando lo llaman, lo manifiesta a través del tono, acciones y gestos (sonrisas, miradas).",
+              "Toma la iniciativa en actividades cotidianas, como explorar espacios cercanos y jugar con su cuerpo o con objetos pequeños desde sus intereses y sus posibilidades motrices. Colabora con agrado e iniciativa en los momentos de cuidado: higiene, alimentación y cambio de ropa.",
+              "Expresa sus emociones de forma espontánea y reacciona ante las expresiones emocionales que percibe de otros a través de gestos (sonrisas, miradas), llantos o movimientos corporales."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "18 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Reconoce sus intereses, necesidades y las sensaciones que percibe de su cuerpo, y las manifiesta a través de acciones, gestos o movimientos. Desde su iniciativa se aleja de su adulto significativo para explorar nuevos ambientes, y retorna de manera espontánea.",
+              "Toma la iniciativa para desplazarse de un espacio a otro y realiza actividades cotidianas de exploración y juego desde sus intereses. Muestra comodidad al estar en compañía de su adulto significativo y de otras personas cercanas a él.",
+              "Expresa sus emociones y reacciona ante las expresiones emocionales de otros a través de risas, llantos, gestos o movimientos corporales. Busca consuelo y atención del adulto significativo para sentirse seguro y contenido frente a una emoción."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "24 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Reconoce sus intereses, necesidades y las sensaciones que percibe de su cuerpo, las diferencia de las de los otros, a través de palabras, acciones, gestos o movimientos. Hace algunas cosas por sí solo, se aleja del adulto por períodos más largos y retorna de manera espontánea.",
+              "Toma la iniciativa para realizar actividades cotidianas de exploración y juego desde sus intereses. Participa con agrado e iniciativa en acciones de su cuidado.",
+              "Expresa sus emociones y responde a las expresiones emocionales de otros a través de palabras, risas, llantos, gestos o movimientos corporales. Busca consuelo y atención del adulto para sentirse seguro frente a una emoción intensa."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "36 meses",
+            "nivel_ciclo": "logra el nivel esperado del ciclo I",
+            "descripcion": [
+              "Reconoce sus necesidades, sensaciones e intereses, las diferencia de las de los otros, a través de palabras, acciones, gestos o movimientos. Hace algunas cosas por sí solo y hace valer sus decisiones. Se siente parte de su familia, reconoce a sus miembros y a otras personas conocidas.",
+              "Toma la iniciativa para realizar actividades cotidianas de juego y algunas acciones de cuidado personal de acuerdo con sus intereses y posibilidades motrices, muestra alegría y orgullo por hacerlo. Solicita la ayuda del adulto cuando lo necesita.",
+              "Expresa sus emociones a través de gestos, movimientos corporales o palabras, y reconoce algunas emociones en los demás cuando el adulto se lo menciona. Busca consuelo y atención del adulto para sentirse seguro y regular una emoción intensa. Tolera la espera de tiempos cortos y maneja la frustración de algunos deseos."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Reconoce sus necesidades, sensaciones, intereses y preferencias; las diferencia de las de los otros a través de palabras, acciones, gestos o movimientos.",
+              "Se reconoce como miembro de su familia y grupo de aula. Identifica a los integrantes de ambos grupos.",
+              "Toma la iniciativa para realizar actividades cotidianas y juegos desde sus intereses. Realiza acciones de cuidado personal, hábitos de alimentación e higiene.",
+              "Expresa sus emociones; utiliza para ello gestos, movimientos corporales y palabras. Identifica sus emociones y las que observa en los demás cuando el adulto las nombra.",
+              "Busca la compañía y consuelo del adulto en situaciones en las que lo necesita para sentirse seguro. Tolera algunos tiempos de espera anticipados por el adulto."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Reconoce sus intereses, preferencias y características; las diferencia de las de los otros a través de palabras o acciones, dentro de su familia o grupo de aula.",
+              "Se reconoce como miembro de su familia y grupo de aula. Comparte hechos importantes de su historia familiar.",
+              "Toma la iniciativa para realizar acciones de cuidado personal, de alimentación e higiene de manera autónoma. Explica la importancia de estos hábitos para su salud.",
+              "Expresa sus emociones; utiliza palabras, gestos y movimientos corporales. Reconoce las emociones en los demás, y muestra su simpatía o trata de ayudar.",
+              "Busca la compañía y consuelo del adulto en situaciones en las que lo necesita para sentirse seguro o contenido. Da razón de lo que le sucedió."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Reconoce sus intereses, preferencias, características físicas y cualidades, las diferencia de las de los otros a través de palabras o acciones.",
+              "Participa de diferentes acciones de juego o de la vida cotidiana asumiendo distintos roles, sin hacer distinciones de género.",
+              "Se reconoce como parte de su familia, grupo de aula e IE. Comparte hechos y momentos importantes de su historia familiar.",
+              "Toma la iniciativa para realizar acciones de cuidado personal, de manera autónoma, y da razón sobre las decisiones que toma.",
+              "Expresa sus emociones; utiliza palabras, gestos y movimientos corporales e identifica las causas que las originan. Reconoce las emociones de los demás, y muestra su simpatía, desacuerdo o preocupación.",
+              "Busca la compañía y consuelo del adulto en situaciones en que lo requiere. Utiliza la palabra para expresar y explicar lo que le sucede. Reconoce los límites establecidos para su seguridad y contención."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-ps-comp2",
+        "nombre": "Convive y participa democráticamente en la búsqueda del bien común",
+        "descripcion": "En el nivel de Educación Inicial, esta competencia se visualiza desde que el niño y la niña nacen, cuando conviven y participan a partir de la relación y el afecto que reciben de las personas que los atienden y del medio que los rodea. Hacia los 3 años, conviven y participan democráticamente con sus compañeros a partir de la interacción en situaciones de juego, exploración o de la vida cotidiana; con el acompañamiento del docente, van integrando los límites, conocen las normas y contribuyen en la construcción de acuerdos necesarios para la convivencia armónica.",
+        "capacidades": [
+          {
+            "id": "ini-ps-comp2-cap1",
+            "nombre": "Interactúa con todas las personas",
+            "descripcion": "Reconoce a todos como personas valiosas y con derechos, muestra preocupación por el otro, respeta las diferencias y se enriquece de ellas."
+          },
+          {
+            "id": "ini-ps-comp2-cap2",
+            "nombre": "Construye normas y asume acuerdos y leyes",
+            "descripcion": "Participa en la construcción de normas, las respeta y evalúa en relación a los principios que las sustentan, así como cumple los acuerdos, reconociendo la importancia de estas para la convivencia."
+          },
+          {
+            "id": "ini-ps-comp2-cap3",
+            "nombre": "Participa en acciones que promueven el bienestar común",
+            "descripcion": "Propone y gestiona iniciativas vinculadas con el interés común, tanto en la escuela como en la comunidad."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Convive y participa cuando se relaciona con niños y adultos de su espacio cotidiano desde su propia iniciativa. Manifiesta a través de movimientos, gestos o palabras las situaciones que le agradan o le incomodan. Colabora en el cuidado de los materiales y espacios comunes."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Convive y participa democráticamente cuando interactúa de manera respetuosa con sus compañeros desde su propia iniciativa, cumple con sus deberes y se interesa por conocer más sobre las diferentes costumbres y características de las personas de su entorno inmediato. Participa y propone acuerdos y normas de convivencia para el bien común. Realiza acciones con otros para el buen uso de los espacios, materiales y recursos comunes."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "9 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Reconoce al adulto significativo, se siente seguro y protegido, le muestra afecto a través de gestos, movimientos, balbuceos y una postura relajada. Llora o se muestra inseguro ante la presencia de una persona desconocida."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "18 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Reconoce al adulto significativo, se siente seguro y protegido en su presencia, se relaciona con otros adultos que conoce. Muestra interés en otras personas que se le acercan sin alejarse del adulto que lo cuida."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "24 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Interactúa por momentos cortos con otros niños que están en el mismo espacio. Juega junto a ellos, pero no necesariamente con ellos. Reconoce al adulto significativo; en algunos momentos, se aleja sintiéndose seguro y luego regresa para recibir contención."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "36 meses",
+            "nivel_ciclo": "logra el nivel esperado del ciclo I",
+            "descripcion": [
+              "Interactúa con el adulto significativo, se aleja sintiéndose seguro y luego regresa para recibir contención. En algunos momentos, se relaciona con otros adultos que conoce. Juega con otros niños a partir de sus propios intereses y posibilidades.",
+              "Colabora en el cuidado y orden de los materiales y espacios que utiliza."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Se relaciona con adultos y niños de su entorno en diferentes actividades del aula y juega en pequeños grupos.",
+              "Participa en actividades grupales poniendo en práctica las normas de convivencia y los límites que conoce.",
+              "Colabora en el cuidado del uso de recursos, materiales y espacios compartidos."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Se relaciona con adultos de su entorno, juega con otros niños y se integra en actividades grupales del aula. Propone ideas de juego y las normas del mismo, sigue las reglas de los demás de acuerdo con sus intereses.",
+              "Realiza actividades cotidianas con sus compañeros y se interesa por conocer sus costumbres, así como los lugares de los que proceden.",
+              "Participa en la construcción colectiva de acuerdos y normas, basados en el respeto y el bienestar de todos. Muestra comportamientos de acuerdo con las normas de convivencia asumidos.",
+              "Colabora en actividades colectivas orientadas al cuidado de los recursos, materiales y espacios compartidos."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Se relaciona con adultos de su entorno, juega con otros niños y se integra en actividades grupales del aula. Propone ideas de juego y sus normas. Se pone de acuerdo con el grupo para elegir un juego y las reglas del mismo.",
+              "Realiza actividades cotidianas con sus compañeros, y se interesa por compartir las costumbres de su familia y conocer los lugares de donde proceden.",
+              "Participa en la construcción colectiva de acuerdos y normas basadas en el respeto y el bienestar de todos considerando las situaciones que afectan o incomodan a todo el grupo.",
+              "Asume responsabilidades en su aula para colaborar con el orden, limpieza y bienestar de todos.",
+              "Propone y colabora en actividades colectivas orientadas al cuidado de recursos, materiales y espacios compartidos."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-ps-comp3",
+        "nombre": "Construye su identidad, como persona humana, amada por Dios, digna, libre y trascendente, comprendiendo la doctrina de su propia religión, abierto al diálogo con las que le son cercanas",
+        "descripcion": "En el nivel inicial, esta competencia parte de las creencias, del afecto, la atención y la calidad de vínculo que recibe el niño de su familia como evidencia del amor de Dios. Los niños confían en el adulto que les brinda seguridad y creen en lo que él cree por ser un referente afectivo importante. En la medida que el niño experimente el amor de sus padres y su familia, podrá vivenciar el amor de Dios.",
+        "nota": "Solo aplica al ciclo II. Elaborada por la Oficina Nacional de Educación Católica. En concordancia con el Reglamento de la Ley General de Educación (art. 42) y la Ley de Libertades Religiosas (art. 8), se respetará el derecho a exonerarse de la enseñanza de religión.",
+        "ciclos_aplicacion": ["ciclo-II"],
+        "capacidades": [
+          {
+            "id": "ini-ps-comp3-cap1",
+            "nombre": "Conoce a Dios y asume su identidad religiosa y espiritual como persona digna, libre y trascendente",
+            "descripcion": "El estudiante conoce y asume su identidad religiosa y espiritual como persona digna, libre y trascendente, reconociendo a Dios como Padre y Creador."
+          },
+          {
+            "id": "ini-ps-comp3-cap2",
+            "nombre": "Cultiva y valora las manifestaciones religiosas de su entorno argumentando su fe de manera comprensible y respetuosa",
+            "descripcion": "El estudiante participa y valora las manifestaciones religiosas de su entorno, expresando su fe de manera comprensible y respetuosa hacia otras creencias."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene como base el nivel 1 de la competencia Construye su identidad."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Realiza acciones por propia iniciativa para agradecer el amor que recibe de su familia y de su entorno. Participa de acciones que muestren su solidaridad y generosidad hacia su prójimo como muestra del amor que recibe de Dios."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Reconoce de manera espontánea, a través de sus acciones diarias, el amor y cuidado que le brinda su familia, como un indicio del amor de Dios, y da inicio a acciones como colaborar, saludar, despedirse y agradecer por propia iniciativa.",
+              "Participa en las prácticas de la confesión religiosa de sus padres y lo comenta a sus compañeros de aula.",
+              "Disfruta por iniciativa propia de la naturaleza creada por Dios con amor.",
+              "Demuestra su amor al prójimo acogiendo y compartiendo con todos como amigos de Jesús."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Expresa, por propia iniciativa, el amor y cuidado que recibe de su entorno como un indicio del amor de Dios. Lo hace a través de la interacción con los otros, al realizar acciones como compartir, ayudar y colaborar.",
+              "Participa en las prácticas de la confesión religiosa de sus padres y lo comenta a sus compañeros de aula y comunidad educativa.",
+              "Participa por iniciativa propia del cuidado de la Creación en el lugar en donde se encuentra.",
+              "Demuestra su amor al prójimo acogiendo y siendo solidario con los que necesitan ayuda en su entorno más cercano."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Expresa por propia iniciativa el amor y cuidado que recibe de su entorno, como un indicio del amor de Dios. Lo hace a través de la interacción con los otros, al realizar acciones como compartir, ayudar y colaborar.",
+              "Participa en las prácticas de la confesión religiosa de sus padres o comunidad —como rituales y fiestas—, y lo comparte con sus compañeros.",
+              "Participa del uso responsable de los recursos creados por Dios en su entorno.",
+              "Demuestra su amor al prójimo respetando y siendo solidario con los que necesitan de su ayuda material y espiritual."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,4 +1,6 @@
 export interface CurriculumRow {
+  ciclo: string;
+  edad: string;
   area: string;
   competencia: string;
   capacidad: string;
@@ -13,10 +15,12 @@ export function parseCurriculumCsv(raw: string): CurriculumRow[] {
   return rows
     .filter((line) => line.trim().length > 0)
     .map((line) => {
-      const values = line.split(',').map((v) => v.trim());
+      // Split only on the first N-1 commas (last field may contain commas)
+      const parts = line.split(',');
       const row: Record<string, string> = {};
       cols.forEach((col, i) => {
-        row[col] = values[i] ?? '';
+        // Join remaining parts into the last column
+        row[col] = (i === cols.length - 1 ? parts.slice(i).join(',') : parts[i] ?? '').trim();
       });
       return row as unknown as CurriculumRow;
     });
@@ -26,24 +30,51 @@ export function uniqueSorted(values: string[]): string[] {
   return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'es'));
 }
 
-export function getAreas(data: CurriculumRow[]): string[] {
-  return uniqueSorted(data.map((r) => r.area));
+export function getAreas(data: CurriculumRow[], edad?: string): string[] {
+  const filtered = edad ? data.filter((r) => r.edad === edad) : data;
+  return uniqueSorted(filtered.map((r) => r.area));
 }
 
-export function getCompetencias(data: CurriculumRow[], area: string): string[] {
-  return uniqueSorted(data.filter((r) => r.area === area).map((r) => r.competencia));
+export function getCompetencias(data: CurriculumRow[], area: string, edad?: string): string[] {
+  const filtered = data.filter((r) => r.area === area && (!edad || r.edad === edad));
+  return uniqueSorted(filtered.map((r) => r.competencia));
 }
 
-export function getCapacidades(data: CurriculumRow[], area: string, competencia: string): string[] {
-  return uniqueSorted(data.filter((r) => r.area === area && r.competencia === competencia).map((r) => r.capacidad));
-}
-
-export function getCriterios(data: CurriculumRow[], area: string, competencia: string, capacidad: string): string[] {
-  return uniqueSorted(
-    data
-      .filter((r) => r.area === area && r.competencia === competencia && r.capacidad === capacidad)
-      .map((r) => r.criterio),
+export function getCapacidades(
+  data: CurriculumRow[],
+  area: string,
+  competencia: string,
+  edad?: string,
+): string[] {
+  const filtered = data.filter(
+    (r) => r.area === area && r.competencia === competencia && (!edad || r.edad === edad),
   );
+  return uniqueSorted(filtered.map((r) => r.capacidad));
+}
+
+export function getCriterios(
+  data: CurriculumRow[],
+  area: string,
+  competencia: string,
+  capacidad: string,
+  edad?: string,
+): string[] {
+  const filtered = data.filter(
+    (r) =>
+      r.area === area &&
+      r.competencia === competencia &&
+      r.capacidad === capacidad &&
+      (!edad || r.edad === edad),
+  );
+  return uniqueSorted(filtered.map((r) => r.criterio));
+}
+
+/** Edades disponibles en el dataset, en orden curricular */
+const EDAD_ORDER = ['9 meses', '18 meses', '24 meses', '36 meses', '3 años', '4 años', '5 años'];
+
+export function getEdades(data: CurriculumRow[]): string[] {
+  const present = new Set(data.map((r) => r.edad));
+  return EDAD_ORDER.filter((e) => present.has(e));
 }
 
 export interface SessionConfig {

@@ -1,14 +1,19 @@
 import type { APIRoute } from 'astro';
+import curriculoRaw from '../../data/curriculo.csv?raw';
+import { parseCurriculumCsv } from '../../lib/curriculum';
 import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
 import {
   findExistingAIObs,
   insertUserObservation,
   upsertAIObservation,
 } from '../../lib/server/observations';
-import { generatePedagogicalEvidence } from '../../lib/server/pedagogicalEvidence';
+import { type EvidenciaCAI, generatePedagogicalEvidence } from '../../lib/server/pedagogicalEvidence';
 import { getSessionById } from '../../lib/server/sessions';
 
 export const prerender = false;
+
+// Parse once at module load — no cost per request
+const curriculum = parseCurriculumCsv(curriculoRaw);
 
 export const POST: APIRoute = async ({ request }) => {
   const user = await requireUser(request);
@@ -26,7 +31,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Datos incompletos' }), { status: 400 });
     }
 
-    // Fetch session + existing AI note in parallel — saves one round-trip
+    // Fetch session + existing AI note in parallel
     const [session, existingAIObs] = await Promise.all([
       getSessionById(user.id, sessionId),
       findExistingAIObs(sessionId, studentName ?? null),
@@ -36,33 +41,53 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Sesión no encontrada' }), { status: 404 });
     }
 
-    const previousNote =
-      existingAIObs?.evidencia
-        ? { evidencia: existingAIObs.evidencia, retroalimentacion: existingAIObs.retroalimentacion ?? '' }
-        : undefined;
+    // Reconstruct previous CAI note if it exists
+    const previousNote: EvidenciaCAI | undefined = existingAIObs?.evidencia
+      ? {
+          contexto: existingAIObs.evidencia,   // legacy: mapped from old field
+          accion: '',
+          interpretacion: '',
+          retroalimentacion: existingAIObs.retroalimentacion ?? '',
+        }
+      : undefined;
 
-    const ai = await generatePedagogicalEvidence(
-      session, text, studentName, source, students, previousNote,
+    const result = await generatePedagogicalEvidence(
+      session,
+      text,
+      curriculum,
+      studentName,
+      source,
+      students,
+      previousNote,
     );
 
-    if (ai.error) {
-      return new Response(JSON.stringify({ error: ai.error }), { status: 400 });
+    if (result.error) {
+      return new Response(JSON.stringify({ error: result.error }), { status: 400 });
     }
 
-    const resolvedStudentName = ai.studentNameMatch || studentName;
+    const cai = result.cai!;
+    const resolvedStudentName = result.studentNameMatch || studentName;
 
-    // Only do the extra DB lookup if the AI matched a *different* student
+    // Only do the extra DB lookup if AI matched a different student
     let resolvedExisting = existingAIObs;
-    if (ai.studentNameMatch && ai.studentNameMatch !== studentName) {
+    if (result.studentNameMatch && result.studentNameMatch !== studentName) {
       resolvedExisting = await findExistingAIObs(sessionId, resolvedStudentName ?? null);
     }
+
+    // Store contexto+accion+interpretacion in evidencia field (structured as JSON string)
+    // retroalimentacion stays in its own field
+    const evidenciaStored = JSON.stringify({
+      contexto: cai.contexto,
+      accion: cai.accion,
+      interpretacion: cai.interpretacion,
+    });
 
     const [userObs, aiObs] = await Promise.all([
       insertUserObservation({ sessionId, text, studentName: resolvedStudentName }),
       upsertAIObservation({
         sessionId,
-        evidencia: ai.evidencia || text,
-        retroalimentacion: ai.retroalimentacion || '',
+        evidencia: evidenciaStored,
+        retroalimentacion: cai.retroalimentacion,
         studentName: resolvedStudentName,
         existingId: resolvedExisting?.id,
       }),
@@ -76,9 +101,21 @@ export const POST: APIRoute = async ({ request }) => {
 
     return new Response(
       JSON.stringify({
-        userMessage: { id: userObs.id, type: 'user', text, studentName: resolvedStudentName, timestamp: formatTime(userObs.createdAt) },
-        aiMessage: { id: aiObs.id, type: 'ai', evidencia: ai.evidencia, retroalimentacion: ai.retroalimentacion, studentName: resolvedStudentName, timestamp: formatTime(aiObs.createdAt) },
-        studentNameMatch: ai.studentNameMatch,
+        userMessage: {
+          id: userObs.id,
+          type: 'user',
+          text,
+          studentName: resolvedStudentName,
+          timestamp: formatTime(userObs.createdAt),
+        },
+        aiMessage: {
+          id: aiObs.id,
+          type: 'ai',
+          cai,
+          studentName: resolvedStudentName,
+          timestamp: formatTime(aiObs.createdAt),
+        },
+        studentNameMatch: result.studentNameMatch,
         isUpdate,
       }),
       { headers: { 'Content-Type': 'application/json' } },

@@ -153,7 +153,7 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
 
       {/* Área de chips + input */}
       <div
-        className="flex-1 min-h-0 rounded-2xl border-2 border-cream-dark bg-white px-3 py-3 flex flex-col gap-2 cursor-text focus-within:border-lilac-500 focus-within:ring-4 focus-within:ring-lilac-500/20 transition-all duration-200 overflow-hidden"
+        className="flex-1 min-h-0 rounded-2xl border-2 border-cream-dark bg-white px-3 py-3 flex flex-col gap-2 cursor-text transition-all duration-200 overflow-hidden"
         onClick={() => inputRef.current?.focus()}
       >
         {validNames.length > 0 && (

@@ -2,7 +2,7 @@ import type { ChatMessage } from '../../components/aula/ChatFeed';
 import type { StudentDto } from '../api/client';
 import type { SessionConfig } from '../curriculum';
 
-const STORAGE_KEY = 'illari-guest-v1';
+const STORAGE_KEY = 'mi-wawita-guest-v1';
 
 interface GuestData {
   activeSession: SessionConfig | null;
@@ -79,9 +79,19 @@ export function guestAppendObservations(sessionId: string, userMessage: ChatMess
 export function guestPatchObservation(id: string, field: 'evidencia' | 'retroalimentacion', value: string) {
   const data = read();
   for (const sessionId of Object.keys(data.observations)) {
-    data.observations[sessionId] = data.observations[sessionId].map((m) =>
-      m.type === 'ai' && m.id === id ? { ...m, [field]: value } : m,
-    );
+    data.observations[sessionId] = data.observations[sessionId].map((m) => {
+      if (m.type !== 'ai' || m.id !== id) return m;
+      if (field === 'retroalimentacion') {
+        return { ...m, cai: { ...m.cai, retroalimentacion: value } };
+      }
+      // evidencia field stores JSON with contexto/accion/interpretacion
+      try {
+        const parsed = JSON.parse(value);
+        return { ...m, cai: { ...m.cai, ...parsed } };
+      } catch {
+        return { ...m, cai: { ...m.cai, accion: value } };
+      }
+    });
   }
   write(data);
 }

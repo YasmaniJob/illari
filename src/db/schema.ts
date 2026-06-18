@@ -51,7 +51,7 @@ export const verification = sqliteTable('verification', {
   updatedAt: integer('updated_at', { mode: 'timestamp' }),
 });
 
-/** Sesiones de aula (Illari) */
+/** Sesiones de aula (Mi Wawita) */
 export const classSessions = sqliteTable(
   'class_sessions',
   {

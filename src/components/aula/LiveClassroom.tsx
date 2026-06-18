@@ -186,12 +186,25 @@ export default function LiveClassroom() {
     [session, selectedStudent, students],
   );
 
-  const handleUpdateAI = useCallback(async (id: string, field: 'evidencia' | 'retroalimentacion', value: string) => {
-    setMessages((prev) => prev.map((m) => (m.type === 'ai' && m.id === id ? { ...m, [field]: value } : m)));
+  const handleUpdateAI = useCallback(async (id: string, field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion', value: string) => {
+    let updatedCai: { contexto: string; accion: string; interpretacion: string; retroalimentacion: string } | null = null;
+
+    setMessages((prev) => prev.map((m) => {
+      if (m.type !== 'ai' || m.id !== id) return m;
+      const next = { ...m, cai: { ...m.cai, [field]: value } };
+      updatedCai = next.cai;
+      return next;
+    }));
+
     try {
-      await patchObservation(id, field, value);
+      if (field === 'retroalimentacion') {
+        await patchObservation(id, 'retroalimentacion', value);
+      } else if (updatedCai) {
+        const { retroalimentacion: _r, ...rest } = updatedCai;
+        await patchObservation(id, 'evidencia', JSON.stringify(rest));
+      }
     } catch {
-      /* UI ya actualizada */
+      /* UI ya actualizada optimísticamente */
     }
   }, []);
 

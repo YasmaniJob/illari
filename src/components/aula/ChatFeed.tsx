@@ -14,7 +14,7 @@ export type ChatMessage = UserMessage | AIMessage;
 interface ChatFeedProps {
   messages: ChatMessage[];
   sending?: boolean;
-  onUpdateAI: (id: string, field: 'evidencia' | 'retroalimentacion', value: string) => void;
+  onUpdateAI: (id: string, field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion', value: string) => void;
 }
 
 /** Three-dot bouncing animation shown while the AI is thinking */
@@ -30,15 +30,15 @@ function TypingBubble() {
       <div className="flex items-center gap-1.5 rounded-3xl rounded-bl-lg bg-white border border-lilac-100 px-5 py-4 shadow-sm">
         <span
           className="h-2.5 w-2.5 rounded-full bg-lilac-400"
-          style={{ animation: 'illari-bounce 1.2s ease-in-out infinite', animationDelay: '0ms' }}
+          style={{ animation: 'miwawita-bounce 1.2s ease-in-out infinite', animationDelay: '0ms' }}
         />
         <span
           className="h-2.5 w-2.5 rounded-full bg-lilac-400"
-          style={{ animation: 'illari-bounce 1.2s ease-in-out infinite', animationDelay: '200ms' }}
+          style={{ animation: 'miwawita-bounce 1.2s ease-in-out infinite', animationDelay: '200ms' }}
         />
         <span
           className="h-2.5 w-2.5 rounded-full bg-lilac-400"
-          style={{ animation: 'illari-bounce 1.2s ease-in-out infinite', animationDelay: '400ms' }}
+          style={{ animation: 'miwawita-bounce 1.2s ease-in-out infinite', animationDelay: '400ms' }}
         />
       </div>
 
@@ -46,7 +46,7 @@ function TypingBubble() {
 
       {/* Keyframe injected inline so it works without a global CSS change */}
       <style>{`
-        @keyframes illari-bounce {
+        @keyframes miwawita-bounce {
           0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
           30%            { transform: translateY(-7px); opacity: 1; }
         }

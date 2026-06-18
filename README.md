@@ -1,4 +1,4 @@
-# Illari — Cuaderno de Campo Digital
+# Mi Wawita — Cuaderno de Campo Digital
 
 Asistente para docentes de educación inicial en Perú. Basado en el CNEB.
 

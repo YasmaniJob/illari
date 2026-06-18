@@ -1,0 +1,217 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección VI, 6.5 Área de Descubrimiento del Mundo, págs. 149-168.",
+  "nivel": "inicial",
+  "area": {
+    "id": "ini-dm",
+    "nombre": "Descubrimiento del Mundo",
+    "sigla": "DM",
+    "descripcion": "Los niños y niñas, desde que nacen, son sujetos de acción, e interactúan con las personas, los objetos y seres vivos que forman parte de su ambiente. Desde sus posibilidades de movimiento, desplazamiento y emoción en su cotidianidad, empiezan a explorar espontáneamente el entorno que los rodea y a vivir experiencias que les permiten poco a poco ir descubriendo el mundo. Su curiosidad natural y la seguridad afectiva los anima a explorar y experimentar por propia iniciativa con todo su cuerpo. A partir de estas acciones exploratorias, van construyendo sus primeras nociones de espacio, de cantidad, de tiempo y de causalidad, así como también construyen sus ideas acerca de lo que es y de lo que sucede en el mundo.",
+    "enfoques": ["ea-indagacion-cientifica", "ea-resolucion-problemas"],
+    "nota": "Esta área agrupa competencias que en primaria y secundaria se separan en las áreas de Matemática y Ciencia y Tecnología. Solo atiende el Ciclo I.",
+    "competencias": [
+      {
+        "id": "ini-dm-comp1",
+        "nombre": "Indaga mediante métodos científicos para construir sus conocimientos",
+        "descripcion": "En el nivel de Educación Inicial, esta competencia se visualiza cuando los niños y niñas, desde que nacen, son capaces de construir de manera progresiva su propio conocimiento acerca del qué y cómo funciona el mundo que los rodea, lo que pone en juego habilidades y actitudes que les son innatas, como la curiosidad, el asombro y la búsqueda de información a través de las situaciones de exploración libre. Los niños y niñas, utilizando sus sentidos y habilidades motrices, desarrollan la capacidad de generar y obtener información sobre los objetos, seres vivos o hechos que acontecen en su ambiente.",
+        "nota_ciclos": "En el ciclo I, esta competencia desarrolla principalmente la capacidad: Genera y registra datos o información.",
+        "capacidades": [
+          {
+            "id": "ini-dm-comp1-cap1",
+            "nombre": "Genera y registra datos o información",
+            "descripcion": "Obtiene, organiza y registra datos fiables en función de las variables, utilizando instrumentos y diversas técnicas que permitan explorar el entorno."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora los objetos, el espacio y hechos que acontecen en su entorno, los observa y manipula con todos sus sentidos para obtener información sobre sus características o usos, experimenta y observa los efectos que sus acciones causan sobre ellos."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Explora los objetos, el espacio y hechos que acontecen en su entorno, hace preguntas con base en su curiosidad, propone posibles respuestas, obtiene información al observar, manipular y describir; compara aspectos del objeto o fenómeno para comprobar la respuesta y expresa en forma oral o gráfica lo que hizo y aprendió.",
+            "nota": "En el Ciclo II esta competencia pasa al área de Ciencia y Tecnología."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "9 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Explora, con todos sus sentidos (mira, toca, huele, chupa, escucha) y desde su iniciativa, los hechos que ocurren en su entorno inmediato y algunas características de los objetos que están a su alcance."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "18 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Explora, con todos sus sentidos (mira, toca, huele, chupa, escucha) y desde su iniciativa, los hechos que ocurren en su entorno y hace uso de los objetos que están a su alcance según sus características."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "24 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Explora desde su iniciativa los hechos que ocurren en su entorno y hace uso de los objetos que están a su alcance, según sus características, para resolver problemas cotidianos."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "36 meses",
+            "nivel_ciclo": "logra el nivel esperado del ciclo I",
+            "descripcion": [
+              "Explora desde su iniciativa los hechos que ocurren en su entorno. Explora y hace uso de los objetos que están a su alcance, según sus características, para resolver problemas cotidianos, y experimenta con sus propiedades; descubre los efectos que sus acciones producen sobre ellos."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-dm-comp2",
+        "nombre": "Resuelve problemas de cantidad",
+        "descripcion": "En el nivel de Educación Inicial, esta competencia se visualiza cuando los niños y niñas actúan sobre los objetos que tienen a su alcance, los ponen en relación uno con otro y descubren así sus características. Resuelven de manera práctica los problemas que surgen en sus actividades cotidianas poniendo en juego sus propias estrategias. De esta manera, aprenden a organizar sus acciones y a construir nociones de orden espacial, temporal y causal como base para el desarrollo de su pensamiento.",
+        "nota_ciclos": "En el ciclo I esta competencia desarrolla principalmente las capacidades: Traduce cantidades a expresiones numéricas, Comunica su comprensión sobre los números y las operaciones, y Usa estrategias y procedimientos de estimación y cálculo.",
+        "capacidades": [
+          {
+            "id": "ini-dm-comp2-cap1",
+            "nombre": "Traduce cantidades a expresiones numéricas",
+            "descripcion": "Establece relaciones entre los datos y condiciones de un problema, y las expresa en un modelo que reproduce las relaciones entre estos; usa cantidades y expresiones numéricas."
+          },
+          {
+            "id": "ini-dm-comp2-cap2",
+            "nombre": "Comunica su comprensión sobre los números y las operaciones",
+            "descripcion": "Expresa la comprensión de los conceptos numéricos, las operaciones y propiedades, usando lenguaje matemático y diversas representaciones."
+          },
+          {
+            "id": "ini-dm-comp2-cap3",
+            "nombre": "Usa estrategias y procedimientos de estimación y cálculo",
+            "descripcion": "Selecciona, adapta, combina o crea una variedad de estrategias, procedimientos como el cálculo mental y escrito, la estimación, la aproximación y medición, comparar cantidades."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora por propia iniciativa los objetos y situaciones de su entorno cotidiano utilizando sus sentidos, sus propias estrategias y criterios reconociendo algunas características y estableciendo relaciones o agrupaciones entre ellos y comprende algunas expresiones sencillas relacionadas con la cantidad y el tiempo."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas referidos a relacionar objetos de su entorno según sus características perceptuales; agrupar, ordenar hasta el quinto lugar, seriar hasta 5 objetos, comparar cantidades de objetos y pesos, agregar y quitar hasta 5 elementos, realizando representaciones con su cuerpo, material concreto o dibujos. Expresa la cantidad de hasta 10 objetos, usando estrategias como el conteo. Usa cuantificadores: 'muchos' 'pocos', 'ninguno', y expresiones: 'más que', 'menos que'. Expresa el peso de los objetos 'pesa más', 'pesa menos' y el tiempo con nociones temporales como 'antes o después', 'ayer' 'hoy' o 'mañana'.",
+            "nota": "En el Ciclo II esta competencia pasa al área de Matemática."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "9 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Descubre algunas características perceptuales de los objetos de su entorno inmediato durante la exploración con todos sus sentidos y según sus intereses."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "18 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Establece relaciones entre las características perceptuales y los usos que le asigna a los objetos de su entorno inmediato durante la exploración con todos sus sentidos y según sus intereses."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "24 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Establece relaciones entre las características perceptuales que le asigna a los objetos de su entorno, los junta o separa durante la exploración con todos sus sentidos, según sus intereses y con una intención determinada.",
+              "Utiliza gestos, movimientos y/u otras expresiones no verbales en respuesta a preguntas o expresiones que surgen en la vida cotidiana relacionadas con la cantidad y el tiempo."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "36 meses",
+            "nivel_ciclo": "logra el nivel esperado del ciclo I",
+            "descripcion": [
+              "Establece relaciones entre las características perceptuales de los objetos en su entorno, los agrupa, empareja, separa y ordena durante la exploración con todos sus sentidos, y según sus intereses y propios criterios.",
+              "Utiliza gestos, movimientos y otras expresiones no verbales y verbales, en respuesta a preguntas o expresiones que surgen en la vida cotidiana, y están relacionadas con la cantidad y el tiempo."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-dm-comp3",
+        "nombre": "Resuelve problemas de forma, movimiento y localización",
+        "descripcion": "En el nivel de Educación Inicial, esta competencia se visualiza cuando los niños y las niñas, en los primeros años de vida, exploran su cuerpo, sus posibilidades de movimiento y desplazamiento, así como al experimentar con los objetos que están en su entorno. A través de sus sentidos, los niños y las niñas reciben información sobre las personas y los objetos de su entorno cercano; pueden ver y seguir con la mirada al adulto que los acompaña; se dan cuenta, mientras desarrollan sus actividades de exploración y juego, si un objeto cambia de posición.",
+        "nota_ciclos": "En el ciclo I esta competencia desarrolla principalmente las capacidades: Modela objetos con formas geométricas y sus transformaciones, Comunica su comprensión sobre las formas y relaciones geométricas, y Usa estrategias y procedimientos para orientarse en el espacio.",
+        "capacidades": [
+          {
+            "id": "ini-dm-comp3-cap1",
+            "nombre": "Modela objetos con formas geométricas y sus transformaciones",
+            "descripcion": "Establece relaciones entre las características y datos del objeto, y las expresa en un modelo que reproduce sus propiedades geométricas."
+          },
+          {
+            "id": "ini-dm-comp3-cap2",
+            "nombre": "Comunica su comprensión sobre las formas y relaciones geométricas",
+            "descripcion": "Expresa la comprensión de las propiedades de las formas geométricas, sus transformaciones y la ubicación en el espacio, usando lenguaje geométrico y representaciones."
+          },
+          {
+            "id": "ini-dm-comp3-cap3",
+            "nombre": "Usa estrategias y procedimientos para orientarse en el espacio",
+            "descripcion": "Selecciona, adapta, combina o crea una variedad de estrategias, procedimientos y recursos para construir formas geométricas, medir o estimar desplazamientos y posiciones en el espacio."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora el espacio en situaciones cotidianas utilizando sus sentidos y sus propias estrategias, se desplaza y reconoce su posición o la ubicación de los objetos y comprende algunas expresiones sencillas relacionadas a su ubicación."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas al relacionar los objetos del entorno con formas bidimensionales y tridimensionales. Expresa la ubicación de personas en relación a objetos en el espacio 'cerca de', 'lejos de', 'al lado de', y de desplazamientos 'hacia adelante, hacia atrás', 'hacia un lado, hacia el otro'. Así también expresa la comparación de la longitud de dos objetos: 'es más largo que', 'es más corto que'. Emplea estrategias para resolver problemas, al construir objetos con material concreto o realizar desplazamientos en el espacio.",
+            "nota": "En el Ciclo II esta competencia pasa al área de Matemática."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "9 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Descubre relaciones de espacio y medida a partir de la exploración con su cuerpo y todos sus sentidos en su entorno inmediato. Lo hace según sus intereses, y desde sus posibilidades de movimiento y desplazamiento."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "18 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Establece relaciones de espacio y medida, se organiza y organiza los objetos a partir de la exploración con su cuerpo y todos sus sentidos en su entorno inmediato. Lo hace según sus intereses, y desde sus posibilidades de movimiento y desplazamiento."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "24 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Establece relaciones de espacio y medida, se organiza y organiza los objetos al sortear obstáculos que están en su camino, transportar los objetos, empujarlos, arrastrarlos, encajarlos, apilarlos por formas similares u ordenarlos a partir de la exploración con su cuerpo y todos sus sentidos."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "36 meses",
+            "nivel_ciclo": "logra el nivel esperado del ciclo I",
+            "descripcion": [
+              "Establece relaciones de espacio y medida, se organiza y organiza los objetos al sortear obstáculos que están en su camino, transportar los objetos, empujarlos, arrastrarlos u ordenarlos a partir de la exploración con su cuerpo y todos sus sentidos, y en interacción con los otros.",
+              "Utiliza expresiones verbales y no verbales en su cotidianidad, como algunas palabras sencillas: 'arriba', 'abajo', 'dentro', 'fuera'."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

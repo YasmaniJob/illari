@@ -1,0 +1,336 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección VI, 6.3 Área de Comunicación, págs. 108-138.",
+  "nivel": "inicial",
+  "area": {
+    "id": "ini-com",
+    "nombre": "Comunicación",
+    "sigla": "COM",
+    "descripcion": "La comunicación surge como una necesidad vital de los seres humanos. En los primeros años, en sus interacciones con el adulto, los niños y las niñas se comunican a través de balbuceos, sonrisas, miradas, llantos, gestos que expresan sus necesidades, emociones, intereses o vivencias. Progresivamente, pasan de una comunicación gestual a una donde surgen las interacciones verbales cada vez más adecuadas a la situación comunicativa y a los diferentes contextos. El nivel de Educación Inicial considera las competencias relacionadas con el área de comunicación: la comprensión y la producción de textos orales de acuerdo con el nivel de desarrollo de los niños y del contexto en que se desenvuelven, así como la iniciación a la lectura y a la escritura a través del contacto con los textos escritos.",
+    "enfoques": ["ea-comunicativo", "ea-multicultural"],
+    "nota": "En el Ciclo II se añade la competencia Crea proyectos desde los lenguajes artísticos, que en primaria y secundaria pertenece al área de Arte y Cultura.",
+    "competencias": [
+      {
+        "id": "ini-com-comp1",
+        "nombre": "Se comunica oralmente en su lengua materna",
+        "descripcion": "En los primeros años, los niños comunican a través de gestos, sonrisas, llantos, balbuceos, sus deseos, necesidades e intereses al adulto significativo con el que interactúan. Progresivamente pasan de una comunicación predominantemente gestual y basada en lo sobreentendido a una comunicación donde surgen los intercambios lingüísticos cada vez más adecuados a lo que quieren decir, y a quién o quiénes se quiere dirigir.",
+        "capacidades": [
+          {
+            "id": "ini-com-comp1-cap1",
+            "nombre": "Obtiene información del texto oral",
+            "descripcion": "El estudiante recupera y extrae información explícita expresada por los interlocutores."
+          },
+          {
+            "id": "ini-com-comp1-cap2",
+            "nombre": "Infiere e interpreta información del texto oral",
+            "descripcion": "El estudiante construye el sentido del texto. Para ello, infiere estableciendo diversas relaciones entre la información explícita e implícita con el fin de deducir nueva información y completar los vacíos del texto oral."
+          },
+          {
+            "id": "ini-com-comp1-cap3",
+            "nombre": "Adecúa, organiza y desarrolla el texto de forma coherente y cohesionada",
+            "descripcion": "El estudiante expresa sus ideas adaptándose al propósito, destinatario, características del tipo de texto, género discursivo y registro."
+          },
+          {
+            "id": "ini-com-comp1-cap4",
+            "nombre": "Utiliza recursos no verbales y paraverbales de forma estratégica",
+            "descripcion": "El estudiante emplea variados recursos no verbales (como gestos o movimientos corporales) o paraverbales (como el tono de la voz o silencios) según la situación comunicativa para enfatizar o matizar significados."
+          },
+          {
+            "id": "ini-com-comp1-cap5",
+            "nombre": "Interactúa estratégicamente con distintos interlocutores",
+            "descripcion": "El estudiante intercambia los roles de hablante y oyente alternada y dinámicamente, participando de forma pertinente, oportuna y relevante para lograr su propósito comunicativo."
+          },
+          {
+            "id": "ini-com-comp1-cap6",
+            "nombre": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral",
+            "descripcion": "Reflexionar implica distanciarse de los textos orales en que participa, comparando y contrastando aspectos formales y de contenido, con la experiencia, el contexto, el conocimiento formal y diversas fuentes de información."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Se comunica oralmente, escucha lo que otros le dicen, pregunta y responde. Se expresa espontáneamente a través del lenguaje verbal apoyándose en gestos y lenguaje corporal, con el propósito de interactuar con otras personas de su entorno."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Se comunica oralmente mediante diversos tipos de textos; identifica información explícita; realiza inferencias sencillas a partir de esta información e interpreta recursos no verbales y paraverbales de las personas de su entorno. Opina sobre lo que más/menos le gustó del contenido del texto. Se expresa espontáneamente a partir de sus conocimientos previos, con el propósito de interactuar con uno o más interlocutores conocidos en una situación comunicativa. Desarrolla sus ideas manteniéndose por lo general en el tema; utiliza vocabulario de uso frecuente y una pronunciación entendible, se apoya en gestos y lenguaje corporal. En un intercambio, generalmente participa y responde en forma pertinente a lo que le dicen."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "9 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Expresa sus necesidades, emociones e intereses al interactuar con personas conocidas de su entorno familiar a través de balbuceos, señas, gestos, sonrisas, miradas, movimientos corporales y, en algunas ocasiones, con el llanto, con la intención de comunicarse o lograr su propósito.",
+              "Responde a las personas conocidas de su entorno familiar que le hablan a través de balbuceos, sonrisas, miradas, señas, gestos y movimientos corporales."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "18 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Expresa sus necesidades, emociones e intereses al interactuar con otras personas conocidas de su entorno familiar a través de señas, gestos, sonrisas, miradas, movimientos corporales y/o algunas palabras con la intención de comunicarse o lograr su propósito.",
+              "Responde a las personas conocidas de su entorno familiar que le hablan con señas, gestos, sonrisas, miradas, movimientos corporales y algunas palabras."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "24 meses",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
+            "descripcion": [
+              "Expresa sus necesidades, emociones e intereses al interactuar con otras personas de su entorno familiar usando algunas palabras y sonidos combinados que se asemejan a palabras, así como movimientos corporales, señas, gestos, sonrisas y miradas con la intención de comunicarse o lograr su propósito.",
+              "Participa en conversaciones con personas de su entorno respondiendo con algunas palabras, así como movimientos corporales, señas, gestos, sonrisas, miradas."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-I",
+            "edad": "36 meses",
+            "nivel_ciclo": "logra el nivel esperado del ciclo I",
+            "descripcion": [
+              "Expresa sus necesidades, emociones, intereses y da cuenta de algunas experiencias al interactuar con personas de su entorno familiar y local. Utiliza palabras de uso frecuente, señas, sonrisas, miradas, gestos, así como movimientos corporales, con la intención de comunicarse.",
+              "Participa en conversaciones o cuando escucha cuentos, fábulas, adivinanzas y otros relatos de la tradición oral formulando preguntas o respondiendo con palabras de uso cotidiano a preguntas que le hacen."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Expresa sus necesidades, emociones, intereses y da cuenta de algunas experiencias al interactuar con personas de su entorno familiar, escolar o local. Utiliza palabras de uso frecuente, sonrisas, miradas, señas, gestos, movimientos corporales y diversos volúmenes de voz con la intención de lograr su propósito: informar, pedir, convencer o agradecer.",
+              "Participa en conversaciones o escucha cuentos, leyendas y otros relatos de la tradición oral. Formula preguntas sobre lo que le interesa saber o responde a lo que le preguntan.",
+              "Recupera información explícita de un texto oral. Menciona el nombre de personas y personajes, sigue indicaciones orales o vuelve a contar con sus propias palabras los sucesos que más le gustaron.",
+              "Deduce características de personas, personajes, animales y objetos en anécdotas, cuentos y rimas orales.",
+              "Comenta lo que le gusta o le disgusta de personas, personajes, hechos o situaciones de la vida cotidiana a partir de sus experiencias y del contexto en que se desenvuelve."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Expresa sus necesidades, emociones, intereses y da cuenta de sus experiencias al interactuar con personas de su entorno familiar, escolar o local. Utiliza palabras de uso frecuente, sonrisas, miradas, señas, gestos, movimientos corporales y diversos volúmenes de voz según su interlocutor y propósito: informar, pedir, convencer o agradecer.",
+              "Participa en conversaciones o escucha cuentos, leyendas, adivinanzas y otros relatos de la tradición oral. Formula preguntas sobre lo que le interesa saber o lo que no ha comprendido o responde a lo que le preguntan.",
+              "Recupera información explícita de un texto oral. Menciona algunos hechos, el nombre de personas y personajes. Sigue indicaciones orales o vuelve a contar con sus propias palabras los sucesos que más le gustaron.",
+              "Deduce relaciones de causa-efecto, así como características de personas, personajes, animales y objetos en anécdotas, cuentos, leyendas y rimas orales.",
+              "Comenta lo que le gusta o le disgusta de personas, personajes, hechos o situaciones de la vida cotidiana a partir de sus experiencias y del contexto en que se desenvuelve."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Expresa sus necesidades, emociones, intereses y da cuenta de sus experiencias al interactuar con personas de su entorno familiar, escolar o local. Utiliza palabras de uso frecuente y, estratégicamente, sonrisas, miradas, señas, gestos, movimientos corporales y diversos volúmenes de voz, según su interlocutor y propósito. Desarrolla sus ideas en torno a un tema, aunque en ocasiones puede salirse de este.",
+              "Participa en conversaciones, diálogos o escucha cuentos, leyendas, rimas, adivinanzas y otros relatos de la tradición oral. Espera su turno para hablar, escucha mientras su interlocutor habla, pregunta y responde sobre lo que le interesa saber o lo que no ha comprendido.",
+              "Recupera información explícita de un texto oral. Menciona algunos hechos y lugares, el nombre de personas y personajes. Sigue indicaciones orales o vuelve a contar con sus propias palabras los sucesos que más le gustaron.",
+              "Deduce relaciones de causa-efecto, así como características de personas, personajes, animales y objetos en anécdotas, cuentos, leyendas y rimas orales.",
+              "Comenta sobre lo que le gusta o disgusta de personas, personajes, hechos o situaciones de la vida cotidiana dando razones sencillas a partir de sus experiencias y del contexto en que se desenvuelve."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-com-comp2",
+        "nombre": "Lee diversos tipos de textos escritos en lengua materna",
+        "descripcion": "En el nivel inicial, esta competencia se desarrolla desde los primeros años en la vida de los niños cuando establecen su primer contacto con el mundo escrito: eligen y exploran los textos que se encuentran en su entorno. Los niños leen textos por sí mismos a partir de elaborar diversas hipótesis sobre lo que dicen los textos, relacionando sus conocimientos previos con los elementos que reconocen en los textos: imágenes, indicios, palabras, letras, entre otros. No se espera que los niños terminen el inicial leyendo de manera convencional.",
+        "nota_ciclos": "Esta competencia solo se desarrolla en el Ciclo II. El Ciclo I tiene como base el nivel 1 de la competencia Se comunica oralmente.",
+        "capacidades": [
+          {
+            "id": "ini-com-comp2-cap1",
+            "nombre": "Obtiene información del texto escrito",
+            "descripcion": "El estudiante localiza y selecciona información explícita en textos escritos con un propósito específico."
+          },
+          {
+            "id": "ini-com-comp2-cap2",
+            "nombre": "Infiere e interpreta información del texto escrito",
+            "descripcion": "El estudiante construye el sentido del texto. Para ello, infiere estableciendo diversas relaciones entre la información explícita e implícita con el fin de deducir nueva información."
+          },
+          {
+            "id": "ini-com-comp2-cap3",
+            "nombre": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito",
+            "descripcion": "Reflexionar implica comparar y contrastar aspectos formales y de contenido del texto con la experiencia, el conocimiento formal del lector y diversas fuentes de información."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene principalmente como base el nivel 1 de la competencia Se comunica oralmente en su lengua materna."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Lee diversos tipos de textos que tratan temas reales o imaginarios que le son cotidianos, en los que predominan palabras conocidas y que se acompañan con ilustraciones. Construye hipótesis o predicciones sobre la información contenida en los textos y demuestra comprensión de las ilustraciones y de algunos símbolos escritos que transmiten información. Expresa sus gustos y preferencias en relación a los textos leídos a partir de su propia experiencia. Utiliza algunas convenciones básicas de los textos escritos.",
+            "nota": "Leer, en este nivel, se refiere a la lectura no convencional: los niños leen textos por sí mismos a partir de elaborar diversas hipótesis sobre lo que dicen los textos, relacionando sus conocimientos previos con los elementos que reconocen en los textos: imágenes, indicios, palabras, letras, entre otros."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Identifica características de personas, personajes, animales u objetos a partir de lo que observa en las ilustraciones cuando explora cuentos, etiquetas, carteles, que se presenta en variados soportes.",
+              "Dice de qué tratará, cómo continuará o cómo terminará el texto a partir de las ilustraciones o imágenes que observa antes y durante la lectura que realiza (por sí mismo o a través de un adulto).",
+              "Comenta las emociones que le generó el texto leído (por sí mismo o a través de un adulto), a partir de sus intereses y experiencias."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Identifica características de personas, personajes, animales, objetos o acciones a partir de lo que observa en ilustraciones cuando explora cuentos, etiquetas, carteles, que se presentan en variados soportes.",
+              "Dice de qué tratará, cómo continuará o cómo terminará el texto a partir de las ilustraciones o imágenes que observa antes y durante la lectura que realiza (por sí mismo o a través de un adulto).",
+              "Comenta las emociones que le generó el texto leído (por sí mismo o a través de un adulto), a partir de sus intereses y experiencias."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Identifica características de personas, personajes, animales, objetos o acciones a partir de lo que observa en las ilustraciones, así como de algunas palabras conocidas por él: su nombre o el de otros, palabras que aparecen frecuentemente en los cuentos, canciones, rondas, rimas, anuncios publicitarios o carteles del aula que se presentan en variados soportes.",
+              "Dice de qué tratará, cómo continuará o cómo terminará el texto a partir de algunos indicios, como el título, las ilustraciones, palabras, expresiones o sucesos significativos, que observa o escucha antes y durante la lectura que realiza (por sí mismo o a través de un adulto).",
+              "Opina dando razones sobre algún aspecto del texto leído (por sí mismo o a través de un adulto), a partir de sus intereses y experiencia."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-com-comp3",
+        "nombre": "Escribe diversos tipos de textos en su lengua materna",
+        "descripcion": "En el nivel inicial, los niños se inician en el aprendizaje de la escritura en su lengua materna desde el momento en que empiezan a plantearse preguntas sobre cómo se escribe alguna palabra que les interesa. En el segundo ciclo de educación inicial, se espera que los niños se inicien en la adquisición del sistema de escritura. No se espera escritura convencional; los niños producen textos en los que ponen en juego sus hipótesis de escritura.",
+        "nota_ciclos": "Esta competencia solo se desarrolla en el Ciclo II. El Ciclo I tiene como base el nivel 1 de la competencia Se comunica oralmente.",
+        "capacidades": [
+          {
+            "id": "ini-com-comp3-cap1",
+            "nombre": "Adecúa el texto a la situación comunicativa",
+            "descripcion": "El estudiante considera el propósito, destinatario, tipo de texto, género discursivo y registro que utilizará al escribir los textos."
+          },
+          {
+            "id": "ini-com-comp3-cap2",
+            "nombre": "Organiza y desarrolla las ideas de forma coherente y cohesionada",
+            "descripcion": "El estudiante ordena lógicamente las ideas en torno a un tema, ampliándolas y complementándolas, estableciendo relaciones de cohesión entre ellas y utilizando un vocabulario pertinente."
+          },
+          {
+            "id": "ini-com-comp3-cap3",
+            "nombre": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito",
+            "descripcion": "El estudiante se distancia del texto que ha escrito para revisar de manera permanente el contenido, la coherencia, cohesión y adecuación a la situación comunicativa con la finalidad de mejorarlo."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene como base principalmente el nivel 1 de la competencia Se comunica oralmente en su lengua materna."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Escribe a partir de sus hipótesis de escritura diversos tipos de textos sobre temas variados considerando el propósito y el destinatario a partir de su experiencia previa. Desarrolla sus ideas en torno a un tema con la intención de transmitir ideas o emociones. Sigue la linealidad y direccionalidad de la escritura.",
+            "nota": "Escribir en este nivel se refiere a la escritura no convencional; los estudiantes producen textos en los que ponen en juego sus hipótesis de escritura (de cantidad, de variedad, silábica, silábico-alfabética y alfabética)."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "No se evidencian desempeños en esta edad."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Escribe por propia iniciativa y a su manera sobre lo que le interesa. Utiliza trazos, grafismos u otras formas para expresar sus ideas y emociones a través de una nota, para relatar una vivencia o un cuento."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Escribe por propia iniciativa y a su manera sobre lo que le interesa: considera a quién le escribirán y para qué lo escribirá; utiliza trazos, grafismos, letras ordenadas de izquierda a derecha y sobre una línea imaginaria para expresar sus ideas o emociones en torno a un tema a través de una nota o carta, para relatar una vivencia o un cuento.",
+              "Revisa el escrito que ha dictado, en función de lo que quiere comunicar."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-com-comp4",
+        "nombre": "Crea proyectos desde los lenguajes artísticos",
+        "descripcion": "En cualquier contexto cultural, los niños y las niñas, desde pequeños, tienen contacto con elementos que pueden transformar o con los cuales pueden dejar huella. La creación en los diversos lenguajes artísticos tiene como base la expresión en los distintos lenguajes de los niños. La expresividad psicomotriz, unida a la capacidad de simbolizar, da pie a la exploración y a la producción plástica, musical, dramática y de la danza. En la medida en que los niños tengan oportunidades para experimentar lúdicamente con los elementos que forman parte de los diversos lenguajes artísticos y de expresar sus emociones, sentimientos e ideas a través de sus producciones, podrán desarrollar su expresión en diversos lenguajes artísticos.",
+        "nota_ciclos": "Esta competencia solo se desarrolla en el Ciclo II. En primaria y secundaria corresponde al área de Arte y Cultura.",
+        "ciclos_aplicacion": ["ciclo-II"],
+        "capacidades": [
+          {
+            "id": "ini-com-comp4-cap1",
+            "nombre": "Explora y experimenta los lenguajes del arte",
+            "descripcion": "Significa experimentar, improvisar y desarrollar habilidades en el uso de los medios, materiales, herramientas y técnicas de los diversos lenguajes del arte."
+          },
+          {
+            "id": "ini-com-comp4-cap2",
+            "nombre": "Aplica procesos creativos",
+            "descripcion": "Supone generar ideas, investigar, tomar decisiones y poner en práctica sus conocimientos para elaborar un proyecto artístico individual o colaborativo en relación a una intención específica."
+          },
+          {
+            "id": "ini-com-comp4-cap3",
+            "nombre": "Socializa sus procesos y proyectos",
+            "descripcion": "Significa registrar sus experiencias, comunicar sus descubrimientos y compartir sus creaciones con otros, para profundizar en ellos y reflexionar sobre sus ideas y experiencias."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene principalmente como base el nivel 1 de la competencia de Indagación."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Crea proyectos artísticos al experimentar y manipular libremente diversos medios y materiales para descubrir sus propiedades expresivas. Explora los elementos básicos de los lenguajes del arte como el sonido, los colores y el movimiento. Explora sus propias ideas imaginativas que construye a partir de sus vivencias y las transforma en algo nuevo mediante el juego simbólico, el dibujo, la pintura, la construcción, la música y el movimiento creativo. Comparte espontáneamente sus experiencias y creaciones."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Explora por iniciativa propia diversos materiales de acuerdo con sus necesidades e intereses. Descubre las posibilidades expresivas de sus movimientos y de los materiales con los que trabaja.",
+              "Representa sus ideas acerca de sus vivencias personales usando diferentes lenguajes artísticos (el dibujo, la pintura, la danza o el movimiento, el teatro, la música, los títeres, etc.).",
+              "Muestra y comenta de forma espontánea, a compañeros y adultos de su entorno, lo que ha realizado al jugar y crear proyectos a través de los lenguajes artísticos."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Explora por iniciativa propia diversos materiales de acuerdo con sus necesidades e intereses. Descubre los efectos que se producen al combinar un material con otro.",
+              "Representa ideas acerca de sus vivencias personales usando diferentes lenguajes artísticos (el dibujo, la pintura, la danza o el movimiento, el teatro, la música, los títeres, etc.).",
+              "Muestra y comenta de forma espontánea a compañeros y adultos de su entorno, lo que ha realizado, al jugar y crear proyectos a través de los lenguajes artísticos."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Explora de manera individual y/o grupal diversos materiales de acuerdo con sus necesidades e intereses. Descubre los efectos que se producen al combinar un material con otro.",
+              "Representa ideas acerca de sus vivencias personales y del contexto en el que se desenvuelve usando diferentes lenguajes artísticos (el dibujo, la pintura, la danza o el movimiento, el teatro, la música, los títeres, etc.).",
+              "Muestra sus creaciones y observa las creaciones de otros. Describe lo que ha creado. A solicitud del docente, manifiesta lo que le gusta de la experiencia, o de su proyecto y del proyecto de otros."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

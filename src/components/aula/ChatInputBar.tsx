@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 interface ChatInputBarProps {
   onSend: (text: string) => void;
-  onVoiceTranscript: (text: string) => void; // kept for API compatibility
+  /** Reservado para futura implementación de entrada por voz */
+  onVoiceTranscript?: (text: string) => void;
   disabled?: boolean;
   selectedStudent?: { id: string; name: string } | null;
   onClearStudent?: () => void;
@@ -40,7 +41,7 @@ export default function ChatInputBar({
           onClick={onOpenPicker}
           className={[
             'inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold transition-all duration-200 shadow-sm',
-            'focus:outline-none focus:ring-4 focus:ring-lilac-500/20 active:scale-[0.97]',
+            'focus:outline-none active:scale-[0.97]',
             selectedStudent
               ? 'bg-lilac-50 border border-lilac-200 text-lilac-800 hover:bg-lilac-100'
               : 'bg-honey-50 border border-honey-200 text-warm-700 hover:bg-honey-100',
@@ -79,7 +80,7 @@ export default function ChatInputBar({
 
       {/* Input */}
       <form onSubmit={handleSubmit}>
-        <div className="mx-auto max-w-2xl md:max-w-none flex items-center gap-2 rounded-2xl border-2 border-cream-dark bg-white px-4 py-2 shadow-[0_4px_16px_-4px_rgba(61,44,41,0.12)] focus-within:border-lilac-400 focus-within:ring-4 focus-within:ring-lilac-500/15 transition-all duration-200">
+        <div className="mx-auto max-w-2xl md:max-w-none flex items-center gap-2 rounded-2xl border-2 border-cream-dark bg-white px-4 py-2 shadow-[0_4px_16px_-4px_rgba(61,44,41,0.12)] transition-all duration-200">
           {/* Ícono decorativo — ancla visual izquierda */}
           <svg className="h-5 w-5 shrink-0 text-warm-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -90,7 +91,7 @@ export default function ChatInputBar({
             onChange={(e) => setText(e.target.value)}
             disabled={disabled}
             placeholder={placeholder}
-            className="flex-1 min-w-0 bg-transparent border-0 text-base font-semibold text-warm-900 placeholder:text-warm-400 focus:outline-none focus:ring-0 py-2"
+            className="flex-1 min-w-0 bg-transparent border-0 text-base font-semibold text-warm-900 placeholder:text-warm-400 focus:outline-none py-2"
             autoComplete="off"
           />
           <button

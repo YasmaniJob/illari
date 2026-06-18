@@ -1,0 +1,80 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección VI, 6.4 Área de Castellano como Segunda Lengua, págs. 141-147.",
+  "nivel": "inicial",
+  "area": {
+    "id": "ini-csl",
+    "nombre": "Castellano como Segunda Lengua",
+    "sigla": "CSL",
+    "descripcion": "Nuestro país tiene una gran diversidad lingüística y cultural, por ello, en las aulas se cuenta con niños y niñas que, como parte de su herencia cultural y lingüística, hablan una lengua originaria o indígena, la cual suele ser su lengua materna. Según el contexto lingüístico en el que se ubiquen, además de consolidar el aprendizaje de su propia lengua, lo harán en una segunda lengua: el castellano. Esta será el puente de comunicación intercultural entre hablantes de diferentes lenguas y, además, una forma de acceder a nuevos conocimientos. El desarrollo de las competencias comunicativas en castellano como segunda lengua permitirá que los estudiantes establezcan relaciones sociales con otras personas en diferentes ámbitos de sus vidas, y puedan comunicarse y ejercer su ciudadanía en contextos públicos y privados.",
+    "enfoques": ["ea-comunicativo"],
+    "nota": "Esta área atiende a niños y niñas cuya lengua materna es una lengua originaria o indígena. Se debe respetar el silencio lingüístico de los niños, es decir, no obligarlos a hablar en castellano si aún no lo desean. Solo tiene una competencia en el nivel inicial.",
+    "competencias": [
+      {
+        "id": "ini-csl-comp1",
+        "nombre": "Se comunica oralmente en castellano como segunda lengua",
+        "descripcion": "En el aula hay diversidad de niños y niñas. Algunos, por mayor movilidad social, pueden usar el castellano a nivel oral con respecto de otros niños y niñas que han tenido poco contacto. Aprender esta lengua en la IE supone considerar nuevos registros de la lengua oral. El desarrollo de esta competencia se dará a partir de situaciones significativas que surjan del contexto social y cultural, como las actividades socioproductivas, entre otras, pero que incluyan también las demandas de los niños y las niñas de forma articulada.",
+        "capacidades": [
+          {
+            "id": "ini-csl-comp1-cap1",
+            "nombre": "Obtiene información del texto oral",
+            "descripcion": "El estudiante recupera y extrae información explícita expresada por los interlocutores en castellano."
+          },
+          {
+            "id": "ini-csl-comp1-cap2",
+            "nombre": "Infiere e interpreta información del texto oral",
+            "descripcion": "El estudiante construye el sentido del texto en castellano. Para ello, infiere estableciendo diversas relaciones entre la información explícita e implícita."
+          },
+          {
+            "id": "ini-csl-comp1-cap3",
+            "nombre": "Adecúa, organiza y desarrolla el texto de forma coherente y cohesionada",
+            "descripcion": "El estudiante expresa sus ideas en castellano adaptándose al propósito, destinatario y características del tipo de texto."
+          },
+          {
+            "id": "ini-csl-comp1-cap4",
+            "nombre": "Utiliza recursos no verbales y paraverbales de forma estratégica",
+            "descripcion": "El estudiante emplea variados recursos no verbales (gestos, movimientos corporales) o paraverbales (tono de voz, silencios) para hacer efectiva la comunicación en castellano."
+          },
+          {
+            "id": "ini-csl-comp1-cap5",
+            "nombre": "Interactúa estratégicamente con distintos interlocutores",
+            "descripcion": "El estudiante intercambia los roles de hablante y oyente alternada y dinámicamente en castellano, participando de forma pertinente para lograr su propósito comunicativo."
+          },
+          {
+            "id": "ini-csl-comp1-cap6",
+            "nombre": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral",
+            "descripcion": "El estudiante se distancia de los textos orales en castellano en que participa, comparando y contrastando aspectos formales y de contenido con su experiencia y contexto."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene como base principalmente el nivel 1 de la competencia Se comunica oralmente en su lengua materna."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Se comunica oralmente mediante palabras o frases breves. Obtiene información de textos acompañados de expresiones corporales, gestos y tono de voz de su interlocutor. Responde a través de algunas palabras aisladas, con apoyo de gestos y expresiones corporales y de su lengua materna."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "nota": "El programa solo especifica desempeños para 5 años en esta área.",
+            "descripcion": [
+              "Recupera información explícita (algunos hechos y lugares, el nombre de personas y personajes) de un texto oral donde predominan palabras de uso frecuente (IE, familia y comunidad) y son expresados con apoyo de gestos, expresiones corporales y tono de voz del interlocutor.",
+              "Responde a un interlocutor (compañero de clases o docente) utilizando palabras y frases de su lengua materna."
+            ]
+          }
+        ],
+        "condiciones_favorables": [
+          "Crear un clima de confianza en el aula, en donde el docente respete el proceso gradual de aprendizaje de una segunda lengua y no obligue a hablar al niño.",
+          "Hacer consciente al niño de que aprenderá el castellano, una lengua diferente a su lengua materna.",
+          "Contar con soportes audiovisuales en castellano para el proceso de enseñanza y aprendizaje de esta lengua."
+        ]
+      }
+    ]
+  }
+}

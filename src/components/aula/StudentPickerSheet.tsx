@@ -104,7 +104,7 @@ export default function StudentPickerSheet({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={`Buscar entre ${students.length} estudiantes…`}
-              className="w-full rounded-xl border-2 border-cream-dark bg-cream pl-9 pr-4 py-2.5 text-sm font-semibold text-warm-900 placeholder:text-warm-400 focus:outline-none focus:border-lilac-400 focus:ring-4 focus:ring-lilac-500/15 transition-all"
+              className="w-full rounded-xl border-2 border-cream-dark bg-cream pl-9 pr-4 py-2.5 text-sm font-semibold text-warm-900 placeholder:text-warm-400 focus:outline-none transition-all"
             />
           </div>
         </div>

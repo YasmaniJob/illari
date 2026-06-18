@@ -36,6 +36,29 @@
     @apply bg-cream text-warm-900 leading-relaxed;
   }
 
+  /* ── Cursor pointer arquitectónico ─────────────────────────────────────────
+     Todos los elementos interactivos usan pointer por defecto.
+     No necesitamos cursor-pointer en cada componente individual. */
+  button,
+  [role="button"],
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  label[for],
+  select,
+  summary,
+  a[href] {
+    cursor: pointer;
+  }
+
+  /* ── Suprimir outline del browser globalmente ───────────────────────────────
+     Usamos nuestros propios focus rings vía focus:ring-* de Tailwind.
+     Framer Motion no siempre hereda outline:none de className. */
+  *:focus,
+  *:focus-visible {
+    outline: none;
+  }
+
   /* Scrollbars personalizadas - Fijas y Finas */
   html {
     scrollbar-color: var(--color-coral-500) transparent;
@@ -93,11 +116,11 @@
   }
 
   .input-warm {
-    @apply w-full rounded-2xl border-2 border-cream-dark bg-white px-5 py-4 text-lg text-warm-900 placeholder:text-warm-500/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none focus:border-lilac-500 focus:ring-4 focus:ring-lilac-500/20;
+    @apply w-full rounded-2xl border-2 border-cream-dark bg-white px-5 py-4 text-lg text-warm-900 placeholder:text-warm-500/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none focus:border-warm-300 focus:shadow-[0_4px_16px_-4px_rgba(61,44,41,0.12)];
   }
 
   .focus-ring-warm {
-    @apply transition-all duration-200 ease-in-out focus:outline-none focus:ring-4 focus:ring-lilac-500/25 focus:border-lilac-500;
+    @apply transition-all duration-200 ease-in-out focus:outline-none;
   }
 
   .text-display {

@@ -9,7 +9,7 @@ const TIMEOUT_MS = 30_000;
 
 export class GroqNotConfiguredError extends Error {
   constructor() {
-    super('Configura GROQ_API_KEY en .env para usar la IA de Illari.');
+    super('Configura GROQ_API_KEY en .env para usar la IA de Mi Wawita.');
     this.name = 'GroqNotConfiguredError';
   }
 }

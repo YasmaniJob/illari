@@ -1,0 +1,81 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección I: El nivel de Educación Inicial, págs. 14-21.",
+  "caracteristicas_ciclos": [
+    {
+      "ciclo_id": "ciclo-I",
+      "nivel": "inicial",
+      "grados": ["ini-0-2"],
+      "edades": "0 a 2 años",
+      "descripcion_nivel": "La Educación Inicial es el primer nivel de la Educación Básica Regular. Atiende a los niños y las niñas menores de 6 años. Este nivel sienta las bases para el desarrollo de las competencias de los niños y las niñas y se articula con el nivel de Educación Primaria.",
+      "caracteristicas": "En estas edades los niños y las niñas viven un proceso de individuación en el que transitan de la necesidad de tener un vínculo de apego seguro, con un adulto significativo, a la necesidad de diferenciarse y distanciarse de él para construir de manera progresiva su propia identidad. Tienen la capacidad de moverse y actuar desde su iniciativa, adquiriendo posturas y desplazamientos de manera autónoma, es así que desarrollan un mayor dominio de su cuerpo, sintiéndose seguros y con mayores recursos para conocer el mundo que los rodea. En las interacciones con el entorno descubren el placer de comunicarse y transitan de la comunicación no verbal a la comunicación verbal. Es así que, a través de los gestos, miradas, movimientos corporales y primeros balbuceos, expresan a otros sus necesidades e intereses, emergiendo sus primeras palabras como producto de estas relaciones y vivencias. El desarrollo de su pensamiento se da a través de la exploración del entorno, a partir de sus habilidades van tomando conciencia de su cuerpo, se desplazan en el espacio, manipulan los objetos descubriendo así sus cualidades y algunas relaciones como las espaciales, temporales y causales que les permitirán construir sus primeras nociones e ideas acerca del mundo y desarrollar procesos cognitivos cada vez más complejos.",
+      "atencion_educativa": "La atención educativa en este ciclo involucra a los padres de familia, cuidadores y docentes a cargo, quienes brindan entornos seguros basados en el vínculo afectivo, en la organización de espacios, materiales y ambientes tranquilos que permitan a los niños y las niñas moverse con libertad, explorar, jugar y actuar desde su iniciativa para desarrollarse de manera integral durante los momentos de cuidados, de actividad autónoma y juego libre, en los entornos donde transcurren sus días.",
+      "grupos_edad": [
+        {
+          "rango": "0 a 9 meses aproximadamente",
+          "descripcion": "Bebés desde recién nacidos, que mueven sus miembros, su cuerpo, pero que no se desplazan en el espacio; hasta bebés que comienzan a girar, rotar, reptar o gatear."
+        },
+        {
+          "rango": "9 a 18 meses aproximadamente",
+          "descripcion": "Niños que se desplazan por el espacio de diferentes formas (gatean, empiezan a pararse o caminan)."
+        },
+        {
+          "rango": "19 a 24 meses aproximadamente",
+          "descripcion": "Niños que caminan, suben y bajan, interesados en la conquista de su equilibrio."
+        },
+        {
+          "rango": "Más de 24 meses",
+          "descripcion": "Niños que caminan, trotan, trepan, saltan."
+        }
+      ]
+    },
+    {
+      "ciclo_id": "ciclo-II",
+      "nivel": "inicial",
+      "grados": ["ini-3-5"],
+      "edades": "3 a 5 años",
+      "caracteristicas": "A partir del proceso de individuación iniciado en los primeros años de vida, los niños y las niñas de estas edades han logrado diferenciarse de los demás, y empiezan un proceso de afirmación de su identidad, desde el conocimiento de sus características personales y la valoración de sí mismos. En este proceso, continúan desarrollando su autonomía, aprenden a reconocer y expresar con mayor seguridad sus emociones, y a regularlas progresivamente con el acompañamiento del docente. A medida que fortalecen estos aspectos desarrollan sus habilidades sociales, aprenden a convivir con los demás y a cuidar los espacios y recursos comunes que utilizan. De igual manera, aprenden a respetar y a construir acuerdos y normas de convivencia. En el proceso de su desarrollo psicomotriz, los niños y las niñas viven su cuerpo a través de la libre exploración y experimentación de sus movimientos, posturas, desplazamientos y juegos, en interacción permanente con su entorno y ambiente. En estas edades los niños y las niñas enriquecen su lenguaje y amplían su vocabulario. Progresivamente aprenden a adecuar su lenguaje según su propósito o a las personas con las cuales interactúan, además, empiezan a interesarse por el mundo escrito. Su curiosidad natural los impulsa a explorar el ambiente que los rodea, y a plantearse preguntas que los motivan a averiguar el qué y cómo funcionan las cosas. A partir de estas conductas exploratorias y de las situaciones problemáticas que se les presentan en la vida cotidiana, los niños y las niñas prueban diversas estrategias y acciones en las que descubren algunas relaciones entre los elementos de su entorno y ambiente.",
+      "atencion_educativa": "Al igual que en el Ciclo I, la atención educativa se basa en el respeto de las necesidades e intereses de los niños y las niñas y el acompañamiento en su desarrollo personal, social, motriz, cognitivo y afectivo. Pone énfasis también en las condiciones que favorecen los aprendizajes, teniendo en cuenta la seguridad emocional, la organización del tiempo, el espacio y la disposición de materiales adecuados que respondan a las características madurativas que contribuyan a su desarrollo integral."
+    }
+  ],
+  "principios_educacion_inicial": [
+    {
+      "nombre": "Principio de respeto",
+      "descripcion": "Considera la importancia de crear condiciones que respeten los procesos y necesidades vitales que nuestros niños y niñas requieren para desarrollarse plenamente. Respetar al niño como sujeto implica reconocer sus derechos, valorar su forma de ser y hacer en el mundo, lo que supone considerar su ritmo, nivel madurativo, características particulares y culturales, que hacen de él un ser único y especial."
+    },
+    {
+      "nombre": "Principio de seguridad",
+      "descripcion": "Constituye la base para el desarrollo de una personalidad estable y armoniosa en el niño, la cual se construye a través del vínculo afectivo, la calidad de los cuidados que recibe, y la posibilidad de actuar e interactuar con libertad en espacios seguros que permitan el desarrollo de su potencial natural."
+    },
+    {
+      "nombre": "Principio de un buen estado de salud",
+      "descripcion": "No implica únicamente la atención física del niño y niña; se trata de un cuidado integral. La salud involucra un estado de bienestar en el aspecto físico, mental y social; está relacionada a conductas, estilos de vida, entornos físicos y sociales saludables."
+    },
+    {
+      "nombre": "Principio de autonomía",
+      "descripcion": "Tiene como base la convicción de que los niños y las niñas son capaces de desarrollarse, aprender y construirse a sí mismos, siempre y cuando se garantice las condiciones físicas y afectivas que requieren para ello. De este modo, serán capaces de realizar acciones a partir de su propia iniciativa."
+    },
+    {
+      "nombre": "Principio de movimiento",
+      "descripcion": "El movimiento libre constituye un factor esencial en el desarrollo integral del niño, pues le permite expresarse, comunicarse, adquirir posturas, desplazamientos y desarrollar su pensamiento. Es importante que los niños y las niñas desplieguen al máximo sus iniciativas de movimiento y acción para conocerse y conocer el mundo que los rodea."
+    },
+    {
+      "nombre": "Principio de comunicación",
+      "descripcion": "La comunicación es una necesidad esencial y absoluta, que se origina desde el inicio de la vida con las interacciones y en el placer de las transformaciones recíprocas. Por tanto, en los primeros años de vida, es importante considerar al bebé o al niño como un interlocutor válido, con capacidades comunicativas y expresivas."
+    },
+    {
+      "nombre": "Principio de juego libre",
+      "descripcion": "Jugar es una actividad libre y esencialmente placentera, no impuesta o dirigida desde afuera. Le permite al niño, de manera natural, tomar decisiones, asumir roles, establecer reglas y negociar según las diferentes situaciones. A través del juego, los niños y las niñas movilizan distintas habilidades cognitivas, motoras, sociales y comunicativas."
+    }
+  ],
+  "formas_de_atencion": {
+    "escolarizada": [
+      "Cuna: atiende integralmente a los niños y las niñas de 0 a 2 años.",
+      "Jardín: atiende a los niños y las niñas de 3 a 5 años.",
+      "Cuna-Jardín: atiende a los niños y las niñas de 0 a 5 años."
+    ],
+    "no_escolarizada": [
+      "PRONOEI de ciclo I: entorno familiar y entorno comunitario.",
+      "PRONOEI de ciclo II: entorno familiar y entorno comunitario."
+    ]
+  }
+}

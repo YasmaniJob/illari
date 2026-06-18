@@ -9,6 +9,18 @@ function formatTime(iso: string) {
   }).format(new Date(iso));
 }
 
+/** Intenta parsear el campo evidencia como JSON C+A+I; si falla, trata como texto legado */
+function parseEvidencia(raw: string | null): { contexto: string; accion: string; interpretacion: string } | null {
+  if (!raw) return null;
+  try {
+    const obj = JSON.parse(raw);
+    if (obj && typeof obj.contexto === 'string') return obj;
+  } catch {
+    // legado: texto plano
+  }
+  return null;
+}
+
 export async function listObservations(sessionId: string): Promise<ChatMessage[]> {
   const rows = await db
     .select()
@@ -26,11 +38,33 @@ export async function listObservations(sessionId: string): Promise<ChatMessage[]
         timestamp: formatTime(row.createdAt),
       };
     }
+
+    const parsed = parseEvidencia(row.evidencia);
+    if (parsed) {
+      return {
+        id: row.id,
+        type: 'ai' as const,
+        cai: {
+          contexto: parsed.contexto,
+          accion: parsed.accion,
+          interpretacion: parsed.interpretacion,
+          retroalimentacion: row.retroalimentacion ?? '',
+        },
+        studentName: row.studentName ?? undefined,
+        timestamp: formatTime(row.createdAt),
+      };
+    }
+
+    // Legado — texto plano en evidencia
     return {
       id: row.id,
       type: 'ai' as const,
-      evidencia: row.evidencia ?? '',
-      retroalimentacion: row.retroalimentacion ?? '',
+      cai: {
+        contexto: '',
+        accion: row.evidencia ?? '',
+        interpretacion: '',
+        retroalimentacion: row.retroalimentacion ?? '',
+      },
       studentName: row.studentName ?? undefined,
       timestamp: formatTime(row.createdAt),
     };

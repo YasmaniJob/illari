@@ -120,7 +120,7 @@ export default function Dashboard({ userName }: DashboardProps) {
         {/* Card coral — flex-1 siempre: llena el espacio en mobile Y desktop */}
         <a
           href="/onboarding"
-          className="group flex flex-col items-center justify-center gap-4 md:gap-6 flex-1 min-h-0 w-full rounded-3xl bg-gradient-to-br from-coral-500 to-coral-600 px-6 py-6 md:px-10 md:py-10 text-white shadow-[0_8px_32px_-4px_rgba(224,122,95,0.45)] transition-all duration-200 hover:shadow-[0_16px_48px_-4px_rgba(224,122,95,0.55)] hover:scale-[1.005] active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-coral-500/30"
+          className="group flex flex-col items-center justify-center gap-4 md:gap-6 flex-1 min-h-0 w-full rounded-3xl bg-gradient-to-br from-coral-500 to-coral-600 px-6 py-6 md:px-10 md:py-10 text-white shadow-[0_8px_32px_-4px_rgba(224,122,95,0.45)] transition-all duration-200 hover:shadow-[0_16px_48px_-4px_rgba(224,122,95,0.55)] hover:scale-[1.005] active:scale-[0.99] focus:outline-none"
           aria-label="Crear nuevo registro de campo"
         >
           {/* Ícono */}
@@ -159,7 +159,7 @@ export default function Dashboard({ userName }: DashboardProps) {
           <button
             type="button"
             onClick={() => setHistorialOpen((v) => !v)}
-            className="w-full flex items-center justify-between gap-2 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 transition-all duration-200 hover:bg-cream active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-lilac-500/20"
+            className="w-full flex items-center justify-between gap-2 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 transition-all duration-200 hover:bg-cream active:scale-[0.98] focus:outline-none"
             aria-expanded={historialOpen}
           >
             <span className="flex items-center gap-2">

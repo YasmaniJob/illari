@@ -1,0 +1,159 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección VI, 6.6 Área de Matemática, págs. 169-183.",
+  "nivel": "inicial",
+  "area": {
+    "id": "ini-mat",
+    "nombre": "Matemática",
+    "sigla": "MAT",
+    "descripcion": "Los niños y niñas, desde que nacen, exploran de manera natural todo aquello que los rodea y usan todos sus sentidos para captar información y resolver los problemas que se les presentan. Durante esta exploración, ellos actúan sobre los objetos y establecen relaciones que les permiten agrupar, ordenar y realizar correspondencias según sus propios criterios. Progresivamente, irán estableciendo relaciones más complejas que los llevarán a resolver situaciones referidas a la cantidad, forma, movimiento y localización. El acercamiento de los niños a la matemática en este nivel se da en forma gradual y progresiva, acorde con el desarrollo de su pensamiento.",
+    "enfoques": ["ea-resolucion-problemas"],
+    "nota": "Esta área atiende solo el Ciclo II. En el Ciclo I estas competencias pertenecen al Área de Descubrimiento del Mundo.",
+    "competencias": [
+      {
+        "id": "ini-mat-comp1",
+        "nombre": "Resuelve problemas de cantidad",
+        "descripcion": "Esta competencia se visualiza cuando los niños y niñas muestran interés por explorar los objetos de su entorno y descubren las características perceptuales de estos. A partir de ello, empiezan a establecer relaciones, lo que los lleva a comparar, agrupar, ordenar, quitar, agregar y contar, utilizando sus propios criterios y de acuerdo con sus necesidades e intereses. Todas estas acciones les permiten resolver problemas cotidianos relacionados con la noción de cantidad.",
+        "capacidades": [
+          {
+            "id": "ini-mat-comp1-cap1",
+            "nombre": "Traduce cantidades a expresiones numéricas",
+            "descripcion": "Establece relaciones entre los datos y condiciones de un problema, y las expresa en un modelo que reproduce las relaciones entre estos; usa cantidades y expresiones numéricas."
+          },
+          {
+            "id": "ini-mat-comp1-cap2",
+            "nombre": "Comunica su comprensión sobre los números y las operaciones",
+            "descripcion": "Expresa la comprensión de los conceptos numéricos, las operaciones y propiedades, usando lenguaje matemático y diversas representaciones."
+          },
+          {
+            "id": "ini-mat-comp1-cap3",
+            "nombre": "Usa estrategias y procedimientos de estimación y cálculo",
+            "descripcion": "Selecciona, adapta, combina o crea una variedad de estrategias, procedimientos como el cálculo mental y escrito, la estimación, la aproximación y medición, comparar cantidades."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora por propia iniciativa los objetos y situaciones de su entorno cotidiano utilizando sus sentidos, sus propias estrategias y criterios reconociendo algunas características y estableciendo relaciones o agrupaciones entre ellos y comprende algunas expresiones sencillas relacionadas con la cantidad y el tiempo.",
+            "nota": "En el Ciclo I esta competencia pertenece al Área de Descubrimiento del Mundo."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas referidos a relacionar objetos de su entorno según sus características perceptuales; agrupar, ordenar hasta el quinto lugar, seriar hasta 5 objetos, comparar cantidades de objetos y pesos, agregar y quitar hasta 5 elementos, realizando representaciones con su cuerpo, material concreto o dibujos. Expresa la cantidad de hasta 10 objetos, usando estrategias como el conteo. Usa cuantificadores: 'muchos', 'pocos', 'ninguno', y expresiones: 'más que', 'menos que'. Expresa el peso de los objetos 'pesa más', 'pesa menos' y el tiempo con nociones temporales como 'antes o después', 'ayer', 'hoy' o 'mañana'."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Establece relaciones entre los objetos de su entorno según sus características perceptuales al comparar y agrupar aquellos objetos similares que le sirven para algún fin, y dejar algunos elementos sueltos.",
+              "Usa algunas expresiones que muestran su comprensión acerca de la cantidad, peso y el tiempo — 'muchos', 'pocos', 'pesa mucho', 'pesa poco', 'un ratito' — en situaciones cotidianas.",
+              "Utiliza el conteo espontáneo en situaciones cotidianas siguiendo un orden no convencional respecto de la serie numérica."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Establece relaciones entre los objetos de su entorno según sus características perceptuales al comparar y agrupar aquellos objetos similares que le sirven para algún fin, y dejar algunos elementos sueltos.",
+              "Realiza seriaciones por tamaño de hasta tres objetos.",
+              "Establece correspondencia uno a uno en situaciones cotidianas.",
+              "Usa algunas expresiones que muestran su comprensión acerca de la cantidad, el tiempo y el peso — 'muchos', 'pocos', 'pesa mucho', 'pesa poco', 'antes' o 'después' — en situaciones cotidianas.",
+              "Utiliza el conteo hasta 5, en situaciones cotidianas en las que requiere contar, empleando material concreto o su propio cuerpo.",
+              "Utiliza los números ordinales 'primero', 'segundo' y 'tercero' para establecer la posición de un objeto o persona en situaciones cotidianas."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Establece relaciones entre los objetos de su entorno según sus características perceptuales al comparar y agrupar, y dejar algunos elementos sueltos. El niño dice el criterio que usó para agrupar.",
+              "Realiza seriaciones por tamaño, longitud y grosor hasta con cinco objetos.",
+              "Establece correspondencia uno a uno en situaciones cotidianas.",
+              "Usa diversas expresiones que muestran su comprensión sobre la cantidad, el peso y el tiempo — 'muchos', 'pocos', 'ninguno', 'más que', 'menos que', 'pesa más', 'pesa menos', 'ayer', 'hoy' y 'mañana' — en situaciones cotidianas.",
+              "Utiliza el conteo hasta 10, en situaciones cotidianas en las que requiere contar, empleando material concreto o su propio cuerpo.",
+              "Utiliza los números ordinales 'primero', 'segundo', 'tercero', 'cuarto' y 'quinto' para establecer el lugar o posición de un objeto o persona.",
+              "Utiliza el conteo en situaciones cotidianas en las que requiere juntar, agregar o quitar hasta cinco objetos."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ini-mat-comp2",
+        "nombre": "Resuelve problemas de forma, movimiento y localización",
+        "descripcion": "Esta competencia se visualiza cuando los niños y las niñas van estableciendo relaciones entre su cuerpo y el espacio, los objetos y las personas que están en su entorno. Es durante la exploración e interacción con el entorno que los niños se desplazan por el espacio para alcanzar y manipular objetos que son de su interés o interactuar con las personas. Todas estas acciones les permiten construir las primeras nociones de espacio, forma y medida.",
+        "capacidades": [
+          {
+            "id": "ini-mat-comp2-cap1",
+            "nombre": "Modela objetos con formas geométricas y sus transformaciones",
+            "descripcion": "Establece relaciones entre las características y datos del objeto, y las expresa en un modelo que reproduce sus propiedades geométricas."
+          },
+          {
+            "id": "ini-mat-comp2-cap2",
+            "nombre": "Comunica su comprensión sobre las formas y relaciones geométricas",
+            "descripcion": "Expresa la comprensión de las propiedades de las formas geométricas, sus transformaciones y la ubicación en el espacio, usando lenguaje geométrico y representaciones."
+          },
+          {
+            "id": "ini-mat-comp2-cap3",
+            "nombre": "Usa estrategias y procedimientos para orientarse en el espacio",
+            "descripcion": "Selecciona, adapta, combina o crea una variedad de estrategias, procedimientos y recursos para construir formas geométricas, medir o estimar desplazamientos y posiciones en el espacio."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 1,
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora el espacio en situaciones cotidianas utilizando sus sentidos y sus propias estrategias, se desplaza y reconoce su posición o la ubicación de los objetos y comprende algunas expresiones sencillas relacionadas a su ubicación.",
+            "nota": "En el Ciclo I esta competencia pertenece al Área de Descubrimiento del Mundo."
+          },
+          {
+            "nivel": 2,
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas al relacionar los objetos del entorno con formas bidimensionales y tridimensionales. Expresa la ubicación de personas en relación a objetos en el espacio 'cerca de', 'lejos de', 'al lado de', y de desplazamientos 'hacia adelante, hacia atrás', 'hacia un lado, hacia el otro'. Así también expresa la comparación de la longitud de dos objetos: 'es más largo que', 'es más corto que'. Emplea estrategias para resolver problemas, al construir objetos con material concreto o realizar desplazamientos en el espacio."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Establece relaciones de medida en situaciones cotidianas. Expresa con su cuerpo o mediante algunas acciones cuando algo es grande o pequeño.",
+              "Se ubica a sí mismo y ubica objetos en el espacio en el que se encuentra; a partir de ello, organiza sus movimientos y acciones para desplazarse. Utiliza expresiones como 'arriba', 'abajo', 'dentro' y 'fuera'.",
+              "Prueba diferentes formas de resolver una determinada situación relacionada con la ubicación, desplazamiento en el espacio y la construcción de objetos con material concreto."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Establece relaciones entre las formas de los objetos que están en su entorno.",
+              "Establece relaciones de medida en situaciones cotidianas. Expresa con su cuerpo o mediante algunas palabras cuando algo es grande o pequeño.",
+              "Se ubica a sí mismo y ubica objetos en el espacio en el que se encuentra; organiza sus movimientos y acciones para desplazarse. Utiliza expresiones como 'arriba', 'abajo', 'dentro', 'fuera', 'delante de', 'detrás de', 'encima', 'debajo', 'hacia adelante' y 'hacia atrás'.",
+              "Expresa con material concreto y dibujos sus vivencias, en los que muestra relaciones espaciales entre personas y objetos.",
+              "Prueba diferentes formas de resolver una determinada situación relacionada con la ubicación, desplazamiento en el espacio y la construcción de objetos con material concreto, y elige una para lograr su propósito."
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Establece relaciones entre las formas de los objetos que están en su entorno y las formas geométricas que conoce, utilizando material concreto.",
+              "Establece relaciones de medida en situaciones cotidianas y usa expresiones como 'es más largo', 'es más corto'.",
+              "Se ubica a sí mismo y ubica objetos en el espacio; establece relaciones espaciales al orientar sus movimientos y acciones al desplazarse. Las expresa con su cuerpo o algunas palabras como 'cerca de', 'lejos de', 'al lado de', 'hacia adelante', 'hacia atrás', 'hacia un lado', 'hacia el otro lado'.",
+              "Expresa con material concreto y dibujos sus vivencias, en los que muestra relaciones espaciales y de medida entre personas y objetos.",
+              "Prueba diferentes formas de resolver una determinada situación relacionada con la ubicación, desplazamiento en el espacio y la construcción de objetos con material concreto. Elige una manera para lograr su propósito y dice por qué la usó."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

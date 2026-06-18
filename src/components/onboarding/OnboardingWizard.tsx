@@ -1,3 +1,4 @@
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { createSession, saveStudents } from '../../lib/api/client';
 import type { CurriculumRow } from '../../lib/curriculum';
@@ -11,13 +12,23 @@ import StudentsRosterInput, { RosterHeaderActions } from './StudentsRosterInput'
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
 const STEPS = ['Tu aula', 'Mis estudiantes', 'Planificación'] as const;
-
 const STEP_EMOJI: Record<number, string> = { 1: '🏫', 2: '👥', 3: '📚' };
-
 const TOTAL = STEPS.length;
 
-/** Secciones fijas + opción "Otro…" */
-const SECCIONES_FIJAS = ['A', 'B', 'C', 'Única'] as const;
+const CICLO_I_ITEMS = [
+  { key: '9 meses',  emoji: '🍼', bg: '#fce7f3', border: '#f9a8d4', label: '#be185d' },
+  { key: '18 meses', emoji: '🐣', bg: '#fef9c3', border: '#fde047', label: '#a16207' },
+  { key: '24 meses', emoji: '🌱', bg: '#d1fae5', border: '#6ee7b7', label: '#065f46' },
+  { key: '36 meses', emoji: '🐥', bg: '#e0f2fe', border: '#7dd3fc', label: '#0369a1' },
+] as const;
+
+const CICLO_II_ITEMS = [
+  { key: '3 años', emoji: '🌻', bg: '#fef3c7', border: '#fcd34d', label: '#92400e' },
+  { key: '4 años', emoji: '🦋', bg: '#ede9fe', border: '#c4b5fd', label: '#5b21b6' },
+  { key: '5 años', emoji: '⭐', bg: '#ffedd5', border: '#fdba74', label: '#9a3412' },
+] as const;
+
+const SECCIONES_FIJAS = ['A', 'B', 'C', 'D', 'Única'] as const;
 
 // ─── Util ─────────────────────────────────────────────────────────────────────
 
@@ -32,26 +43,347 @@ function getCapacidadFromCriterio(
   );
 }
 
+// ─── GradoCard — con tilt 3D (Framer Motion) ────────────────────────────────
+
+interface GradoCardProps {
+  gradoKey: string;
+  emoji: string;
+  bg: string;
+  border: string;
+  label: string;
+  isSelected: boolean;
+  onToggle: (key: string) => void;
+}
+
+function GradoCard({ gradoKey, emoji, bg, border, label, isSelected, onToggle }: GradoCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const rawX = useMotionValue(0.5);
+  const rawY = useMotionValue(0.5);
+  const springX = useSpring(rawX, { stiffness: 200, damping: 20 });
+  const springY = useSpring(rawY, { stiffness: 200, damping: 20 });
+  const rotateY = useTransform(springX, [0, 1], [-10, 10]);
+  const rotateX = useTransform(springY, [0, 1], [8, -8]);
+  const shineX = useTransform(springX, [0, 1], ['-40%', '140%']);
+  const shineY = useTransform(springY, [0, 1], ['-40%', '140%']);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    rawX.set((e.clientX - rect.left) / rect.width);
+    rawY.set((e.clientY - rect.top) / rect.height);
+  }
+
+  function handleMouseLeave() {
+    rawX.set(0.5);
+    rawY.set(0.5);
+  }
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ perspective: '600px' }}
+      className="h-full"
+    >
+      <motion.button
+        type="button"
+        onClick={() => onToggle(gradoKey)}
+        aria-pressed={isSelected}
+        whileTap={{ scale: 0.94, rotateX: 0, rotateY: 0 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+        className="relative w-full h-full rounded-2xl overflow-hidden select-none flex flex-col items-center justify-center gap-2 focus:outline-none"
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: 'preserve-3d',
+          backgroundColor: bg,
+          borderWidth: '2px',
+          borderStyle: 'solid',
+          borderColor: isSelected ? border : 'transparent',
+          outline: 'none',
+        } as React.CSSProperties}
+      >
+        {/* Shine */}
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-2xl"
+          style={{
+            background: `radial-gradient(circle at ${shineX} ${shineY}, rgba(255,255,255,0.5) 0%, transparent 65%)`,
+          }}
+        />
+
+        {/* Tick */}
+        <motion.span
+          className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-extrabold"
+          style={{ backgroundColor: border, color: '#fff' }}
+          initial={false}
+          animate={isSelected ? { scale: [0, 1.4, 1], opacity: 1 } : { scale: 0.6, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 20 }}
+        >
+          ✓
+        </motion.span>
+
+        {/* Emoji */}
+        <motion.span
+          className="leading-none select-none"
+          style={{ fontSize: '2rem', transformStyle: 'preserve-3d' }}
+          initial={false}
+          animate={isSelected ? { scale: [1, 1.35, 1], translateZ: 20 } : { scale: 1, translateZ: 0 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+        >
+          {emoji}
+        </motion.span>
+
+        {/* Label */}
+        <span className="text-xs font-extrabold tracking-tight text-center leading-tight" style={{ color: label }}>
+          {gradoKey}
+        </span>
+      </motion.button>
+    </div>
+  );
+}
+
+// ─── Vista de Grados ──────────────────────────────────────────────────────────
+
+interface GradosViewProps {
+  grados: string[];
+  onToggle: (key: string) => void;
+}
+
+function GradosView({ grados, onToggle }: Omit<GradosViewProps, 'onNext'>) {
+  return (
+    <div className="flex flex-col gap-4 flex-1 min-h-0 pb-1 pr-1">
+      {/* Ciclo I */}
+      <div className="flex flex-col flex-1 min-h-0">
+        <p className="text-[10px] font-extrabold text-warm-400 uppercase tracking-widest mb-2 shrink-0">
+          Ciclo I — Cuna · 0 a 2 años
+        </p>
+        <div className="grid grid-cols-4 gap-2.5 flex-1 min-h-0">
+          {CICLO_I_ITEMS.map((item) => (
+            <GradoCard
+              key={item.key}
+              gradoKey={item.key}
+              emoji={item.emoji}
+              bg={item.bg}
+              border={item.border}
+              label={item.label}
+              isSelected={grados.includes(item.key)}
+              onToggle={onToggle}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Ciclo II */}
+      <div className="flex flex-col flex-1 min-h-0">
+        <p className="text-[10px] font-extrabold text-warm-400 uppercase tracking-widest mb-2 shrink-0">
+          Ciclo II — Jardín · 3 a 5 años
+        </p>
+        <div className="grid grid-cols-3 gap-2.5 flex-1 min-h-0">
+          {CICLO_II_ITEMS.map((item) => (
+            <GradoCard
+              key={item.key}
+              gradoKey={item.key}
+              emoji={item.emoji}
+              bg={item.bg}
+              border={item.border}
+              label={item.label}
+              isSelected={grados.includes(item.key)}
+              onToggle={onToggle}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Vista de Sección ─────────────────────────────────────────────────────────
+
+interface SeccionViewProps {
+  grados: string[];
+  seccion: string;
+  onChange: (s: string) => void;
+  onBack: () => void;
+}
+
+function SeccionView({ grados, seccion, onChange, onBack }: SeccionViewProps) {
+  const [showCustom, setShowCustom] = useState(false);
+  const [custom, setCustom] = useState('');
+
+  function handleFija(s: string) {
+    setShowCustom(false);
+    setCustom('');
+    onChange(s);
+  }
+
+  function handleCustomChange(val: string) {
+    setCustom(val);
+    onChange(val.trim());
+  }
+
+  const allItems = [...CICLO_I_ITEMS, ...CICLO_II_ITEMS];
+
+  return (
+    <div className="flex flex-col gap-4 flex-1 min-h-0">
+
+      {/* Chips de grados seleccionados */}
+      <div className="flex flex-wrap gap-2 shrink-0">
+        {grados.map((g) => {
+          const found = allItems.find((i) => i.key === g);
+          return (
+            <span
+              key={g}
+              className="inline-flex items-center gap-1.5 rounded-xl border-2 px-3 py-1.5 text-xs font-extrabold"
+              style={{ backgroundColor: found?.bg, borderColor: found?.border, color: found?.label }}
+            >
+              <span>{found?.emoji}</span> {g}
+            </span>
+          );
+        })}
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex items-center gap-1 rounded-xl border-2 border-dashed border-warm-300 px-3 py-1.5 text-xs font-bold text-warm-500 hover:border-warm-400 hover:text-warm-700 transition-colors"
+        >
+          ✏️ Editar
+        </button>
+      </div>
+
+      {/* Pregunta */}
+      <div className="shrink-0">
+        <p className="text-lg font-extrabold text-warm-900 mb-0.5">¿En qué sección?</p>
+        <p className="text-sm text-warm-500">
+          {grados.length > 1
+            ? 'Todos los grados comparten la misma sección (unidocencia).'
+            : 'Selecciona la sección de tu aula.'}
+        </p>
+      </div>
+
+      {/* Botones de sección — llenan el espacio restante */}
+      <div className="flex-1 min-h-0 relative">
+        <AnimatePresence mode="wait">
+
+          {/* ── Vista: grid de secciones ── */}
+          {!showCustom && (
+            <motion.div
+              key="grid"
+              className="absolute inset-0 grid grid-cols-3 gap-2.5"
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              {SECCIONES_FIJAS.map((s) => {
+                const active = seccion === s;
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => handleFija(s)}
+                    className={[
+                      'h-full w-full rounded-2xl border-2 text-lg font-extrabold transition-all duration-150 focus:outline-none',
+                      active
+                        ? 'bg-lilac-500 border-lilac-500 text-white'
+                        : 'bg-white border-cream-dark text-warm-700 hover:border-lilac-300 hover:bg-lilac-50',
+                    ].join(' ')}
+                  >
+                    {s}
+                  </button>
+                );
+              })}
+
+              {/* Otra */}
+              <button
+                type="button"
+                onClick={() => setShowCustom(true)}
+                className="h-full w-full rounded-2xl border-2 border-cream-dark bg-white text-lg font-extrabold text-coral-500 hover:border-coral-300 hover:bg-coral-50 transition-all duration-150 focus:outline-none"
+              >
+                Otra…
+              </button>
+            </motion.div>
+          )}
+
+          {/* ── Vista: input centrado ── */}
+          {showCustom && (
+            <motion.div
+              key="custom"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+            >
+              <p className="text-sm font-bold text-warm-500">Escribe el nombre de tu sección</p>
+
+              <input
+                type="text"
+                value={custom}
+                onChange={(e) => handleCustomChange(e.target.value)}
+                placeholder="Ej. Celeste, Pollitos, D…"
+                maxLength={20}
+                autoFocus
+                className="w-full max-w-xs text-center text-2xl font-extrabold text-warm-900 placeholder:text-warm-300 bg-transparent border-b-2 border-lilac-300 pb-2 focus:outline-none transition-colors duration-200"
+              />
+
+              <button
+                type="button"
+                onClick={() => { setShowCustom(false); setCustom(''); onChange(''); }}
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-warm-400 hover:text-lilac-600 transition-colors mt-2 px-3 py-1.5 rounded-xl hover:bg-lilac-50"
+              >
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                Volver a las secciones
+              </button>
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+      </div>
+
+    </div>
+  );
+}
+
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 interface OnboardingWizardProps {
   curriculum: CurriculumRow[];
 }
 
-// ─── Componente ───────────────────────────────────────────────────────────────
+// ─── Componente principal ─────────────────────────────────────────────────────
 
 export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) {
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState<CardDirection>('forward');
 
-  // Paso 1 — Aula
+  // Paso 1 — grados seleccionados + una sola sección compartida (unidocencia)
   const [grados, setGrados] = useState<string[]>([]);
   const [seccion, setSeccion] = useState('');
-  const [seccionCustom, setSeccionCustom] = useState('');
-  const [showSeccionInput, setShowSeccionInput] = useState(false);
+  const [subpaso, setSubpaso] = useState<'grados' | 'seccion'>('grados');
 
-  // Grado serializado para la DB (ej. "3 años, 4 años")
-  const gradoStr = grados.join(', ');
+  // String para la DB: "3 años, 4 años (A)"
+  const gradoStr = grados.length > 0
+    ? `${grados.join(', ')}${seccion ? ` (${seccion})` : ''}`
+    : '';
+
+  function toggleGrado(key: string) {
+    setGrados((prev) =>
+      prev.includes(key) ? prev.filter((g) => g !== key) : [...prev, key],
+    );
+  }
+
+  function confirmarGrados() {
+    setSubpaso('seccion');
+  }
+
+  function volverAGrados() {
+    setSubpaso('grados');
+    setSeccion('');
+  }
 
   // Paso 2 — Mis estudiantes
   const [studentNames, setStudentNames] = useState<string[]>([]);
@@ -70,25 +402,10 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   const [scanDone, setScanDone] = useState(false);
   const [scanError, setScanError] = useState<string | null>(null);
 
-  // ── Sección efectiva (fija o personalizada) ─────────────────────────────────
-
-  const seccionEfectiva = showSeccionInput ? seccionCustom.trim() : seccion;
-
-  function handleSeccionFija(s: string) {
-    setSeccion(s);
-    setShowSeccionInput(false);
-    setSeccionCustom('');
-  }
-
-  function handleSeccionOtro() {
-    setSeccion('');
-    setShowSeccionInput(true);
-  }
-
   // ── Validación ──────────────────────────────────────────────────────────────
 
   function isStep1Complete(): boolean {
-    return grados.length >= 1 && seccionEfectiva.length >= 1;
+    return grados.length >= 1 && seccion.trim().length >= 1;
   }
 
   function isStep2Complete(): boolean {
@@ -114,7 +431,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   // ── Resumen para pestañas ───────────────────────────────────────────────────
 
   function getTabSummary(s: number): string {
-    if (s === 1) return `${gradoStr} · ${seccionEfectiva}`;
+    if (s === 1) return gradoStr || '—';
     if (s === 2) {
       const count = studentNames.filter((n) => n.trim().length >= 2).length;
       return `${count} niño${count !== 1 ? 's' : ''}`;
@@ -173,11 +490,11 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
     const criterio = validos.join('; ');
     const primaryCriterio = validos[0] ?? '';
     try {
-      await saveStudents(gradoStr, seccionEfectiva, names);
+      await saveStudents(gradoStr, seccion, names);
       await createSession({
         titulo: planning.titulo.trim() || undefined,
         grado: gradoStr,
-        seccion: seccionEfectiva,
+        seccion: seccion,
         area: planning.area,
         competencia: planning.competencia,
         capacidad: getCapacidadFromCriterio(curriculum, planning.area, planning.competencia, primaryCriterio),
@@ -196,99 +513,19 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       id: 1,
       content: (
         <OnboardingStepCard title="Tu aula">
-          <div className="flex flex-col flex-1 min-h-0 gap-5">
-            {/* Grado — Selección única con radio cards */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              {[
-                { key: '3 años', emoji: '🐣', className: '' },
-                { key: '4 años', emoji: '🌱', className: '' },
-                { key: '5 años', emoji: '🦋', className: 'col-span-2' },
-              ].map((item) => {
-                const isActive = grados.includes(item.key);
-                return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => setGrados([item.key])}
-                    aria-pressed={isActive}
-                    className={[
-                      'rounded-2xl border-2 p-6 flex flex-col items-center justify-center gap-4 transition-all hover:shadow-md h-40 active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#f97316]/20',
-                      item.className,
-                      isActive
-                        ? 'border-[#f97316] bg-[#fff7ed]'
-                        : 'border-[#fde6d5] bg-white text-[#4a3f35]',
-                    ].join(' ')}
-                  >
-                    <div className="text-5xl leading-none">{item.emoji}</div>
-                    <span className="font-bold text-lg text-[#4a3f35]">{item.key}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Sección */}
-            <div className="shrink-0">
-              <p className="text-base font-bold text-[#4a3f35] mb-4">Sección</p>
-              <div className="flex flex-wrap gap-3">
-                {SECCIONES_FIJAS.map((s) => {
-                  const isActive = !showSeccionInput && seccion === s;
-                  return (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => handleSeccionFija(s)}
-                      className={[
-                        'rounded-xl border-2 py-3 px-4 text-center font-bold transition-all hover:bg-gray-50 flex-1 min-w-[70px] cursor-pointer active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#f97316]/20',
-                        isActive
-                          ? 'border-[#f97316] bg-[#fff7ed] text-[#f97316]'
-                          : 'border-[#fde6d5] bg-white text-[#4a3f35]',
-                      ].join(' ')}
-                    >
-                      {s}
-                    </button>
-                  );
-                })}
-                {/* Botón Otro — con reset si ya hay valor personalizado */}
-                <button
-                  type="button"
-                  onClick={
-                    showSeccionInput && seccionCustom
-                      ? () => {
-                          setSeccionCustom('');
-                          setShowSeccionInput(false);
-                        }
-                      : handleSeccionOtro
-                  }
-                  className={[
-                    'rounded-xl border-2 py-3 px-4 text-center font-bold transition-all hover:bg-gray-50 flex-1 min-w-[70px] cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus:ring-4 focus:ring-[#f97316]/20',
-                    showSeccionInput
-                      ? 'border-[#f97316] bg-[#fff7ed] text-[#f97316]'
-                      : 'border-[#fde6d5] bg-white text-[#f97316]',
-                  ].join(' ')}
-                >
-                  {showSeccionInput && seccionCustom ? '✕ Limpiar' : '✨ Otro...'}
-                </button>
-              </div>
-
-              {/* Input animado — transición suave con grid-rows */}
-              <div
-                className="grid transition-all duration-300 ease-in-out"
-                style={{ gridTemplateRows: showSeccionInput ? '1fr' : '0fr' }}
-              >
-                <div className="overflow-hidden">
-                  <input
-                    type="text"
-                    value={seccionCustom}
-                    onChange={(e) => setSeccionCustom(e.target.value)}
-                    placeholder="Ej. D, G, Celeste, Pollitos…"
-                    className="w-full rounded-2xl border-2 border-[#fde6d5] bg-white px-5 py-4 text-lg text-[#4a3f35] placeholder:text-[#8b7355]/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none focus:border-[#8b5cf6] focus:ring-4 focus:ring-[#8b5cf6]/20 mt-3"
-                    tabIndex={showSeccionInput ? 0 : -1}
-                    maxLength={20}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          {subpaso === 'grados' ? (
+            <GradosView
+              grados={grados}
+              onToggle={toggleGrado}
+            />
+          ) : (
+            <SeccionView
+              grados={grados}
+              seccion={seccion}
+              onChange={setSeccion}
+              onBack={volverAGrados}
+            />
+          )}
         </OnboardingStepCard>
       ),
     },
@@ -320,7 +557,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
           title="Planificación"
           headerActions={
             <>
-              {/* Input oculto para la cámara/galería */}
               <input
                 ref={scanFileRef}
                 type="file"
@@ -339,7 +575,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
             </>
           }
         >
-          <PlanningStep curriculum={curriculum} values={planning} onChange={setPlanning} />
+          <PlanningStep curriculum={curriculum} edad={grados[0]} values={planning} onChange={setPlanning} />
         </OnboardingStepCard>
       ),
     },
@@ -350,10 +586,8 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   return (
     <div className="flex h-full min-h-0 overflow-hidden flex-col md:flex-row">
 
-      {/* ══════════════════════════════════════════
-          MOBILE — Stepper indicator (solo < md)
-          ══════════════════════════════════════════ */}
-      <div className="md:hidden shrink-0 px-6 pt-6 flex flex-col gap-2">
+      {/* MOBILE — Stepper */}
+      <div className="md:hidden shrink-0 px-6 pt-5 flex flex-col gap-2">
         <div className="flex justify-between items-center text-sm font-semibold">
           <span className="text-[#f97316] bg-orange-100 px-3 py-1 rounded-full flex items-center gap-2">
             <span className="w-5 h-5 rounded-full bg-[#f97316] text-white flex items-center justify-center text-xs">
@@ -363,7 +597,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
           </span>
           <span className="text-gray-400 font-bold">{step} / {TOTAL}</span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+        <div className="w-full bg-gray-100 rounded-full h-1.5">
           <div
             className="bg-[#f97316] h-1.5 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${(step / TOTAL) * 100}%` }}
@@ -371,9 +605,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════
-          DESKTOP — Pestañas de cuaderno (solo ≥ md)
-          ══════════════════════════════════════════ */}
+      {/* DESKTOP — Pestañas */}
       <nav
         aria-label="Pasos del asistente"
         className="hidden md:flex md:w-[160px] shrink-0 md:flex-col md:justify-center gap-1.5 md:py-8 md:pl-6 md:pr-0"
@@ -382,20 +614,15 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
           const s = index + 1;
           const isActive = s === step;
           const isComplete = isStepComplete(s) && s < step;
-          const canClick = isComplete;
-
           return (
             <button
               key={s}
               type="button"
-              onClick={() => (canClick ? goTo(s) : undefined)}
-              disabled={!canClick && !isActive}
+              onClick={() => (isComplete ? goTo(s) : undefined)}
+              disabled={!isComplete && !isActive}
               aria-current={isActive ? 'step' : undefined}
-              title={isActive ? label : canClick ? `Volver a: ${label}` : label}
               className={[
-                'relative flex flex-col items-start text-left',
-                'rounded-l-2xl px-3 py-2.5 transition-all duration-200',
-                'border-y-2 border-l-2 border-r-0',
+                'relative flex flex-col items-start text-left rounded-l-2xl px-3 py-2.5 transition-all duration-200 border-y-2 border-l-2 border-r-0',
                 isActive
                   ? 'bg-white border-cream-dark z-10 shadow-[-4px_4px_16px_-4px_rgba(61,44,41,0.10)] translate-x-[2px]'
                   : isComplete
@@ -407,41 +634,25 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                 <span
                   className={[
                     'flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold',
-                    isActive
-                      ? 'bg-coral-500 text-white'
-                      : isComplete
-                        ? 'bg-lilac-500 text-white'
-                        : 'bg-cream-dark text-warm-500',
+                    isActive ? 'bg-coral-500 text-white' : isComplete ? 'bg-lilac-500 text-white' : 'bg-cream-dark text-warm-500',
                   ].join(' ')}
-                  aria-hidden
                 >
                   {isComplete ? '✓' : s}
                 </span>
-                {isComplete && (
-                  <span className="text-xs leading-none" aria-hidden>
-                    {STEP_EMOJI[s]}
-                  </span>
-                )}
+                {isComplete && <span className="text-xs leading-none">{STEP_EMOJI[s]}</span>}
               </span>
               {isComplete ? (
                 <span className="mt-1 text-[11px] font-bold text-lilac-700 leading-tight line-clamp-2 w-full">
                   {getTabSummary(s)}
                 </span>
               ) : (
-                <span
-                  className={[
-                    'mt-1 text-[11px] font-bold leading-tight w-full',
-                    isActive ? 'text-warm-900' : 'text-warm-500',
-                  ].join(' ')}
-                >
+                <span className={['mt-1 text-[11px] font-bold leading-tight w-full', isActive ? 'text-warm-900' : 'text-warm-500'].join(' ')}>
                   {label}
                 </span>
               )}
             </button>
           );
         })}
-
-        {/* Barra de progreso desktop */}
         <div className="mt-5 pl-1 pr-3">
           <div className="h-1 w-full rounded-full bg-cream-dark overflow-hidden">
             <div
@@ -449,58 +660,81 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
               style={{ width: `${((step - 1) / (TOTAL - 1)) * 100}%` }}
             />
           </div>
-          <p className="mt-1 text-[10px] font-bold text-warm-500 text-center">
-            {step} / {TOTAL}
-          </p>
+          <p className="mt-1 text-[10px] font-bold text-warm-500 text-center">{step} / {TOTAL}</p>
         </div>
       </nav>
 
-      {/* ══════════════════════════════════════════
-          COLUMNA DERECHA — Tarjeta del paso actual
-          ══════════════════════════════════════════ */}
+      {/* COLUMNA DERECHA */}
       <div className="flex flex-1 min-h-0 flex-col overflow-hidden px-4 pb-0 md:py-5 md:pr-6 md:pl-0">
-        {/* Tarjeta — scrollable en mobile */}
         <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
           <CardStack cards={stackCards} activeStep={step} direction={direction} />
         </div>
 
-        {/* Navegación — botón primario full-width + Volver como link de texto */}
         <footer className="shrink-0 pt-3 pb-4 md:pb-0 bg-white md:bg-transparent border-t border-cream-dark md:border-none">
-          {/* Botón primario */}
-          {step < TOTAL ? (
-            <button
-              type="button"
-              onClick={() => goTo(step + 1)}
-              disabled={!canAdvance()}
-              className="btn-primary w-full py-3.5 text-base"
-            >
-              Siguiente →
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleStartSession}
-              disabled={!canAdvance()}
-              className="btn-primary w-full py-3.5 text-base"
-            >
-              🚀 ¡Empezar mi clase hoy!
-            </button>
-          )}
+          <div className="flex items-center gap-3">
 
-          {/* Volver — link de texto, oculto en paso 1 mobile */}
-          <button
-            type="button"
-            onClick={() => step > 1 ? goTo(step - 1) : (window.location.href = '/')}
-            className={[
-              'flex items-center justify-center gap-1.5 w-full mt-2.5 py-1.5 text-sm font-semibold text-warm-500 hover:text-warm-700 transition-colors rounded-xl focus-ring-warm',
-              step === 1 ? 'hidden md:flex' : '',
-            ].join(' ')}
-          >
-            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-            {step === 1 ? 'Volver al inicio' : 'Volver al paso anterior'}
-          </button>
+            {/* ── Botón Atrás ── */}
+            <button
+              type="button"
+              onClick={() => {
+                if (step > 1) goTo(step - 1);
+                else if (subpaso === 'seccion') volverAGrados();
+                else window.location.href = '/';
+              }}
+              className={[
+                'flex items-center justify-center gap-1.5 shrink-0 rounded-2xl border-2 border-cream-dark bg-white px-5 py-3.5 text-sm font-bold text-warm-600 hover:border-warm-300 hover:text-warm-800 transition-all focus:outline-none focus-ring-warm',
+                step === 1 && subpaso === 'grados' ? 'hidden md:flex' : 'flex',
+              ].join(' ')}
+            >
+              <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              {step === 1 && subpaso === 'grados' ? 'Inicio' : 'Atrás'}
+            </button>
+
+            {/* ── Botón acción principal ── */}
+            {step === 1 && subpaso === 'grados' && (
+              <button
+                type="button"
+                onClick={confirmarGrados}
+                disabled={grados.length === 0}
+                className="btn-primary flex-1 py-3.5 text-base"
+              >
+                Elegir sección →
+              </button>
+            )}
+            {step === 1 && subpaso === 'seccion' && (
+              <button
+                type="button"
+                onClick={() => goTo(2)}
+                disabled={!canAdvance()}
+                className="btn-primary flex-1 py-3.5 text-base"
+              >
+                Mis estudiantes →
+              </button>
+            )}
+            {step === 2 && (
+              <button
+                type="button"
+                onClick={() => goTo(3)}
+                disabled={!canAdvance()}
+                className="btn-primary flex-1 py-3.5 text-base"
+              >
+                Planificación →
+              </button>
+            )}
+            {step === 3 && (
+              <button
+                type="button"
+                onClick={handleStartSession}
+                disabled={!canAdvance()}
+                className="btn-primary flex-1 py-3.5 text-base"
+              >
+                🚀 ¡Empezar clase!
+              </button>
+            )}
+
+          </div>
         </footer>
       </div>
     </div>

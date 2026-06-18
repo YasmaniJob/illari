@@ -59,12 +59,16 @@ describe('bestMatch', () => {
 describe('matchScanToCurriculum', () => {
   const curriculum = [
     {
+      ciclo: 'ciclo-II',
+      edad: '3 años',
       area: 'Comunicación',
       competencia: 'Se comunica oralmente',
       capacidad: 'Adapta su discurso',
       criterio: 'Identifica el propósito',
     },
     {
+      ciclo: 'ciclo-II',
+      edad: '4 años',
       area: 'Matemática',
       competencia: 'Resuelve problemas de cantidad',
       capacidad: 'Traduce cantidades',
@@ -72,7 +76,7 @@ describe('matchScanToCurriculum', () => {
     },
   ];
 
-  const grados = ['3 años', '4 años', '5 años'];
+  const grados = ['9 meses', '18 meses', '24 meses', '36 meses', '3 años', '4 años', '5 años'];
   const secciones = ['A', 'B', 'C', 'Única'];
 
   it('matches all fields when extracted data aligns', () => {

@@ -6,7 +6,7 @@ const TIMEOUT_VISION_MS = 60_000;
 
 export class GeminiNotConfiguredError extends Error {
   constructor() {
-    super('Configura GOOGLE_GENERATIVE_AI_API_KEY en .env para usar la IA de Illari.');
+    super('Configura GOOGLE_GENERATIVE_AI_API_KEY en .env para usar la IA de Mi Wawita.');
     this.name = 'GeminiNotConfiguredError';
   }
 }

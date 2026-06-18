@@ -16,7 +16,7 @@ Analiza la imagen de una planificación o sesión de aprendizaje.
 Extrae SOLO texto visible. Responde JSON válido sin markdown:
 {
   "titulo": "título o tema de la sesión",
-  "grado": "ej. 3 años, 4 años, 5 años",
+  "grado": "ej. 9 meses, 18 meses, 24 meses, 36 meses, 3 años, 4 años, 5 años",
   "seccion": "ej. A, B, C o Única",
   "area": "área curricular si aparece",
   "competencia": "competencia CNEB si aparece",

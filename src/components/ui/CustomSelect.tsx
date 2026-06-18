@@ -206,10 +206,11 @@ export default function CustomSelect({
         aria-controls={listId}
         onClick={() => (open ? setOpen(false) : openDropdown())}
         className={[
-          'flex w-full min-h-[3.25rem] items-center justify-between gap-3 rounded-2xl border-2 border-cream-dark',
+          'flex w-full min-h-[3.25rem] items-center justify-between gap-3 rounded-2xl border-2',
           'bg-white px-4 py-3 text-left text-base shadow-[0_2px_10px_-2px_rgba(61,44,41,0.08)]',
-          'focus-ring-warm transition-all duration-200',
-          disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:border-coral-500/40',
+          'transition-all duration-200',
+          open ? 'border-lilac-400' : 'border-cream-dark hover:border-coral-500/40',
+          disabled ? 'cursor-not-allowed opacity-50' : '',
           value ? 'text-warm-900 font-semibold' : 'text-warm-500',
         ].join(' ')}
       >

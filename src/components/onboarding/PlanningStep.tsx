@@ -17,6 +17,8 @@ export interface PlanningValues {
 
 interface PlanningStepProps {
   curriculum: CurriculumRow[];
+  /** Edad/grado seleccionado en el paso 1 — filtra áreas, competencias y capacidades */
+  edad?: string;
   values: PlanningValues;
   onChange: (values: PlanningValues) => void;
 }
@@ -45,7 +47,7 @@ export function ScanHeaderAction({ scanning, scanDone, scanError, onScan }: Scan
         disabled={scanning}
         title="Escanear planificación impresa con IA"
         className={[
-          'flex items-center gap-1.5 rounded-xl border-2 px-3 py-1.5 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-lilac-500/25',
+          'flex items-center gap-1.5 rounded-xl border-2 px-3 py-1.5 text-xs font-bold transition-all duration-200 focus:outline-none',
           scanDone
             ? 'border-mint-400/60 bg-mint-400/10 text-warm-900'
             : 'border-lilac-200 bg-lilac-50/60 hover:bg-lilac-100/60 hover:border-lilac-400/60 text-warm-900',
@@ -119,7 +121,7 @@ function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
 
   return (
     <div
-      className="rounded-2xl border-2 border-cream-dark bg-white px-3 py-3 flex flex-col gap-2 cursor-text focus-within:border-lilac-500 focus-within:ring-4 focus-within:ring-lilac-500/20 transition-all duration-200"
+      className="rounded-2xl border-2 border-cream-dark bg-white px-3 py-3 flex flex-col gap-2 cursor-text transition-all duration-200"
       onClick={() => inputRef.current?.focus()}
     >
       {validCriterios.length > 0 && (
@@ -162,18 +164,21 @@ function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 
-export default function PlanningStep({ curriculum, values, onChange }: PlanningStepProps) {
-  // Cascada curricular
-  const areas = useMemo(() => getAreas(curriculum), [curriculum]);
+export default function PlanningStep({ curriculum, edad, values, onChange }: PlanningStepProps) {
+  // Cascada curricular — filtrada por edad si se provee
+  const areas = useMemo(() => getAreas(curriculum, edad), [curriculum, edad]);
 
   const competencias = useMemo(
-    () => (values.area ? getCompetencias(curriculum, values.area) : []),
-    [curriculum, values.area],
+    () => (values.area ? getCompetencias(curriculum, values.area, edad) : []),
+    [curriculum, values.area, edad],
   );
 
   const todasCapacidades = useMemo(
-    () => (values.area && values.competencia ? getCapacidades(curriculum, values.area, values.competencia) : []),
-    [curriculum, values.area, values.competencia],
+    () =>
+      values.area && values.competencia
+        ? getCapacidades(curriculum, values.area, values.competencia, edad)
+        : [],
+    [curriculum, values.area, values.competencia, edad],
   );
 
   // ── Cascada ─────────────────────────────────────────────────────────────────
@@ -259,7 +264,7 @@ export default function PlanningStep({ curriculum, values, onChange }: PlanningS
                   aria-pressed={selected}
                   className={[
                     'w-full flex items-start gap-2.5 rounded-xl border-2 px-4 py-3 text-left transition-all duration-150',
-                    'focus:outline-none focus:ring-4 focus:ring-lilac-500/20',
+                    'focus:outline-none',
                     selected
                       ? 'border-mint-400 bg-mint-400/15 text-warm-900'
                       : 'border-cream-dark bg-white text-warm-600 hover:border-lilac-200 hover:bg-cream/60',

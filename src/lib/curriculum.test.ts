@@ -4,26 +4,30 @@ import {
   getCapacidades,
   getCompetencias,
   getCriterios,
+  getEdades,
   parseCurriculumCsv,
   uniqueSorted,
 } from './curriculum';
 
-const SAMPLE_CSV = `area,competencia,capacidad,criterio
-Comunicación,Se comunica oralmente,Adapta su discurso,Identifica el propósito
-Matemática,Resuelve problemas de cantidad,Traduce cantidades,Modela con operaciones
-Comunicación,Escribe diversos textos,Organiza ideas,Utiliza conectores`;
+const SAMPLE_CSV = `ciclo,edad,area,competencia,capacidad,criterio
+ciclo-II,3 años,Comunicación,Se comunica oralmente,Adapta su discurso,Identifica el propósito
+ciclo-II,5 años,Matemática,Resuelve problemas de cantidad,Traduce cantidades,Modela con operaciones
+ciclo-II,4 años,Comunicación,Escribe diversos textos,Organiza ideas,Utiliza conectores
+ciclo-I,36 meses,Personal Social,Construye su identidad,Se valora a sí mismo,Reconoce su nombre y características`;
 
 describe('parseCurriculumCsv', () => {
   it('parses valid CSV into rows', () => {
     const rows = parseCurriculumCsv(SAMPLE_CSV);
-    expect(rows).toHaveLength(3);
+    expect(rows).toHaveLength(4);
     expect(rows[0].area).toBe('Comunicación');
-    expect(rows[2].criterio).toBe('Utiliza conectores');
+    expect(rows[0].ciclo).toBe('ciclo-II');
+    expect(rows[0].edad).toBe('3 años');
+    expect(rows[3].criterio).toBe('Reconoce su nombre y características');
   });
 
   it('skips empty lines', () => {
     const rows = parseCurriculumCsv(`${SAMPLE_CSV}\n\n\n`);
-    expect(rows).toHaveLength(3);
+    expect(rows).toHaveLength(4);
   });
 
   it('returns empty array for empty input', () => {
@@ -38,10 +42,22 @@ describe('uniqueSorted', () => {
   });
 });
 
-describe('getAreas', () => {
-  it('returns unique areas sorted', () => {
+describe('getEdades', () => {
+  it('returns edades in curricular order', () => {
     const rows = parseCurriculumCsv(SAMPLE_CSV);
-    expect(getAreas(rows)).toStrictEqual(['Comunicación', 'Matemática']);
+    expect(getEdades(rows)).toStrictEqual(['36 meses', '3 años', '4 años', '5 años']);
+  });
+});
+
+describe('getAreas', () => {
+  it('returns unique areas sorted without filter', () => {
+    const rows = parseCurriculumCsv(SAMPLE_CSV);
+    expect(getAreas(rows)).toStrictEqual(['Comunicación', 'Matemática', 'Personal Social']);
+  });
+
+  it('filters areas by edad', () => {
+    const rows = parseCurriculumCsv(SAMPLE_CSV);
+    expect(getAreas(rows, '3 años')).toStrictEqual(['Comunicación']);
   });
 });
 
@@ -49,6 +65,11 @@ describe('getCompetencias', () => {
   it('returns competencias filtered by area', () => {
     const rows = parseCurriculumCsv(SAMPLE_CSV);
     expect(getCompetencias(rows, 'Comunicación')).toStrictEqual(['Escribe diversos textos', 'Se comunica oralmente']);
+  });
+
+  it('filters competencias by area and edad', () => {
+    const rows = parseCurriculumCsv(SAMPLE_CSV);
+    expect(getCompetencias(rows, 'Comunicación', '3 años')).toStrictEqual(['Se comunica oralmente']);
   });
 
   it('returns empty for unknown area', () => {
@@ -62,6 +83,12 @@ describe('getCapacidades', () => {
     const rows = parseCurriculumCsv(SAMPLE_CSV);
     expect(getCapacidades(rows, 'Comunicación', 'Se comunica oralmente')).toStrictEqual(['Adapta su discurso']);
   });
+
+  it('filters by edad when provided', () => {
+    const rows = parseCurriculumCsv(SAMPLE_CSV);
+    expect(getCapacidades(rows, 'Comunicación', 'Se comunica oralmente', '3 años')).toStrictEqual(['Adapta su discurso']);
+    expect(getCapacidades(rows, 'Comunicación', 'Se comunica oralmente', '5 años')).toStrictEqual([]);
+  });
 });
 
 describe('getCriterios', () => {
@@ -70,5 +97,15 @@ describe('getCriterios', () => {
     expect(getCriterios(rows, 'Matemática', 'Resuelve problemas de cantidad', 'Traduce cantidades')).toStrictEqual([
       'Modela con operaciones',
     ]);
+  });
+
+  it('filters criterios by edad', () => {
+    const rows = parseCurriculumCsv(SAMPLE_CSV);
+    expect(
+      getCriterios(rows, 'Matemática', 'Resuelve problemas de cantidad', 'Traduce cantidades', '5 años'),
+    ).toStrictEqual(['Modela con operaciones']);
+    expect(
+      getCriterios(rows, 'Matemática', 'Resuelve problemas de cantidad', 'Traduce cantidades', '3 años'),
+    ).toStrictEqual([]);
   });
 });
