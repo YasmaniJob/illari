@@ -2,10 +2,7 @@
  * Transcripción de audio usando Gemini multimodal.
  * Reemplaza Web Speech API (que requiere servidores Google externos).
  */
-export async function transcribeAudioWithGemini(
-  audioBase64: string,
-  mimeType: string,
-): Promise<string> {
+export async function transcribeAudioWithGemini(audioBase64: string, mimeType: string): Promise<string> {
   // Use runtime env to avoid bundling secrets into build output.
   const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
   if (!apiKey) throw new Error('Gemini no configurado.');
@@ -44,7 +41,9 @@ export async function transcribeAudioWithGemini(
     const err = await res.text();
     console.error('[transcribe] Gemini error', res.status, err);
     if (res.status === 429) {
-      throw new Error('El servicio de IA está muy ocupado (Límite de cuota excedido). Espera unos segundos e intenta de nuevo.');
+      throw new Error(
+        'El servicio de IA está muy ocupado (Límite de cuota excedido). Espera unos segundos e intenta de nuevo.',
+      );
     }
     throw new Error(`Error al transcribir audio (${res.status}).`);
   }

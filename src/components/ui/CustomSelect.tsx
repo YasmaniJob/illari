@@ -59,10 +59,7 @@ export default function CustomSelect({
     if (!open || mobile) return;
     function handleClickOutside(e: MouseEvent) {
       const target = e.target as Node;
-      if (
-        !(triggerRef.current?.contains(target)) &&
-        !(dropdownRef.current?.contains(target))
-      ) {
+      if (!triggerRef.current?.contains(target) && !dropdownRef.current?.contains(target)) {
         setOpen(false);
       }
     }
@@ -91,7 +88,9 @@ export default function CustomSelect({
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [open, mobile]);
 
   const display = value || placeholder;
@@ -121,7 +120,13 @@ export default function CustomSelect({
               ].join(' ')}
             >
               {value === opt && (
-                <svg className="mt-1 h-5 w-5 shrink-0 text-lilac-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <svg
+                  className="mt-1 h-5 w-5 shrink-0 text-lilac-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={3}
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               )}
@@ -137,11 +142,7 @@ export default function CustomSelect({
     open && mobile ? (
       <div className="fixed inset-0 z-[9999] flex flex-col justify-end">
         {/* Overlay */}
-        <div
-          className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
-          onClick={() => setOpen(false)}
-          aria-hidden
-        />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={() => setOpen(false)} aria-hidden />
         {/* Sheet */}
         <div
           className="relative bg-white rounded-t-3xl shadow-[0_-8px_40px_-8px_rgba(61,44,41,0.25)] animate-slide-up"
@@ -179,7 +180,13 @@ export default function CustomSelect({
                 >
                   <span className="flex-1">{opt}</span>
                   {value === opt && (
-                    <svg className="h-5 w-5 shrink-0 text-lilac-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <svg
+                      className="h-5 w-5 shrink-0 text-lilac-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
@@ -226,13 +233,14 @@ export default function CustomSelect({
         </svg>
       </button>
 
-      {typeof document !== 'undefined' && createPortal(
-        <>
-          {desktopDropdown}
-          {mobileSheet}
-        </>,
-        document.body,
-      )}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <>
+            {desktopDropdown}
+            {mobileSheet}
+          </>,
+          document.body,
+        )}
     </div>
   );
 }

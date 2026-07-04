@@ -48,11 +48,31 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Se comunica oralmente mediante balbuceos, señas, gestos, movimientos corporales y primeras palabras para expresar necesidades, emociones y responder a los estímulos de las personas conocidas de su entorno familiar."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Se comunica oralmente, escucha lo que otros le dicen, pregunta y responde. Se expresa espontáneamente a través del lenguaje verbal apoyándose en gestos y lenguaje corporal, con el propósito de interactuar con otras personas de su entorno."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Se comunica oralmente expresando necesidades, emociones e intereses con palabras frecuentes y gestos. Participa en diálogos sencillos respondiendo a preguntas que le hacen, y recupera información explícita simple de textos orales relatando lo que más le gustó."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Se comunica oralmente mediante textos sencillos; recupera información explícita y realiza inferencias sencillas de causa-efecto en relatos orales. Se expresa espontáneamente adaptando su volumen de voz al propósito de informar o pedir, participando en intercambios respetando turnos."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Se comunica oralmente mediante diversos tipos de textos; identifica información explícita; realiza inferencias sencillas a partir de esta información e interpreta recursos no verbales y paraverbales de las personas de su entorno. Opina sobre lo que más/menos le gustó del contenido del texto. Se expresa espontáneamente a partir de sus conocimientos previos, con el propósito de interactuar con uno o más interlocutores conocidos en una situación comunicativa. Desarrolla sus ideas manteniéndose por lo general en el tema; utiliza vocabulario de uso frecuente y una pronunciación entendible, se apoya en gestos y lenguaje corporal. En un intercambio, generalmente participa y responde en forma pertinente a lo que le dicen."
           }
@@ -60,6 +80,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "9 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -69,6 +90,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "18 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -78,6 +100,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "24 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -87,6 +110,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "36 meses",
             "nivel_ciclo": "logra el nivel esperado del ciclo I",
             "descripcion": [
@@ -96,6 +120,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -108,6 +133,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -120,6 +146,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [
@@ -157,19 +184,40 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
             "ciclo_id": "ciclo-I",
-            "descripcion": "Este nivel tiene principalmente como base el nivel 1 de la competencia Se comunica oralmente en su lengua materna."
+            "descripcion": "Este nivel tiene principalmente como base el nivel 1 (1 año) de la competencia Se comunica oralmente en su lengua materna."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene principalmente como base el nivel 1 (2 años) de la competencia Se comunica oralmente en su lengua materna."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
             "ciclo_id": "ciclo-II",
-            "descripcion": "Lee diversos tipos de textos que tratan temas reales o imaginarios que le son cotidianos, en los que predominan palabras conocidas y que se acompañan con ilustraciones. Construye hipótesis o predicciones sobre la información contenida en los textos y demuestra comprensión de las ilustraciones y de algunos símbolos escritos que transmiten información. Expresa sus gustos y preferencias en relación a los textos leídos a partir de su propia experiencia. Utiliza algunas convenciones básicas de los textos escritos.",
+            "descripcion": "Lee de forma no convencional textos con ilustraciones que le son familiares, identificando personajes y objetos en las imágenes y expresando las emociones que le genera el texto escuchado."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Lee de forma no convencional anticipando el contenido de textos acompañados de ilustraciones antes y durante la lectura, identificando características en las imágenes y comentando sus preferencias a partir de su experiencia."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Lee diversos tipos de textos que tratan temas reales o imaginarios que le son cotidianos, en los que predominan palabras conocidas y que se acompañan con ilustraciones. Construye hipótesis o predicciones sobre la información contenida en los textos y demuestra comprensión de las ilustraciones y de algunos símbolos escritos que transmiten información. Expresa sus gustos y preferences en relación a los textos leídos a partir de su propia experiencia. Utiliza algunas convenciones básicas de los textos escritos.",
             "nota": "Leer, en este nivel, se refiere a la lectura no convencional: los niños leen textos por sí mismos a partir de elaborar diversas hipótesis sobre lo que dicen los textos, relacionando sus conocimientos previos con los elementos que reconocen en los textos: imágenes, indicios, palabras, letras, entre otros."
           }
         ],
         "desempenios": [
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -180,6 +228,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -190,6 +239,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [
@@ -225,11 +275,31 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
             "ciclo_id": "ciclo-I",
-            "descripcion": "Este nivel tiene como base principalmente el nivel 1 de la competencia Se comunica oralmente en su lengua materna."
+            "descripcion": "Este nivel tiene como base principalmente el nivel 1 (1 año) de la competencia Se comunica oralmente en su lengua materna."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene como base principalmente el nivel 1 (2 años) de la competencia Se comunica oralmente en su lengua materna."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "En este nivel los niños expresan sus ideas principalmente a través del dibujo y el lenguaje oral; no se evidencian estándares de escritura formal."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Escribe por propia iniciativa y a su manera (trazos, grafismos u otras formas no convencionales) sobre temas de su interés para expresar ideas y emociones en situaciones cotidianas."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Escribe a partir de sus hipótesis de escritura diversos tipos de textos sobre temas variados considerando el propósito y el destinatario a partir de su experiencia previa. Desarrolla sus ideas en torno a un tema con la intención de transmitir ideas o emociones. Sigue la linealidad y direccionalidad de la escritura.",
             "nota": "Escribir en este nivel se refiere a la escritura no convencional; los estudiantes producen textos en los que ponen en juego sus hipótesis de escritura (de cantidad, de variedad, silábica, silábico-alfabética y alfabética)."
@@ -238,14 +308,14 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
-            "descripcion": [
-              "No se evidencian desempeños en esta edad."
-            ]
+            "descripcion": ["No se evidencian desempeños en esta edad."]
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -254,6 +324,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [
@@ -289,11 +360,31 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
             "ciclo_id": "ciclo-I",
-            "descripcion": "Este nivel tiene principalmente como base el nivel 1 de la competencia de Indagación."
+            "descripcion": "Este nivel tiene principalmente como base el nivel 1 (1 año) de la competencia de Indagación (Área de Descubrimiento del Mundo)."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene principalmente como base el nivel 1 (2 años) de la competencia de Indagación (Área de Descubrimiento del Mundo)."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Crea proyectos artísticos explorando y manipulando libremente diversos materiales cotidianos y experimentando con movimientos y sonidos simples. Representa ideas y vivencias mediante el dibujo, pintura o juego simbólico, y muestra lo que ha realizado."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Crea proyectos artísticos experimentando con la combinación de diversos materiales y explorando elementos artísticos como colores, sonidos y movimientos. Transforma sus vivencias en creaciones grupales o individuales y comenta lo realizado."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Crea proyectos artísticos al experimentar y manipular libremente diversos medios y materiales para descubrir sus propiedades expresivas. Explora los elementos básicos de los lenguajes del arte como el sonido, los colores y el movimiento. Explora sus propias ideas imaginativas que construye a partir de sus vivencias y las transforma en algo nuevo mediante el juego simbólico, el dibujo, la pintura, la construcción, la música y el movimiento creativo. Comparte espontáneamente sus experiencias y creaciones."
           }

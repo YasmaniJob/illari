@@ -19,7 +19,9 @@ export default function AuthModal({ initialMode = 'login', onClose }: AuthModalP
   // Bloquea scroll del body
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, []);
 
   // Cierra con Escape
@@ -38,7 +40,9 @@ export default function AuthModal({ initialMode = 'login', onClose }: AuthModalP
     try {
       if (mode === 'register') {
         const { error: err } = await authClient.signUp.email({
-          email, password, name: name || 'Docente',
+          email,
+          password,
+          name: name || 'Docente',
         });
         if (err) throw new Error(err.message);
       } else {
@@ -63,11 +67,7 @@ export default function AuthModal({ initialMode = 'login', onClose }: AuthModalP
       aria-label={mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
     >
       {/* Overlay */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
-        onClick={onClose}
-        aria-hidden
-      />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
 
       {/* Sheet — sube desde abajo en mobile, centrado en desktop */}
       <div
@@ -153,21 +153,22 @@ export default function AuthModal({ initialMode = 'login', onClose }: AuthModalP
           </div>
 
           {error && (
-            <p className="text-sm font-semibold text-coral-600" role="alert">{error}</p>
+            <p className="text-sm font-semibold text-coral-600" role="alert">
+              {error}
+            </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary w-full py-3.5"
-          >
+          <button type="submit" disabled={loading} className="btn-primary w-full py-3.5">
             {loading ? 'Espera…' : mode === 'login' ? 'Entrar' : 'Registrarme'}
           </button>
 
           <button
             type="button"
             className="text-sm font-bold text-lilac-600 w-full py-1 hover:text-lilac-700 transition-colors"
-            onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(null); }}
+            onClick={() => {
+              setMode(mode === 'login' ? 'register' : 'login');
+              setError(null);
+            }}
           >
             {mode === 'login' ? '¿Primera vez? Crear cuenta' : 'Ya tengo cuenta'}
           </button>

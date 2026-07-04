@@ -12,6 +12,7 @@ function rowToConfig(row: typeof schema.classSessions.$inferSelect): SessionConf
     competencia: row.competencia,
     capacidad: row.capacidad,
     criterio: row.criterio,
+    evidencia: row.evidencia ?? '',
     createdAt: row.createdAt,
     status: row.status as 'active' | 'completed',
   };
@@ -60,6 +61,7 @@ export async function createClassSession(
       capacidad: input.capacidad,
       criterio: input.criterio,
       proposito: '',
+      evidencia: input.evidencia ?? '',
       status: 'active',
       createdAt,
     });

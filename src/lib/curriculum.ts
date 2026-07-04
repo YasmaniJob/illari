@@ -20,7 +20,7 @@ export function parseCurriculumCsv(raw: string): CurriculumRow[] {
       const row: Record<string, string> = {};
       cols.forEach((col, i) => {
         // Join remaining parts into the last column
-        row[col] = (i === cols.length - 1 ? parts.slice(i).join(',') : parts[i] ?? '').trim();
+        row[col] = (i === cols.length - 1 ? parts.slice(i).join(',') : (parts[i] ?? '')).trim();
       });
       return row as unknown as CurriculumRow;
     });
@@ -40,15 +40,8 @@ export function getCompetencias(data: CurriculumRow[], area: string, edad?: stri
   return uniqueSorted(filtered.map((r) => r.competencia));
 }
 
-export function getCapacidades(
-  data: CurriculumRow[],
-  area: string,
-  competencia: string,
-  edad?: string,
-): string[] {
-  const filtered = data.filter(
-    (r) => r.area === area && r.competencia === competencia && (!edad || r.edad === edad),
-  );
+export function getCapacidades(data: CurriculumRow[], area: string, competencia: string, edad?: string): string[] {
+  const filtered = data.filter((r) => r.area === area && r.competencia === competencia && (!edad || r.edad === edad));
   return uniqueSorted(filtered.map((r) => r.capacidad));
 }
 
@@ -60,17 +53,13 @@ export function getCriterios(
   edad?: string,
 ): string[] {
   const filtered = data.filter(
-    (r) =>
-      r.area === area &&
-      r.competencia === competencia &&
-      r.capacidad === capacidad &&
-      (!edad || r.edad === edad),
+    (r) => r.area === area && r.competencia === competencia && r.capacidad === capacidad && (!edad || r.edad === edad),
   );
   return uniqueSorted(filtered.map((r) => r.criterio));
 }
 
 /** Edades disponibles en el dataset, en orden curricular */
-const EDAD_ORDER = ['9 meses', '18 meses', '24 meses', '36 meses', '3 años', '4 años', '5 años'];
+const EDAD_ORDER = ['1 año', '2 años', '3 años', '4 años', '5 años'];
 
 export function getEdades(data: CurriculumRow[]): string[] {
   const present = new Set(data.map((r) => r.edad));
@@ -86,6 +75,7 @@ export interface SessionConfig {
   competencia: string;
   capacidad: string;
   criterio: string;
+  evidencia?: string;
   createdAt: string;
   status: 'active' | 'completed';
 }

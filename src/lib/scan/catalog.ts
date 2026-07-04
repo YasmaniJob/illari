@@ -19,7 +19,7 @@ export function buildCatalogPromptAppendix(curriculum: CurriculumRow[]): string 
 Ejemplos del catálogo CNEB (usa redacción cercana si aparece en la imagen):
 ${sample.join('\n')}
 El campo "criterio" corresponde al desempeño o indicador de evaluación.
-Los grados/edades válidos son: 9 meses, 18 meses, 24 meses, 36 meses (Ciclo I) y 3 años, 4 años, 5 años (Ciclo II).`;
+Los grados/edades válidos son: 1 año, 2 años (Ciclo I) y 3 años, 4 años, 5 años (Ciclo II).`;
 }
 
 export function validateCurricularRow(

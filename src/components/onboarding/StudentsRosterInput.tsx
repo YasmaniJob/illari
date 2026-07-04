@@ -13,9 +13,14 @@ function parseRawText(raw: string): string[] {
   return raw
     .split(/[\n\r\t,;]+/)
     .map((s) => s.trim())
-    .map((s) => s.replace(/^[\d]+[.):\-\s]+/, '').replace(/^[•\-*]\s*/, '').trim())
-    .filter((s) => !/\d{6,}/.test(s))       // descartar teléfonos
-    .filter((s) => !/@/.test(s))             // descartar emails
+    .map((s) =>
+      s
+        .replace(/^[\d]+[.):\-\s]+/, '')
+        .replace(/^[•\-*]\s*/, '')
+        .trim(),
+    )
+    .filter((s) => !/\d{6,}/.test(s)) // descartar teléfonos
+    .filter((s) => !/@/.test(s)) // descartar emails
     .filter((s) => s.length >= 2 && s.length <= 60)
     .filter((s) => /[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]/.test(s)); // al menos una letra
 }
@@ -46,7 +51,10 @@ export function RosterHeaderActions({ onFileImport, fileError, onFileError }: Ro
     onFileError(null);
     try {
       const parsed = await parseFile(file);
-      if (parsed.length === 0) { onFileError('Sin nombres válidos en el archivo'); return; }
+      if (parsed.length === 0) {
+        onFileError('Sin nombres válidos en el archivo');
+        return;
+      }
       onFileImport(parsed);
     } catch {
       onFileError('No se pudo leer el archivo');
@@ -58,10 +66,20 @@ export function RosterHeaderActions({ onFileImport, fileError, onFileError }: Ro
   return (
     <div className="flex items-center gap-2">
       {fileError && <span className="text-xs font-semibold text-coral-600">⚠ {fileError}</span>}
-      <input ref={fileInputRef} type="file" accept=".csv,.txt,.tsv,.xlsx" className="sr-only" onChange={handleFileChange} aria-label="Importar lista desde archivo" />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".csv,.txt,.tsv,.xlsx"
+        className="sr-only"
+        onChange={handleFileChange}
+        aria-label="Importar lista desde archivo"
+      />
       <button
         type="button"
-        onClick={() => { onFileError(null); fileInputRef.current?.click(); }}
+        onClick={() => {
+          onFileError(null);
+          fileInputRef.current?.click();
+        }}
         title="Importar desde Excel o CSV"
         className="flex items-center gap-1.5 rounded-xl border-2 border-cream-dark bg-white px-3 py-1.5 text-xs font-bold text-warm-700 transition-all duration-200 hover:border-lilac-300 hover:bg-lilac-50/60 active:scale-[0.97]"
       >
@@ -166,7 +184,10 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
                 {name}
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); removeChip(name); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeChip(name);
+                  }}
                   aria-label={`Quitar ${name}`}
                   className="flex h-4 w-4 items-center justify-center rounded-full text-lilac-500 hover:bg-lilac-300 hover:text-lilac-900 transition-colors text-xs font-bold"
                 >
@@ -195,7 +216,8 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
 
       {/* Hint mínimo */}
       <p className="shrink-0 text-xs text-warm-500 font-semibold">
-        Escribe y pulsa <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">Enter</kbd>, o pega directamente desde WhatsApp, Word o Excel
+        Escribe y pulsa <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">Enter</kbd>, o pega
+        directamente desde WhatsApp, Word o Excel
       </p>
     </div>
   );

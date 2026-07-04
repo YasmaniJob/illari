@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
-import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
-import { db, schema } from '../../../db';
 import { and, eq } from 'drizzle-orm';
+import { db, schema } from '../../../db';
+import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
 import { saveStudentsRoster } from '../../../lib/server/students';
 
 export const prerender = false;
@@ -34,25 +34,24 @@ export const PATCH: APIRoute = async ({ request, params }) => {
   if (typeof body.competencia === 'string') updates.competencia = body.competencia;
   if (typeof body.capacidad === 'string') updates.capacidad = body.capacidad;
   if (typeof body.criterio === 'string') updates.criterio = body.criterio;
+  if (typeof body.evidencia === 'string') updates.evidencia = body.evidencia;
 
   if (Object.keys(updates).length > 0) {
-    await db
-      .update(schema.classSessions)
-      .set(updates)
-      .where(eq(schema.classSessions.id, sessionId));
+    await db.update(schema.classSessions).set(updates).where(eq(schema.classSessions.id, sessionId));
   }
 
   // Optionally update student roster
   if (Array.isArray(body.studentNames) && body.grado && body.seccion) {
-    await saveStudentsRoster(user.id, body.grado ?? existing.grado, body.seccion ?? existing.seccion, body.studentNames);
+    await saveStudentsRoster(
+      user.id,
+      body.grado ?? existing.grado,
+      body.seccion ?? existing.seccion,
+      body.studentNames,
+    );
   }
 
   // Return updated session
-  const [updated] = await db
-    .select()
-    .from(schema.classSessions)
-    .where(eq(schema.classSessions.id, sessionId))
-    .limit(1);
+  const [updated] = await db.select().from(schema.classSessions).where(eq(schema.classSessions.id, sessionId)).limit(1);
 
   return new Response(JSON.stringify({ session: updated }), {
     headers: { 'Content-Type': 'application/json' },

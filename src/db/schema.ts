@@ -67,6 +67,7 @@ export const classSessions = sqliteTable(
     capacidad: text('capacidad').notNull(),
     criterio: text('criterio').notNull(),
     proposito: text('proposito').notNull().default(''),
+    evidencia: text('evidencia').notNull().default(''),
     status: text('status', { enum: ['active', 'completed'] }).notNull(),
     createdAt: text('created_at').notNull(),
   },

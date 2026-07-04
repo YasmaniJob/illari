@@ -19,10 +19,9 @@ export const GET: APIRoute = async ({ request }) => {
   const session = await getActiveSessionForUser(user.id);
 
   if (!session) {
-    return new Response(
-      JSON.stringify({ session: null, messages: [], students: [] }),
-      { headers: { 'Content-Type': 'application/json' } },
-    );
+    return new Response(JSON.stringify({ session: null, messages: [], students: [] }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   // Fetch observations + students in parallel
@@ -33,8 +32,7 @@ export const GET: APIRoute = async ({ request }) => {
       : Promise.resolve([]),
   ]);
 
-  return new Response(
-    JSON.stringify({ session, messages, students }),
-    { headers: { 'Content-Type': 'application/json' } },
-  );
+  return new Response(JSON.stringify({ session, messages, students }), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 };

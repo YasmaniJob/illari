@@ -2,11 +2,7 @@ import type { APIRoute } from 'astro';
 import curriculoRaw from '../../data/curriculo.csv?raw';
 import { parseCurriculumCsv } from '../../lib/curriculum';
 import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
-import {
-  findExistingAIObs,
-  insertUserObservation,
-  upsertAIObservation,
-} from '../../lib/server/observations';
+import { findExistingAIObs, insertUserObservation, upsertAIObservation } from '../../lib/server/observations';
 import { type EvidenciaCAI, generatePedagogicalEvidence } from '../../lib/server/pedagogicalEvidence';
 import { getSessionById } from '../../lib/server/sessions';
 
@@ -42,14 +38,29 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Reconstruct previous CAI note if it exists
-    const previousNote: EvidenciaCAI | undefined = existingAIObs?.evidencia
-      ? {
-          contexto: existingAIObs.evidencia,   // legacy: mapped from old field
-          accion: '',
-          interpretacion: '',
+    let previousNote: EvidenciaCAI | undefined = undefined;
+    if (existingAIObs?.evidencia) {
+      try {
+        const parsed = JSON.parse(existingAIObs.evidencia);
+        previousNote = {
+          contexto: parsed.contexto ?? '',
+          accion: parsed.accion ?? '',
+          interpretacion: parsed.interpretacion ?? '',
+          interpretacionSugerida: parsed.interpretacionSugerida ?? '',
+          intervencion: parsed.intervencion ?? '',
           retroalimentacion: existingAIObs.retroalimentacion ?? '',
-        }
-      : undefined;
+        };
+      } catch {
+        previousNote = {
+          contexto: '',
+          accion: existingAIObs.evidencia,
+          interpretacion: '',
+          interpretacionSugerida: '',
+          intervencion: '',
+          retroalimentacion: existingAIObs.retroalimentacion ?? '',
+        };
+      }
+    }
 
     const result = await generatePedagogicalEvidence(
       session,

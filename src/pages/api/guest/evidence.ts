@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import curriculoRaw from '../../../data/curriculo.csv?raw';
-import { parseCurriculumCsv } from '../../../lib/curriculum';
 import type { SessionConfig } from '../../../lib/curriculum';
+import { parseCurriculumCsv } from '../../../lib/curriculum';
 import { generatePedagogicalEvidence } from '../../../lib/server/pedagogicalEvidence';
 
 export const prerender = false;
@@ -28,14 +28,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Datos incompletos' }), { status: 400 });
     }
 
-    const result = await generatePedagogicalEvidence(
-      session,
-      text,
-      curriculum,
-      studentName,
-      source,
-      students,
-    );
+    const result = await generatePedagogicalEvidence(session, text, curriculum, studentName, source, students);
 
     if (result.error) {
       return new Response(JSON.stringify({ error: result.error }), { status: 400 });

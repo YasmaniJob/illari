@@ -33,7 +33,9 @@ export default function Dashboard({ userName }: DashboardProps) {
   const sidebarInner = isLoggedIn ? (
     sessions.length === 0 ? (
       <div className="flex flex-col items-center justify-center flex-1 gap-3 text-center px-4 py-8">
-        <span className="text-4xl" aria-hidden>🌱</span>
+        <span className="text-4xl" aria-hidden>
+          🌱
+        </span>
         <p className="text-sm font-semibold text-warm-700 leading-relaxed">
           Todavía no guardaste ninguna clase. ¡La primera será especial!
         </p>
@@ -61,9 +63,7 @@ export default function Dashboard({ userName }: DashboardProps) {
                 >
                   {session.status === 'active' ? 'En el aula' : 'Terminada'}
                 </span>
-                <time className="text-xs text-warm-500 font-semibold shrink-0">
-                  {formatDate(session.createdAt)}
-                </time>
+                <time className="text-xs text-warm-500 font-semibold shrink-0">{formatDate(session.createdAt)}</time>
               </div>
             </a>
           </li>
@@ -74,10 +74,12 @@ export default function Dashboard({ userName }: DashboardProps) {
     /* No logueado — cloud promo card */
     <div className="flex-1 overflow-y-auto px-4 py-4">
       <div className="rounded-3xl bg-white border border-cream-dark p-6 text-center shadow-sm">
-        <span className="text-4xl" aria-hidden>☁️</span>
+        <span className="text-4xl" aria-hidden>
+          ☁️
+        </span>
         <p className="mt-4 text-sm text-warm-700 leading-relaxed">
-          <span className="font-bold text-warm-900">Guarda tu historial en la nube.</span>{' '}
-          Crea una cuenta gratis para recuperar tus clases desde cualquier dispositivo.
+          <span className="font-bold text-warm-900">Guarda tu historial en la nube.</span> Crea una cuenta gratis para
+          recuperar tus clases desde cualquier dispositivo.
         </p>
         <div className="flex flex-col gap-3 mt-6">
           <button
@@ -101,10 +103,8 @@ export default function Dashboard({ userName }: DashboardProps) {
 
   return (
     <div className="h-full flex flex-col md:flex-row overflow-hidden">
-
       {/* ── ÁREA PRINCIPAL ── */}
       <div className="flex-1 flex flex-col p-4 sm:p-6 md:p-8 gap-4 md:gap-5 overflow-hidden">
-
         {/* Título */}
         <div className="shrink-0">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-warm-900 tracking-tight leading-tight">
@@ -197,19 +197,17 @@ export default function Dashboard({ userName }: DashboardProps) {
       <aside className="hidden md:flex w-[300px] shrink-0 flex-col bg-[#fdf8f4] overflow-hidden">
         <div className="px-6 pt-6 pb-4 border-b border-cream-dark shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-xl" aria-hidden>📖</span>
+            <span className="text-xl" aria-hidden>
+              📖
+            </span>
             <h2 className="text-base font-extrabold text-warm-900">Mis clases anteriores</h2>
           </div>
         </div>
-        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
-          {sidebarInner}
-        </div>
+        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">{sidebarInner}</div>
       </aside>
 
       {/* Auth modal */}
-      {authModal && (
-        <AuthModal initialMode={authModal} onClose={() => setAuthModal(null)} />
-      )}
+      {authModal && <AuthModal initialMode={authModal} onClose={() => setAuthModal(null)} />}
     </div>
   );
 }

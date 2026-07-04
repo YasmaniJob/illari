@@ -33,12 +33,33 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora los objetos de su entorno inmediato utilizando sus sentidos y establece relaciones iniciales entre las características perceptuales y los usos que les asigna, reaccionando a expresiones gestuales de cantidad y tiempo del adulto.",
+            "nota": "En el Ciclo I (1 año) esta competencia pertenece al Área de Descubrimiento del Mundo."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Explora por propia iniciativa los objetos y situaciones de su entorno cotidiano utilizando sus sentidos, sus propias estrategias y criterios reconociendo algunas características y estableciendo relaciones o agrupaciones entre ellos y comprende algunas expresiones sencillas relacionadas con la cantidad y el tiempo.",
-            "nota": "En el Ciclo I esta competencia pertenece al Área de Descubrimiento del Mundo."
+            "nota": "En el Ciclo I (2 años) esta competencia pertenece al Área de Descubrimiento del Mundo."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas al relacionar objetos por características perceptuales simples, agrupándolos de acuerdo a sus intereses. Usa cuantificadores sencillos como 'muchos' y 'pocos', y utiliza el conteo espontáneo de forma no convencional."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas al agrupar y ordenar objetos. Realiza seriaciones de hasta tres objetos por tamaño y correspondencia uno a uno. Emplea el conteo de hasta 5 objetos y utiliza expresiones de tiempo ('antes', 'después'), peso y orden ('primero', 'segundo', 'tercero')."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Resuelve problemas referidos a relacionar objetos de su entorno según sus características perceptuales; agrupar, ordenar hasta el quinto lugar, seriar hasta 5 objetos, comparar cantidades de objetos y pesos, agregar y quitar hasta 5 elementos, realizando representaciones con su cuerpo, material concreto o dibujos. Expresa la cantidad de hasta 10 objetos, usando estrategias como el conteo. Usa cuantificadores: 'muchos', 'pocos', 'ninguno', y expresiones: 'más que', 'menos que'. Expresa el peso de los objetos 'pesa más', 'pesa menos' y el tiempo con nociones temporales como 'antes o después', 'ayer', 'hoy' o 'mañana'."
           }
@@ -46,6 +67,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -56,6 +78,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -69,6 +92,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [
@@ -107,12 +131,33 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora el espacio cercano y desplaza su cuerpo por su propia iniciativa mediante giros, gateo, parándose o caminando, descubriendo la ubicación de objetos a su alcance en relación a sí mismo.",
+            "nota": "En el Ciclo I (1 año) esta competencia pertenece al Área de Descubrimiento del Mundo."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Explora el espacio en situaciones cotidianas utilizando sus sentidos y sus propias estrategias, se desplaza y reconoce su posición o la ubicación de los objetos y comprende algunas expresiones sencillas relacionadas a su ubicación.",
-            "nota": "En el Ciclo I esta competencia pertenece al Área de Descubrimiento del Mundo."
+            "nota": "En el Ciclo I (2 años) esta competencia pertenece al Área de Descubrimiento del Mundo."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas espaciales expresando con su cuerpo cuando algo es grande o pequeño, ubicándose a sí mismo en el espacio y utilizando nociones espaciales básicas como 'arriba', 'abajo', 'dentro' y 'fuera'."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Resuelve problemas espaciales y de medida al relacionar formas de objetos, utilizar nociones espaciales ('delante', 'detrás', 'encima', 'debajo') y construir representaciones espaciales con material concreto y dibujos."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Resuelve problemas al relacionar los objetos del entorno con formas bidimensionales y tridimensionales. Expresa la ubicación de personas en relación a objetos en el espacio 'cerca de', 'lejos de', 'al lado de', y de desplazamientos 'hacia adelante, hacia atrás', 'hacia un lado, hacia el otro'. Así también expresa la comparación de la longitud de dos objetos: 'es más largo que', 'es más corto que'. Emplea estrategias para resolver problemas, al construir objetos con material concreto o realizar desplazamientos en el espacio."
           }
@@ -120,6 +165,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -130,6 +176,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -142,6 +189,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [

@@ -1,5 +1,5 @@
 /** Ciclo I — Cuna (0 a 2 años) */
-export const GRADOS_CICLO_I = ['9 meses', '18 meses', '24 meses', '36 meses'] as const;
+export const GRADOS_CICLO_I = ['1 año', '2 años'] as const;
 
 /** Ciclo II — Jardín (3 a 5 años) */
 export const GRADOS_CICLO_II = ['3 años', '4 años', '5 años'] as const;

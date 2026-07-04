@@ -62,14 +62,7 @@ function GeneralOption({
   );
 }
 
-export default function StudentList({
-  students,
-  selectedId,
-  onSelect,
-  variant,
-  grado,
-  seccion,
-}: StudentListProps) {
+export default function StudentList({ students, selectedId, onSelect, variant, grado, seccion }: StudentListProps) {
   if (variant === 'carousel') {
     return (
       <div className="md:hidden">
@@ -101,9 +94,7 @@ export default function StudentList({
                 </span>
               )}
             </div>
-            {selectedId === null && (
-              <span className="h-1.5 w-1.5 rounded-full bg-honey-500 shrink-0" />
-            )}
+            {selectedId === null && <span className="h-1.5 w-1.5 rounded-full bg-honey-500 shrink-0" />}
           </button>
 
           {students.map((student) => (
@@ -113,10 +104,8 @@ export default function StudentList({
               onClick={() => onSelect(student.id)}
               className={[
                 'flex items-center gap-2 shrink-0 snap-start rounded-xl border px-3.5 py-2 transition-all duration-150 focus-ring-warm',
-                selectedId === student.id
-                  ? 'border-lilac-300 bg-lilac-50 shadow-sm'
-                  : 'border-cream-dark bg-white',
-            ].join(' ')}
+                selectedId === student.id ? 'border-lilac-300 bg-lilac-50 shadow-sm' : 'border-cream-dark bg-white',
+              ].join(' ')}
             >
               <Avatar name={student.name} />
               <div className="text-left">

@@ -1,0 +1,83 @@
+{
+  "fuente": "Programa curricular de Educación Inicial, Sección VI, 6.2 Área de Psicomotriz, págs. 97-107.",
+  "nivel": "inicial",
+  "area": {
+    "id": "ini-psi",
+    "nombre": "Psicomotriz",
+    "sigla": "PSI",
+    "descripcion": "El movimiento es la forma particular que tiene el niño y la niña de ser y estar en el mundo, de expresarse, comunicarse y aprender. La psicomotricidad busca promover el desarrollo motor del niño, favoreciendo que sea autónomo y seguro.",
+    "enfoques": ["ea-corporeidad"],
+    "nota": "Esta área atiende solo el Ciclo II. En el Ciclo I, el desarrollo psicomotriz se atiende de manera transversal en el cuidado y actividad autónoma.",
+    "competencias": [
+      {
+        "id": "ini-psi-comp1",
+        "nombre": "Se desenvuelve de manera autónoma a través de su motricidad",
+        "descripcion": "El desarrollo psicomotriz de los niños en este nivel parte de la libre exploración de sus movimientos, posturas y desplazamientos, logrando progresivamente estructurar su esquema corporal y coordinar sus acciones.",
+        "capacidades": [
+          {
+            "id": "ini-psi-comp1-cap1",
+            "nombre": "Comprende su cuerpo",
+            "descripcion": "Interioriza su imagen corporal a partir de la toma de conciencia del cuerpo y sus posibilidades."
+          },
+          {
+            "id": "ini-psi-comp1-cap2",
+            "nombre": "Se expresa corporalmente",
+            "descripcion": "Usa el movimiento, gesto, postura, ritmo para expresar sensaciones, emociones y sentimientos."
+          }
+        ],
+        "estandares": [
+          {
+            "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Se desenvuelve de manera autónoma a través de su motricidad cuando explora y descubre su lado dominante y sus posibilidades de movimiento por propia iniciativa en situaciones cotidianas. Realiza acciones motrices básicas en las que coordina movimientos para desplazarse con seguridad y utiliza objetos con precisión, orientándose y regulando sus acciones en relación a estos, a las personas, el espacio y el tiempo. Expresa corporalmente sus sensaciones, emociones y sentimientos a través del tono, gesto, posturas, ritmo y movimiento en diversas actividades individuales y colectivas."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Se desenvuelve de manera autónoma a través de su motricidad cuando explora y descubre su lado dominante y sus posibilidades de movimiento por propia iniciativa en situaciones cotidianas. Realiza acciones motrices básicas en las que coordina movimientos para desplazarse con seguridad y utiliza objetos con precisión, orientándose y regulando sus acciones en relación a estos, a las personas, el espacio y el tiempo. Expresa corporalmente sus sensaciones, emociones y sentimientos a través del tono, gesto, posturas, ritmo y movimiento en diversas actividades individuales y colectivas."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Se desenvuelve de manera autónoma a través de su motricidad cuando explora y descubre su lado dominante y sus posibilidades de movimiento por propia iniciativa en situaciones cotidianas. Realiza acciones motrices básicas en las que coordina movimientos para desplazarse con seguridad y utiliza objetos con precisión, orientándose y regulando sus acciones en relación a estos, a las personas, el espacio y el tiempo. Expresa corporalmente sus sensaciones, emociones y sentimientos a través del tono, gesto, posturas, ritmo y movimiento en diversas actividades individuales y colectivas."
+          }
+        ],
+        "desempenios": [
+          {
+            "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
+            "edad": "3 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Reconoce las partes de su cuerpo y sus posibilidades de movimiento en distintas situaciones explorando materiales y espacios",
+              "Expresa emociones e ideas a través del movimiento el juego y la danza con agrado e iniciativa"
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
+            "edad": "4 años",
+            "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
+            "descripcion": [
+              "Identifica las sensaciones que experimenta su cuerpo durante el movimiento y el juego",
+              "Coordina sus movimientos en actividades de equilibrio desplazamiento y manipulación de objetos participando con agrado en juego libre y dirigido"
+            ]
+          },
+          {
+            "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
+            "edad": "5 años",
+            "nivel_ciclo": "logra el nivel esperado del ciclo II",
+            "descripcion": [
+              "Reconoce las partes de su cuerpo y sus posibilidades de movimiento identificando sensaciones que experimenta durante el movimiento y el juego",
+              "Expresa emociones e ideas a través del movimiento el juego y la danza coordinando sus movimientos en equilibrio desplazamiento y manipulación de objetos"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

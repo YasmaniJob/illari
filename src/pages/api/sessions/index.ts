@@ -26,6 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
     competencia: body.competencia,
     capacidad: body.capacidad,
     criterio: body.criterio,
+    evidencia: body.evidencia,
   });
 
   return new Response(JSON.stringify({ session }), {

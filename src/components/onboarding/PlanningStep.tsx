@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CurriculumRow } from '../../lib/curriculum';
 import { getAreas, getCapacidades, getCompetencias } from '../../lib/curriculum';
 import CustomSelect from '../ui/CustomSelect';
@@ -13,6 +13,7 @@ export interface PlanningValues {
   capacidades: string[];
   /** Criterios escritos libremente por el docente */
   criterios: string[];
+  evidencia: string;
 }
 
 interface PlanningStepProps {
@@ -165,6 +166,18 @@ function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 export default function PlanningStep({ curriculum, edad, values, onChange }: PlanningStepProps) {
+  const isCuna = edad === '1 año' || edad === '2 años';
+
+  useEffect(() => {
+    if (isCuna) {
+      if (values.titulo !== 'Planificación de contexto') {
+        onChange(patch(values, { titulo: 'Planificación de contexto' }));
+      }
+    } else if (values.titulo === 'Planificación de contexto') {
+      onChange(patch(values, { titulo: '' }));
+    }
+  }, [isCuna, values.titulo, onChange, values]);
+
   // Cascada curricular — filtrada por edad si se provee
   const areas = useMemo(() => getAreas(curriculum, edad), [curriculum, edad]);
 
@@ -174,21 +187,21 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
   );
 
   const todasCapacidades = useMemo(
-    () =>
-      values.area && values.competencia
-        ? getCapacidades(curriculum, values.area, values.competencia, edad)
-        : [],
+    () => (values.area && values.competencia ? getCapacidades(curriculum, values.area, values.competencia, edad) : []),
     [curriculum, values.area, values.competencia, edad],
   );
 
   // ── Cascada ─────────────────────────────────────────────────────────────────
 
   function handleAreaChange(area: string) {
-    onChange(patch(values, { area, competencia: '', capacidades: [], criterios: [] }));
+    onChange(patch(values, { area, competencia: '', capacidades: [], criterios: [], evidencia: '' }));
   }
 
   function handleCompetenciaChange(competencia: string) {
-    onChange(patch(values, { competencia, capacidades: [], criterios: [] }));
+    const capacities = competencia
+      ? getCapacidades(curriculum, values.area, competencia, edad)
+      : [];
+    onChange(patch(values, { competencia, capacidades: capacities, criterios: [], evidencia: '' }));
   }
 
   // ── Toggle capacidad ────────────────────────────────────────────────────────
@@ -209,19 +222,21 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
     // Sin overflow-hidden ni overflow-y-auto aquí — el scroll lo maneja OnboardingStepCard
     <div className="flex flex-col gap-4">
       {/* Título */}
-      <div>
-        <label htmlFor="plan-titulo" className="text-sm font-bold text-warm-900 mb-1.5 block">
-          Título de la sesión
-        </label>
-        <input
-          id="plan-titulo"
-          type="text"
-          value={values.titulo}
-          onChange={(e) => onChange(patch(values, { titulo: e.target.value }))}
-          placeholder="Ej.: Jugamos con los números en el patio"
-          className="input-warm"
-        />
-      </div>
+      {!isCuna && (
+        <div>
+          <label htmlFor="plan-titulo" className="text-sm font-bold text-warm-900 mb-1.5 block">
+            Título de la sesión
+          </label>
+          <input
+            id="plan-titulo"
+            type="text"
+            value={values.titulo}
+            onChange={(e) => onChange(patch(values, { titulo: e.target.value }))}
+            placeholder="Ej.: Jugamos con los números en el patio"
+            className="input-warm"
+          />
+        </div>
+      )}
 
       {/* Área + Competencia: columna en mobile, fila en desktop */}
       <div className="flex flex-col sm:flex-row gap-3 items-start">
@@ -284,6 +299,23 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* Evidencia — escritura libre */}
+      {values.competencia && (
+        <div>
+          <label htmlFor="plan-evidencia" className="text-sm font-bold text-warm-900 mb-1.5 block">
+            Evidencia de aprendizaje
+          </label>
+          <input
+            id="plan-evidencia"
+            type="text"
+            value={values.evidencia}
+            onChange={(e) => onChange(patch(values, { evidencia: e.target.value }))}
+            placeholder="Ej.: Dibujo de su familia explicando su significado, registro fotográfico de su juego, etc."
+            className="input-warm"
+          />
         </div>
       )}
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
   "files": {
-    "includes": ["**", "!.astro", "!dist", "!node_modules", "!**/*.csv"]
+    "includes": ["**", "!.astro", "!.vercel", "!dist", "!node_modules", "!**/*.csv"]
   },
   "overrides": [
     {

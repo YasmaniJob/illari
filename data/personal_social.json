@@ -28,18 +28,39 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Construye su identidad al reconocer su cuerpo, intereses y necesidades básicas y diferenciarlos del adulto que lo cuida. Colabora por iniciativa propia en momentos de cuidado como alimentación e higiene. Busca el afecto y consuelo de su adulto de apego para explorar ambientes nuevos con seguridad física y emocional, y expresa sus emociones espontáneamente a través de gestos, risas o llanto."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Construye su identidad al tomar conciencia de los aspectos que lo hacen único. Se identifica con algunas de sus características físicas, sus gustos, disgustos e intereses, su nombre y los miembros de su familia. Participa en sus cuidados personales y en diversas actividades desde su iniciativa y posibilidades. Busca y acepta el consuelo y compañía de su adulto significativo cuando se siente vulnerado e inseguro, así como cuando algunas de sus acciones afectan a otro."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
             "ciclo_id": "ciclo-II",
-            "descripcion": "Construye su identidad al tomar conciencia de los aspectos que lo hacen único. Se identifica en algunas de sus características físicas, así como sus cualidades e intereses, gustos y preferencias. Se siente miembro de su familia y del grupo de aula al que pertenece. Practica hábitos saludables reconociendo que son importantes para él. Actúa de manera autónoma en las actividades que realiza y es capaz de tomar decisiones, desde sus posibilidades y considerando a los demás. Expresa sus emociones e identifica el motivo que las originan. Busca y acepta la compañía de un adulto significativo ante situaciones que lo hacen sentir vulnerable, inseguro, con ira, triste o alegre."
+            "descripcion": "Construye su identidad al reconocer sus características físicas, necesidades, gustos y preferencias básicas y diferenciarlas de los demás. Se reconoce como miembro de su familia y del aula. Realiza de forma autónoma hábitos básicos de alimentación e higiene con apoyo del adulto. Expresa emociones cotidianas e identifica sus causas cuando el adulto las nombra, buscando compañía y consuelo."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Construye su identidad al reconocer sus características físicas, intereses y preferencias, sintiéndose miembro activo de su familia y compartiendo su historia. Realiza de forma autónoma hábitos de cuidado personal y explica su importancia. Actúa por propia iniciativa en sus juegos, expresa sus emociones y reconoce las emociones en otros, mostrando simpatía y buscando consuelo en situaciones de vulnerabilidad."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Construye su identidad al tomar conciencia de los aspectos que lo hacen único. Se identifica en algunas de las características físicas, así como sus cualidades e intereses, gustos y preferencias. Se siente miembro de su familia y del grupo de aula al que pertenece. Practica hábitos saludables reconociendo que son importantes para él. Actúa de manera autónoma en las actividades que realiza y es capaz de tomar decisiones, desde sus posibilidades y considerando a los demás. Expresa sus emociones e identifica el motivo que las originan. Busca y acepta la compañía de un adulto significativo ante situaciones que lo hacen sentir vulnerable, inseguro, con ira, triste o alegre."
           }
         ],
         "desempenios": [
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "9 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -50,6 +71,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "18 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -60,6 +82,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "24 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -70,6 +93,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "36 meses",
             "nivel_ciclo": "logra el nivel esperado del ciclo I",
             "descripcion": [
@@ -80,6 +104,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -92,6 +117,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -104,6 +130,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [
@@ -141,11 +168,31 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Convive y participa al relacionarse de manera segura y cercana con los adultos significativos y otros niños de su entorno cotidiano. Expresa su agrado o incomodidad en situaciones cotidianas mediante gestos, sonrisas, llanto y primeros balbuceos, mostrando interés por explorar materiales cercanos en compañía del adulto."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Convive y participa cuando se relaciona con niños y adultos de su espacio cotidiano desde su propia iniciativa. Manifiesta a través de movimientos, gestos o palabras las situaciones que le agradan o le incomodan. Colabora en el cuidado de los materiales y espacios comunes."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Convive y participa al relacionarse de manera segura y cercana con los adultos significativos y otros niños de su entorno cotidiano. Integra límites básicos y colabora en el cuidado de los materiales que utiliza en el aula."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Convive y participa democráticamente cuando interactúa con sus compañeros en pequeños grupos, respetando las reglas de juego. Se interesa por conocer costumbres de los demás y colabora en la propuesta colectiva de acuerdos y normas, cuidando los recursos comunes."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Convive y participa democráticamente cuando interactúa de manera respetuosa con sus compañeros desde su propia iniciativa, cumple con sus deberes y se interesa por conocer más sobre las diferentes costumbres y características de las personas de su entorno inmediato. Participa y propone acuerdos y normas de convivencia para el bien común. Realiza acciones con otros para el buen uso de los espacios, materiales y recursos comunes."
           }
@@ -153,6 +200,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "9 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -161,6 +209,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "18 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -169,6 +218,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "24 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -177,6 +227,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "36 meses",
             "nivel_ciclo": "logra el nivel esperado del ciclo I",
             "descripcion": [
@@ -186,6 +237,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -196,6 +248,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -207,6 +260,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [
@@ -240,11 +294,31 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
             "ciclo_id": "ciclo-I",
-            "descripcion": "Este nivel tiene como base el nivel 1 de la competencia Construye su identidad."
+            "descripcion": "Este nivel tiene como base el nivel 1 (1 año) de la competencia Construye su identidad."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene como base el nivel 1 (2 años) de la competencia Construye su identidad."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Reconoce de manera espontánea, a través de sus acciones diarias, el amor y cuidado que le brinda su familia, como un indicio del amor de Dios, y da inicio a acciones como colaborar, saludar, despedirse y agradecer por propia iniciativa."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Expresa, por propia iniciativa, el amor y cuidado que recibe de su entorno como un indicio del amor de Dios. Lo hace a través de la interacción con los otros, al realizar acciones como compartir, ayudar y colaborar."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Realiza acciones por propia iniciativa para agradecer el amor que recibe de su familia y de su entorno. Participa de acciones que muestren su solidaridad y generosidad hacia su prójimo como muestra del amor que recibe de Dios."
           }
@@ -252,6 +326,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -263,6 +338,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -274,6 +350,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [

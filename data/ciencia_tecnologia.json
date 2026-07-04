@@ -43,12 +43,33 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora de manera activa su entorno inmediato y los objetos a su alcance utilizando todos sus sentidos (mirar, tocar, oler, chupar, escuchar) por propia iniciativa, reconociendo algunas características perceptuales simples y el uso instrumental básico de los objetos cotidianos.",
+            "nota": "En el Ciclo I (1 año) esta competencia pertenece al Área de Descubrimiento del Mundo."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Explora los objetos, el espacio y hechos que acontecen en su entorno, los observa y manipula con todos sus sentidos para obtener información sobre sus características o usos, experimenta y observa los efectos que sus acciones causan sobre ellos.",
-            "nota": "En el Ciclo I esta competencia pertenece al Área de Descubrimiento del Mundo."
+            "nota": "En el Ciclo I (2 años) esta competencia pertenece al Área de Descubrimiento del Mundo."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Explora objetos y hechos a su alrededor, expresando curiosidad a través de preguntas simples. Obtiene información a través de sus sentidos y comunica sus descubrimientos utilizando gestos, señas o lenguaje oral."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Explora objetos, seres vivos o fenómenos naturales de su interés haciendo preguntas y proponiendo posibles respuestas. Sugiere acciones y materiales para buscar información, la registra mediante dibujos o fotos, y comunica sus resultados."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Explora los objetos, el espacio y hechos que acontecen en su entorno, hace preguntas con base en su curiosidad, propone posibles respuestas, obtiene información al observar, manipular y describir; compara aspectos del objeto o fenómeno para comprobar la respuesta y expresa en forma oral o gráfica lo que hizo y aprendió."
           }
@@ -56,16 +77,18 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-3-anios",
             "edad": "3 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
               "Hace preguntas que expresan su curiosidad sobre los objetos, seres vivos, hechos o fenómenos que acontecen en su ambiente.",
-              "Obtiene información sobre las características de los objetos y materiales que explora a través de sus sentidos. Usa algunos objetos y herramientas en su exploración.",
+              "Obtiene información sobre las características de los objetos and materiales que explora a través de sus sentidos. Usa algunos objetos y herramientas en su exploración.",
               "Comunica los descubrimientos que hace cuando explora. Utiliza gestos o señas, movimientos corporales o lo hace oralmente."
             ]
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-4-anios",
             "edad": "4 años",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo II",
             "descripcion": [
@@ -78,6 +101,7 @@
           },
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "descripcion": [

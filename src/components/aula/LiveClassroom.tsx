@@ -32,7 +32,6 @@ export default function LiveClassroom() {
   const [showPicker, setShowPicker] = useState(false);
   const [errorModal, setErrorModal] = useState<{ title: string; message: string; name?: string } | null>(null);
 
-
   useEffect(() => {
     async function load() {
       try {
@@ -57,9 +56,7 @@ export default function LiveClassroom() {
           if (active) {
             const [msgs, studs] = await Promise.all([
               fetchObservations(active.id),
-              active.grado && active.seccion
-                ? fetchStudents(active.grado, active.seccion)
-                : Promise.resolve([]),
+              active.grado && active.seccion ? fetchStudents(active.grado, active.seccion) : Promise.resolve([]),
             ]);
             setMessages(msgs);
             setStudents(studs);
@@ -73,8 +70,6 @@ export default function LiveClassroom() {
     }
     void load();
   }, []);
-
-
 
   const selectedStudent = useMemo(
     () => students.find((s) => s.id === selectedStudentId),
@@ -109,9 +104,7 @@ export default function LiveClassroom() {
         });
 
         if (studentNameMatch) {
-          const matched = students.find(
-            (s) => s.name.toLowerCase() === studentNameMatch.toLowerCase(),
-          );
+          const matched = students.find((s) => s.name.toLowerCase() === studentNameMatch.toLowerCase());
           if (matched) {
             setSelectedStudentId(matched.id);
           }
@@ -160,9 +153,7 @@ export default function LiveClassroom() {
         });
 
         if (studentNameMatch) {
-          const matched = students.find(
-            (s) => s.name.toLowerCase() === studentNameMatch.toLowerCase(),
-          );
+          const matched = students.find((s) => s.name.toLowerCase() === studentNameMatch.toLowerCase());
           if (matched) {
             setSelectedStudentId(matched.id);
           }
@@ -186,27 +177,44 @@ export default function LiveClassroom() {
     [session, selectedStudent, students],
   );
 
-  const handleUpdateAI = useCallback(async (id: string, field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion', value: string) => {
-    let updatedCai: { contexto: string; accion: string; interpretacion: string; retroalimentacion: string } | null = null;
+  const handleUpdateAI = useCallback(
+    async (
+      id: string,
+      field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion' | 'intervencion' | 'interpretacionSugerida',
+      value: string,
+    ) => {
+      let updatedCai: {
+        contexto: string;
+        accion: string;
+        interpretacion: string;
+        intervencion: string;
+        interpretacionSugerida: string;
+        retroalimentacion: string;
+      } | null = null;
 
-    setMessages((prev) => prev.map((m) => {
-      if (m.type !== 'ai' || m.id !== id) return m;
-      const next = { ...m, cai: { ...m.cai, [field]: value } };
-      updatedCai = next.cai;
-      return next;
-    }));
+      setMessages((prev) =>
+        prev.map((m) => {
+          if (m.type !== 'ai' || m.id !== id) return m;
+          const next = { ...m, cai: { ...m.cai, [field]: value } };
+          updatedCai = next.cai;
+          return next;
+        }),
+      );
 
-    try {
-      if (field === 'retroalimentacion') {
-        await patchObservation(id, 'retroalimentacion', value);
-      } else if (updatedCai) {
-        const { retroalimentacion: _r, ...rest } = updatedCai;
-        await patchObservation(id, 'evidencia', JSON.stringify(rest));
+      try {
+        const cai = updatedCai;
+        if (field === 'retroalimentacion') {
+          await patchObservation(id, 'retroalimentacion', value);
+        } else if (cai) {
+          const { retroalimentacion: _r, ...rest } = cai as Record<string, any>;
+          await patchObservation(id, 'evidencia', JSON.stringify(rest));
+        }
+      } catch {
+        /* UI ya actualizada optimísticamente */
       }
-    } catch {
-      /* UI ya actualizada optimísticamente */
-    }
-  }, []);
+    },
+    [],
+  );
 
   const handleSessionSaved = useCallback((updated: SessionConfig, updatedStudents: StudentDto[]) => {
     setSession(updated);
@@ -230,8 +238,12 @@ export default function LiveClassroom() {
         <p className="text-2xl font-extrabold text-warm-900">No hay clase activa</p>
         <p className="mt-3 text-lg text-warm-700 max-w-md">Prepara o escanea una sesión para entrar al aula.</p>
         <div className="flex flex-col sm:flex-row gap-3 mt-6">
-          <a href="/onboarding" className="btn-primary">Preparar clase</a>
-          <a href="/escanear" className="btn-secondary">Escanear</a>
+          <a href="/onboarding" className="btn-primary">
+            Preparar clase
+          </a>
+          <a href="/escanear" className="btn-secondary">
+            Escanear
+          </a>
         </div>
       </div>
     );
@@ -239,7 +251,6 @@ export default function LiveClassroom() {
 
   return (
     <div className="flex flex-col h-full bg-cream overflow-hidden">
-
       {/* ── Session header ── */}
       <div className="shrink-0 px-3 sm:px-5 md:px-7 py-2 sm:py-3 border-b border-cream-dark bg-white flex items-center gap-2 sm:gap-4">
         {/* Session info */}
@@ -251,7 +262,6 @@ export default function LiveClassroom() {
 
         {/* Action buttons */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-
           {/* Propósito */}
           <button
             type="button"
@@ -259,7 +269,17 @@ export default function LiveClassroom() {
             className="flex items-center justify-center gap-1.5 rounded-xl border border-honey-400/50 bg-honey-200/40 p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-warm-700 hover:bg-honey-200/70 transition-colors focus-ring-warm"
             title="Ver propósito de aprendizaje"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -274,7 +294,17 @@ export default function LiveClassroom() {
             className="flex items-center justify-center gap-1.5 rounded-xl border border-cream-dark bg-white p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-warm-600 hover:bg-cream transition-colors focus-ring-warm"
             title="Editar sesión"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
@@ -288,7 +318,17 @@ export default function LiveClassroom() {
             className="flex items-center justify-center gap-1.5 rounded-xl border border-lilac-300 bg-lilac-50 p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-lilac-700 hover:bg-lilac-100 transition-colors focus-ring-warm"
             title="Vista previa del Cuaderno de Campo"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
@@ -302,7 +342,17 @@ export default function LiveClassroom() {
               className="flex items-center justify-center rounded-xl border border-cream-dark bg-white p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-warm-600 hover:bg-cream transition-colors focus-ring-warm"
               title="Salir del aula"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 sm:hidden"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                 <polyline points="16 17 21 12 16 7" />
                 <line x1="21" y1="12" x2="9" y2="12" />
@@ -315,19 +365,22 @@ export default function LiveClassroom() {
 
       {error && (
         <div className="shrink-0 px-4 py-2 bg-coral-500/10 border-b border-coral-500/20">
-          <p className="text-xs font-semibold text-coral-600" role="alert">{error}</p>
+          <p className="text-xs font-semibold text-coral-600" role="alert">
+            {error}
+          </p>
         </div>
       )}
 
       {/* ── Main: sidebar + chat ── */}
       <div className="flex flex-1 min-h-0 md:grid md:grid-cols-[300px_1fr]">
-
         {/* Sidebar desktop */}
         <div className="hidden md:flex md:flex-col border-r border-cream-dark bg-white min-h-0">
           {students.length === 0 ? (
             <div className="flex flex-col flex-1 items-center justify-center p-6 text-center">
               <p className="text-sm font-bold text-warm-900">Sin listado de aula</p>
-              <a href="/mis-pequenos" className="btn-primary mt-3 text-sm">Mis estudiantes</a>
+              <a href="/mis-pequenos" className="btn-primary mt-3 text-sm">
+                Mis estudiantes
+              </a>
             </div>
           ) : (
             <StudentList
@@ -389,13 +442,13 @@ export default function LiveClassroom() {
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-honey-200 text-3xl mb-4 animate-bounce">
                 🔍
               </span>
-              <h2 className="text-xl font-extrabold text-warm-900 leading-tight">
-                {errorModal.title}
-              </h2>
+              <h2 className="text-xl font-extrabold text-warm-900 leading-tight">{errorModal.title}</h2>
               <p className="mt-3 text-base text-warm-700 leading-relaxed">
-                Escribiste una observación para <strong className="text-coral-600 font-extrabold">{errorModal.name}</strong>, pero no figura en la lista de estudiantes inscritos en esta sección.
+                Escribiste una observación para{' '}
+                <strong className="text-coral-600 font-extrabold">{errorModal.name}</strong>, pero no figura en la lista
+                de estudiantes inscritos en esta sección.
               </p>
-              
+
               <div className="w-full mt-4 p-4 rounded-2xl bg-cream border border-cream-dark text-left">
                 <p className="text-xs font-bold text-warm-800 uppercase tracking-wider mb-2">¿Cómo solucionarlo?</p>
                 <ul className="text-xs font-semibold text-warm-600 space-y-1.5 list-disc pl-4">
@@ -429,12 +482,7 @@ export default function LiveClassroom() {
       )}
 
       {/* Propósito de aprendizaje */}
-      {showProposito && (
-        <PropositoModal
-          session={session}
-          onClose={() => setShowProposito(false)}
-        />
-      )}
+      {showProposito && <PropositoModal session={session} onClose={() => setShowProposito(false)} />}
 
       {/* Student picker — bottom sheet */}
       {showPicker && (

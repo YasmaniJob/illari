@@ -14,7 +14,11 @@ export type ChatMessage = UserMessage | AIMessage;
 interface ChatFeedProps {
   messages: ChatMessage[];
   sending?: boolean;
-  onUpdateAI: (id: string, field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion', value: string) => void;
+  onUpdateAI: (
+    id: string,
+    field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion' | 'intervencion' | 'interpretacionSugerida',
+    value: string,
+  ) => void;
 }
 
 /** Three-dot bouncing animation shown while the AI is thinking */
@@ -109,10 +113,7 @@ function ChatFeed({ messages, sending = false, onUpdateAI }: ChatFeedProps) {
 
         return (
           <div key={msg.id} className="max-w-full">
-            <AICard
-              message={{ ...msg, studentName: inferredStudentName }}
-              onUpdate={onUpdateAI}
-            />
+            <AICard message={{ ...msg, studentName: inferredStudentName }} onUpdate={onUpdateAI} />
           </div>
         );
       })}

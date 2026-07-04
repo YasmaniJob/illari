@@ -2,16 +2,9 @@
  * CuadernoCampo — Vista previa e impresión del Cuaderno de Campo Digital.
  * PDF generado con @react-pdf/renderer (texto vectorial, A4, seleccionable).
  */
+
+import { Document, Font, Page, pdf, StyleSheet, Text, View } from '@react-pdf/renderer';
 import { memo, useCallback, useState } from 'react';
-import {
-  Document,
-  Font,
-  Page,
-  StyleSheet,
-  Text,
-  View,
-  pdf,
-} from '@react-pdf/renderer';
 import type { StudentDto } from '../../lib/api/client';
 import type { SessionConfig } from '../../lib/curriculum';
 import type { ChatMessage } from './ChatFeed';
@@ -45,6 +38,8 @@ function buildStudentEvidence(
           cai.contexto && `[C] ${cai.contexto}`,
           cai.accion && `[A] ${cai.accion}`,
           cai.interpretacion && `[I] ${cai.interpretacion}`,
+          cai.interpretacionSugerida && `[IPS] ${cai.interpretacionSugerida}`,
+          cai.intervencion && `[INT] ${cai.intervencion}`,
         ].filter(Boolean);
         if (parts.length) entry.evidencia = parts.join('\n');
         if (cai.retroalimentacion) entry.retroalimentacion = cai.retroalimentacion;
@@ -171,6 +166,10 @@ function CuadernoDocument({ session, rows, padRows, fecha }: DocProps) {
             <Text style={S.metaLabel}>CRITERIO DE{'\n'}EVALUACIÓN</Text>
             <Text style={S.metaValueWide}>{session.criterio}</Text>
           </View>
+          <View style={S.metaRow}>
+            <Text style={S.metaLabel}>EVIDENCIA DE{'\n'}APRENDIZAJE</Text>
+            <Text style={S.metaValueWide}>{session.evidencia ?? '—'}</Text>
+          </View>
         </View>
 
         {/* Observations table */}
@@ -186,12 +185,8 @@ function CuadernoDocument({ session, rows, padRows, fecha }: DocProps) {
           {/* Rows */}
           {rows.map((row) => (
             <View key={row.name} style={S.obsRow} wrap={false}>
-              <Text style={[S.obsCell, S.colNum, S.muted, { textAlign: 'center' }]}>
-                {row.isGroup ? '—' : row.num}
-              </Text>
-              <Text style={[S.obsCell, S.colName, row.isGroup ? S.italic : {}]}>
-                {row.name}
-              </Text>
+              <Text style={[S.obsCell, S.colNum, S.muted, { textAlign: 'center' }]}>{row.isGroup ? '—' : row.num}</Text>
+              <Text style={[S.obsCell, S.colName, row.isGroup ? S.italic : {}]}>{row.name}</Text>
               <Text style={[S.obsCell, S.colEvidencia]}>{row.evidencia}</Text>
               <Text style={[S.obsCell, S.colRetro]}>{row.retroalimentacion}</Text>
             </View>
@@ -217,7 +212,9 @@ function CuadernoDocument({ session, rows, padRows, fecha }: DocProps) {
 
 function CuadernoCampo({ session, students, messages, onClose }: Props) {
   const fecha = new Date(session.createdAt).toLocaleDateString('es-PE', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   });
 
   const evidenceMap = buildStudentEvidence(messages, students);
@@ -227,6 +224,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
     ...students.map((s, idx) => ({
       num: String(idx + 1).padStart(2, '0'),
       name: s.name,
+      isGroup: false,
       ...(evidenceMap.get(s.name) ?? { evidencia: '', retroalimentacion: '' }),
     })),
     ...(grupoEntry && (grupoEntry.evidencia || grupoEntry.retroalimentacion)
@@ -240,7 +238,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
   const handleDownload = useCallback(async () => {
     try {
       const blob = await pdf(
-        <CuadernoDocument session={session} rows={rows} padRows={padRows} fecha={fecha} />
+        <CuadernoDocument session={session} rows={rows} padRows={padRows} fecha={fecha} />,
       ).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -262,11 +260,13 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
       ['ÁREA', session.area],
       ['COMPETENCIA / CAPACIDADES', `${session.competencia}${session.capacidad ? ` — ${session.capacidad}` : ''}`],
       ['CRITERIO DE EVALUACIÓN', session.criterio ?? '—'],
+      ['EVIDENCIA DE APRENDIZAJE', session.evidencia ?? '—'],
     ];
 
-    const metaHtml = metaRows.map((row, i) => {
-      if (i === 0) {
-        return `<tr>
+    const metaHtml = metaRows
+      .map((row, i) => {
+        if (i === 0) {
+          return `<tr>
           <td style="border:1px solid #111;padding:4px 8px;font-weight:bold;width:100px">${row[0]}</td>
           <td style="border:1px solid #111;padding:4px 8px;width:90px">${row[1]}</td>
           <td style="border:1px solid #111;padding:4px 8px;font-weight:bold;width:70px">${row[2]}</td>
@@ -274,26 +274,31 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
           <td style="border:1px solid #111;padding:4px 8px;font-weight:bold;width:50px">${row[4]}</td>
           <td style="border:1px solid #111;padding:4px 8px">${row[5]}</td>
         </tr>`;
-      }
-      return `<tr>
+        }
+        return `<tr>
         <td style="border:1px solid #111;padding:4px 8px;font-weight:bold">${row[0]}</td>
         <td style="border:1px solid #111;padding:4px 8px" colspan="5">${row[1]}</td>
       </tr>`;
-    }).join('');
+      })
+      .join('');
 
     const obsRowsHtml = [
-      ...rows.map(row => `<tr>
+      ...rows.map(
+        (row) => `<tr>
         <td style="border:1px solid #111;padding:4px 6px;text-align:center;color:#888;width:28px">${row.isGroup ? '—' : row.num}</td>
         <td style="border:1px solid #111;padding:4px 8px;width:130px${row.isGroup ? ';font-style:italic;color:#666' : ''}">${row.name}</td>
         <td style="border:1px solid #111;padding:4px 8px">${row.evidencia}</td>
         <td style="border:1px solid #111;padding:4px 8px;width:140px">${row.retroalimentacion}</td>
-      </tr>`),
-      ...Array.from({ length: padRows }).map(() => `<tr>
+      </tr>`,
+      ),
+      ...Array.from({ length: padRows }).map(
+        () => `<tr>
         <td style="border:1px solid #111;padding:4px 6px;height:32px"></td>
         <td style="border:1px solid #111;padding:4px 8px"></td>
         <td style="border:1px solid #111;padding:4px 8px"></td>
         <td style="border:1px solid #111;padding:4px 8px"></td>
-      </tr>`),
+      </tr>`,
+      ),
     ].join('');
 
     const html = `
@@ -326,9 +331,10 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
       `ÁREA: ${session.area}`,
       `COMPETENCIA: ${session.competencia}`,
       `CRITERIO: ${session.criterio ?? '—'}`,
+      `EVIDENCIA: ${session.evidencia ?? '—'}`,
       '',
       'Nº | NOMBRE | EVIDENCIAS | RETROALIMENTACIÓN',
-      ...rows.map(r => `${r.num} | ${r.name} | ${r.evidencia} | ${r.retroalimentacion}`),
+      ...rows.map((r) => `${r.num} | ${r.name} | ${r.evidencia} | ${r.retroalimentacion}`),
     ].join('\n');
 
     try {
@@ -353,9 +359,12 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
     }
   }, [session, rows, padRows, fecha]);
 
-  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onClose();
-  }, [onClose]);
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) onClose();
+    },
+    [onClose],
+  );
 
   return (
     <div
@@ -366,7 +375,6 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
       onClick={handleOverlayClick}
     >
       <div className="flex flex-col w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[calc(100dvh-2rem)]">
-
         {/* Toolbar */}
         <div className="shrink-0 flex items-center gap-3 px-5 py-3 border-b border-gray-200 bg-white">
           <div className="min-w-0 flex-1">
@@ -381,28 +389,49 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
               copyState === 'copied'
                 ? 'bg-mint-400/20 text-warm-900 border border-mint-400/50'
                 : copyState === 'error'
-                ? 'bg-coral-500/10 text-coral-600 border border-coral-500/30'
-                : 'bg-white border border-cream-dark text-warm-700 hover:bg-cream',
+                  ? 'bg-coral-500/10 text-coral-600 border border-coral-500/30'
+                  : 'bg-white border border-cream-dark text-warm-700 hover:bg-cream',
             ].join(' ')}
             title="Copiar para pegar en Word, Google Docs o LibreOffice"
           >
             {copyState === 'copied' ? (
               <>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 ¡Copiado!
               </>
             ) : copyState === 'error' ? (
               <>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Error
               </>
             ) : (
               <>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                 </svg>
@@ -415,7 +444,17 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
             onClick={handleDownload}
             className="flex items-center gap-2 rounded-xl bg-coral-500 px-4 py-2 text-sm font-bold text-white hover:bg-coral-600 transition-colors focus-ring-warm shrink-0"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
@@ -428,7 +467,17 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
             aria-label="Cerrar"
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-warm-500 hover:bg-gray-100 hover:text-warm-900 transition-colors focus-ring-warm"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -438,9 +487,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
         {/* Preview — tabla HTML para visualización en pantalla */}
         <div className="flex-1 overflow-y-auto overflow-x-auto bg-white">
           <div className="p-8 min-w-[700px]">
-            <h2 className="text-center text-sm font-bold tracking-[0.2em] mb-5 uppercase">
-              Cuaderno de Campo
-            </h2>
+            <h2 className="text-center text-sm font-bold tracking-[0.2em] mb-5 uppercase">Cuaderno de Campo</h2>
 
             <table className="w-full border-collapse text-sm mb-5">
               <tbody>
@@ -454,22 +501,45 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
                 </tr>
                 <tr>
                   <td className="border border-gray-700 px-3 py-2 font-bold">TÍTULO</td>
-                  <td className="border border-gray-700 px-3 py-2" colSpan={5}>{session.titulo ?? '—'}</td>
+                  <td className="border border-gray-700 px-3 py-2" colSpan={5}>
+                    {session.titulo ?? '—'}
+                  </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-700 px-3 py-2 font-bold">ÁREA</td>
-                  <td className="border border-gray-700 px-3 py-2" colSpan={5}>{session.area}</td>
+                  <td className="border border-gray-700 px-3 py-2" colSpan={5}>
+                    {session.area}
+                  </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-700 px-3 py-2 font-bold align-top">COMPETENCIA /<br />CAPACIDADES</td>
+                  <td className="border border-gray-700 px-3 py-2 font-bold align-top">
+                    COMPETENCIA /<br />
+                    CAPACIDADES
+                  </td>
                   <td className="border border-gray-700 px-3 py-2" colSpan={5}>
                     {session.competencia}
                     {session.capacidad && <span className="text-gray-500"> — {session.capacidad}</span>}
                   </td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-700 px-3 py-2 font-bold align-top">CRITERIO DE<br />EVALUACIÓN</td>
-                  <td className="border border-gray-700 px-3 py-2" colSpan={5}>{session.criterio}</td>
+                  <td className="border border-gray-700 px-3 py-2 font-bold align-top">
+                    CRITERIO DE
+                    <br />
+                    EVALUACIÓN
+                  </td>
+                  <td className="border border-gray-700 px-3 py-2" colSpan={5}>
+                    {session.criterio}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-700 px-3 py-2 font-bold align-top">
+                    EVIDENCIA DE
+                    <br />
+                    APRENDIZAJE
+                  </td>
+                  <td className="border border-gray-700 px-3 py-2" colSpan={5}>
+                    {session.evidencia ?? '—'}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -478,18 +548,29 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
               <thead>
                 <tr>
                   <th className="border border-gray-700 px-3 py-2.5 text-center w-10 bg-gray-100">Nº</th>
-                  <th className="border border-gray-700 px-3 py-2.5 text-center w-40 bg-gray-100">NOMBRE Y<br />APELLIDOS</th>
-                  <th className="border border-gray-700 px-3 py-2.5 text-center bg-gray-100">DESCRIPCIÓN DE EVIDENCIAS</th>
+                  <th className="border border-gray-700 px-3 py-2.5 text-center w-40 bg-gray-100">
+                    NOMBRE Y<br />
+                    APELLIDOS
+                  </th>
+                  <th className="border border-gray-700 px-3 py-2.5 text-center bg-gray-100">
+                    DESCRIPCIÓN DE EVIDENCIAS
+                  </th>
                   <th className="border border-gray-700 px-3 py-2.5 text-center w-48 bg-gray-100">RETROALIMENTACIÓN</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row) => (
                   <tr key={row.name} className="align-top">
-                    <td className="border border-gray-700 px-2 py-3 text-center text-gray-400 text-xs">{row.isGroup ? '—' : row.num}</td>
-                    <td className={`border border-gray-700 px-3 py-3 ${row.isGroup ? 'italic text-gray-500' : ''}`}>{row.name}</td>
+                    <td className="border border-gray-700 px-2 py-3 text-center text-gray-400 text-xs">
+                      {row.isGroup ? '—' : row.num}
+                    </td>
+                    <td className={`border border-gray-700 px-3 py-3 ${row.isGroup ? 'italic text-gray-500' : ''}`}>
+                      {row.name}
+                    </td>
                     <td className="border border-gray-700 px-3 py-3 whitespace-pre-line">{row.evidencia || null}</td>
-                    <td className="border border-gray-700 px-3 py-3 whitespace-pre-line">{row.retroalimentacion || null}</td>
+                    <td className="border border-gray-700 px-3 py-3 whitespace-pre-line">
+                      {row.retroalimentacion || null}
+                    </td>
                   </tr>
                 ))}
                 {Array.from({ length: padRows }).map((_, i) => (

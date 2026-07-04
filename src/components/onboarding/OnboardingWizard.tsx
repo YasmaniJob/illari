@@ -16,10 +16,8 @@ const STEP_EMOJI: Record<number, string> = { 1: '🏫', 2: '👥', 3: '📚' };
 const TOTAL = STEPS.length;
 
 const CICLO_I_ITEMS = [
-  { key: '9 meses',  emoji: '🍼', bg: '#fce7f3', border: '#f9a8d4', label: '#be185d' },
-  { key: '18 meses', emoji: '🐣', bg: '#fef9c3', border: '#fde047', label: '#a16207' },
-  { key: '24 meses', emoji: '🌱', bg: '#d1fae5', border: '#6ee7b7', label: '#065f46' },
-  { key: '36 meses', emoji: '🐥', bg: '#e0f2fe', border: '#7dd3fc', label: '#0369a1' },
+  { key: '1 año',  emoji: '🍼', bg: '#fce7f3', border: '#f9a8d4', label: '#be185d' },
+  { key: '2 años', emoji: '🌱', bg: '#d1fae5', border: '#6ee7b7', label: '#065f46' },
 ] as const;
 
 const CICLO_II_ITEMS = [
@@ -94,16 +92,18 @@ function GradoCard({ gradoKey, emoji, bg, border, label, isSelected, onToggle }:
         whileTap={{ scale: 0.94, rotateX: 0, rotateY: 0 }}
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         className="relative w-full h-full rounded-2xl overflow-hidden select-none flex flex-col items-center justify-center gap-2 focus:outline-none"
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: 'preserve-3d',
-          backgroundColor: bg,
-          borderWidth: '2px',
-          borderStyle: 'solid',
-          borderColor: isSelected ? border : 'transparent',
-          outline: 'none',
-        } as React.CSSProperties}
+        style={
+          {
+            rotateX,
+            rotateY,
+            transformStyle: 'preserve-3d',
+            backgroundColor: bg,
+            borderWidth: '2px',
+            borderStyle: 'solid',
+            borderColor: isSelected ? border : 'transparent',
+            outline: 'none',
+          } as React.CSSProperties
+        }
       >
         {/* Shine */}
         <motion.span
@@ -160,7 +160,7 @@ function GradosView({ grados, onToggle }: Omit<GradosViewProps, 'onNext'>) {
         <p className="text-[10px] font-extrabold text-warm-400 uppercase tracking-widest mb-2 shrink-0">
           Ciclo I — Cuna · 0 a 2 años
         </p>
-        <div className="grid grid-cols-4 gap-2.5 flex-1 min-h-0">
+        <div className="grid grid-cols-2 gap-2.5 flex-1 min-h-0">
           {CICLO_I_ITEMS.map((item) => (
             <GradoCard
               key={item.key}
@@ -228,7 +228,6 @@ function SeccionView({ grados, seccion, onChange, onBack }: SeccionViewProps) {
 
   return (
     <div className="flex flex-col gap-4 flex-1 min-h-0">
-
       {/* Chips de grados seleccionados */}
       <div className="flex flex-wrap gap-2 shrink-0">
         {grados.map((g) => {
@@ -265,7 +264,6 @@ function SeccionView({ grados, seccion, onChange, onBack }: SeccionViewProps) {
       {/* Botones de sección — llenan el espacio restante */}
       <div className="flex-1 min-h-0 relative">
         <AnimatePresence mode="wait">
-
           {/* ── Vista: grid de secciones ── */}
           {!showCustom && (
             <motion.div
@@ -330,7 +328,11 @@ function SeccionView({ grados, seccion, onChange, onBack }: SeccionViewProps) {
 
               <button
                 type="button"
-                onClick={() => { setShowCustom(false); setCustom(''); onChange(''); }}
+                onClick={() => {
+                  setShowCustom(false);
+                  setCustom('');
+                  onChange('');
+                }}
                 className="inline-flex items-center gap-1.5 text-sm font-bold text-warm-400 hover:text-lilac-600 transition-colors mt-2 px-3 py-1.5 rounded-xl hover:bg-lilac-50"
               >
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -340,10 +342,8 @@ function SeccionView({ grados, seccion, onChange, onBack }: SeccionViewProps) {
               </button>
             </motion.div>
           )}
-
         </AnimatePresence>
       </div>
-
     </div>
   );
 }
@@ -366,14 +366,23 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   const [subpaso, setSubpaso] = useState<'grados' | 'seccion'>('grados');
 
   // String para la DB: "3 años, 4 años (A)"
-  const gradoStr = grados.length > 0
-    ? `${grados.join(', ')}${seccion ? ` (${seccion})` : ''}`
-    : '';
+  const gradoStr = grados.length > 0 ? `${grados.join(', ')}${seccion ? ` (${seccion})` : ''}` : '';
 
   function toggleGrado(key: string) {
-    setGrados((prev) =>
-      prev.includes(key) ? prev.filter((g) => g !== key) : [...prev, key],
-    );
+    setGrados((prev) => {
+      const isCicloI = ['1 año', '2 años'].includes(key);
+      if (prev.includes(key)) {
+        return prev.filter((g) => g !== key);
+      }
+      
+      if (isCicloI) {
+        // Clear Ciclo II grades when choosing a Ciclo I grade
+        return [...prev.filter((g) => !['3 años', '4 años', '5 años'].includes(g)), key];
+      } else {
+        // Clear Ciclo I grades when choosing a Ciclo II grade
+        return [...prev.filter((g) => !['1 año', '2 años'].includes(g)), key];
+      }
+    });
   }
 
   function confirmarGrados() {
@@ -396,6 +405,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
     competencia: '',
     capacidades: [],
     criterios: [],
+    evidencia: '',
   });
   const scanFileRef = useRef<HTMLInputElement>(null);
   const [scanning, setScanning] = useState(false);
@@ -472,6 +482,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         competencia: m.competencia.value || prev.competencia,
         capacidades: [],
         criterios: m.criterio.value ? [m.criterio.value] : prev.criterios,
+        evidencia: prev.evidencia,
       }));
       setScanDone(true);
     } catch (err) {
@@ -499,6 +510,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         competencia: planning.competencia,
         capacidad: getCapacidadFromCriterio(curriculum, planning.area, planning.competencia, primaryCriterio),
         criterio,
+        evidencia: planning.evidencia.trim(),
       });
       window.location.href = '/aula';
     } catch {
@@ -514,17 +526,9 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       content: (
         <OnboardingStepCard title="Tu aula">
           {subpaso === 'grados' ? (
-            <GradosView
-              grados={grados}
-              onToggle={toggleGrado}
-            />
+            <GradosView grados={grados} onToggle={toggleGrado} />
           ) : (
-            <SeccionView
-              grados={grados}
-              seccion={seccion}
-              onChange={setSeccion}
-              onBack={volverAGrados}
-            />
+            <SeccionView grados={grados} seccion={seccion} onChange={setSeccion} onBack={volverAGrados} />
           )}
         </OnboardingStepCard>
       ),
@@ -554,7 +558,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       id: 3,
       content: (
         <OnboardingStepCard
-          title="Planificación"
+          title={grados.some((g) => ['1 año', '2 años'].includes(g)) ? 'Planificación de contexto' : 'Planificación'}
           headerActions={
             <>
               <input
@@ -585,7 +589,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
 
   return (
     <div className="flex h-full min-h-0 overflow-hidden flex-col md:flex-row">
-
       {/* MOBILE — Stepper */}
       <div className="md:hidden shrink-0 px-6 pt-5 flex flex-col gap-2">
         <div className="flex justify-between items-center text-sm font-semibold">
@@ -595,7 +598,9 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
             </span>
             {STEPS[step - 1]}
           </span>
-          <span className="text-gray-400 font-bold">{step} / {TOTAL}</span>
+          <span className="text-gray-400 font-bold">
+            {step} / {TOTAL}
+          </span>
         </div>
         <div className="w-full bg-gray-100 rounded-full h-1.5">
           <div
@@ -634,7 +639,11 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                 <span
                   className={[
                     'flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold',
-                    isActive ? 'bg-coral-500 text-white' : isComplete ? 'bg-lilac-500 text-white' : 'bg-cream-dark text-warm-500',
+                    isActive
+                      ? 'bg-coral-500 text-white'
+                      : isComplete
+                        ? 'bg-lilac-500 text-white'
+                        : 'bg-cream-dark text-warm-500',
                   ].join(' ')}
                 >
                   {isComplete ? '✓' : s}
@@ -646,7 +655,12 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                   {getTabSummary(s)}
                 </span>
               ) : (
-                <span className={['mt-1 text-[11px] font-bold leading-tight w-full', isActive ? 'text-warm-900' : 'text-warm-500'].join(' ')}>
+                <span
+                  className={[
+                    'mt-1 text-[11px] font-bold leading-tight w-full',
+                    isActive ? 'text-warm-900' : 'text-warm-500',
+                  ].join(' ')}
+                >
                   {label}
                 </span>
               )}
@@ -660,7 +674,9 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
               style={{ width: `${((step - 1) / (TOTAL - 1)) * 100}%` }}
             />
           </div>
-          <p className="mt-1 text-[10px] font-bold text-warm-500 text-center">{step} / {TOTAL}</p>
+          <p className="mt-1 text-[10px] font-bold text-warm-500 text-center">
+            {step} / {TOTAL}
+          </p>
         </div>
       </nav>
 
@@ -672,7 +688,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
 
         <footer className="shrink-0 pt-3 pb-4 md:pb-0 bg-white md:bg-transparent border-t border-cream-dark md:border-none">
           <div className="flex items-center gap-3">
-
             {/* ── Botón Atrás ── */}
             <button
               type="button"
@@ -733,7 +748,6 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                 🚀 ¡Empezar clase!
               </button>
             )}
-
           </div>
         </footer>
       </div>

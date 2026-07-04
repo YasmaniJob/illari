@@ -7,6 +7,8 @@ export interface AIMessage {
     contexto: string;
     accion: string;
     interpretacion: string;
+    interpretacionSugerida: string;
+    intervencion: string;
     retroalimentacion: string;
   };
   studentName?: string;
@@ -15,12 +17,16 @@ export interface AIMessage {
 
 interface AICardProps {
   message: AIMessage;
-  onUpdate: (id: string, field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion', value: string) => void;
+  onUpdate: (
+    id: string,
+    field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion' | 'intervencion' | 'interpretacionSugerida',
+    value: string,
+  ) => void;
 }
 
 function AutoResizeTextarea({ value, onChange, className }: any) {
   const ref = useRef<HTMLTextAreaElement>(null);
-  
+
   useEffect(() => {
     if (ref.current) {
       ref.current.style.height = 'auto';
@@ -28,15 +34,7 @@ function AutoResizeTextarea({ value, onChange, className }: any) {
     }
   }, [value]);
 
-  return (
-    <textarea
-      ref={ref}
-      value={value}
-      onChange={onChange}
-      rows={1}
-      className={`overflow-hidden ${className}`}
-    />
-  );
+  return <textarea ref={ref} value={value} onChange={onChange} rows={1} className={`overflow-hidden ${className}`} />;
 }
 
 // ─── Sección individual C / A / I ─────────────────────────────────────────────
@@ -97,9 +95,7 @@ function AICard({ message, onUpdate }: AICardProps) {
           <div className="min-w-0 text-left">
             <span className="text-sm font-extrabold text-warm-900">Evidencia pedagógica</span>
             {message.studentName && (
-              <span className="ml-2 text-xs font-bold text-lilac-600 capitalize">
-                · {message.studentName}
-              </span>
+              <span className="ml-2 text-xs font-bold text-lilac-600 capitalize">· {message.studentName}</span>
             )}
           </div>
         </div>
@@ -107,7 +103,10 @@ function AICard({ message, onUpdate }: AICardProps) {
           <time className="text-xs font-semibold text-warm-400">{message.timestamp}</time>
           <svg
             className={`h-4 w-4 text-warm-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
-            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
@@ -137,9 +136,25 @@ function AICard({ message, onUpdate }: AICardProps) {
             tag="I"
             tagColor="#5b21b6"
             tagBg="#ede9fe"
-            label="Interpretación pedagógica"
+            label="Interpretación curricular"
             value={cai.interpretacion}
             onChange={(v) => onUpdate(message.id, 'interpretacion', v)}
+          />
+          <CAISection
+            tag="IPS"
+            tagColor="#b45309"
+            tagBg="#fef3c7"
+            label="Interpretación pedagógica sugerida"
+            value={cai.interpretacionSugerida}
+            onChange={(v) => onUpdate(message.id, 'interpretacionSugerida', v)}
+          />
+          <CAISection
+            tag="INT"
+            tagColor="#0f766e"
+            tagBg="#ccfbf1"
+            label="Intervención pedagógica"
+            value={cai.intervencion}
+            onChange={(v) => onUpdate(message.id, 'intervencion', v)}
           />
           {/* Retroalimentación */}
           <div className="border-t border-cream-dark pt-3 pb-1 mt-1">

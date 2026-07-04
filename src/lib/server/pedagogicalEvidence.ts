@@ -1,5 +1,4 @@
-import type { CurriculumRow } from '../curriculum';
-import type { SessionConfig } from '../curriculum';
+import type { CurriculumRow, SessionConfig } from '../curriculum';
 import { groqGenerateJson } from './groq';
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
@@ -8,6 +7,8 @@ export interface EvidenciaCAI {
   contexto: string;
   accion: string;
   interpretacion: string;
+  interpretacionSugerida: string;
+  intervencion: string;
   retroalimentacion: string;
 }
 
@@ -66,7 +67,7 @@ Si la observación no se relaciona con ninguna entrada del catálogo, debes indi
 ${curriculumBlock}
 === FIN DEL CATÁLOGO ===
 
-ESTRUCTURA DE RESPUESTA — C+A+I:
+ESTRUCTURA DE RESPUESTA — C+A+I + INTERVENCION + INTERPRETACION SUGERIDA:
 1. CONTEXTO (C): Describe brevemente la situación del aula en la que ocurrió la observación. 
    - Usa lo que el docente describió. No inventes.
    
@@ -74,13 +75,16 @@ ESTRUCTURA DE RESPUESTA — C+A+I:
    - Copia o parafrasea mínimamente lo que el docente reportó.
    - No interpretes aún, solo describe el hecho.
 
-3. INTERPRETACIÓN PEDAGÓGICA (I): Vincula la acción con UNA entrada exacta del catálogo.
+3. INTERPRETACIÓN CURRICULAR (I): Vincula la acción con UNA entrada exacta del catálogo.
    - Cita textualmente el área, competencia, capacidad y criterio/desempeño del catálogo que corresponde.
    - Si no hay coincidencia exacta en el catálogo, escribe: "No se encontró en el catálogo un desempeño que corresponda a esta observación para ${edad}."
    - NO uses competencias o criterios que no estén en el catálogo.
 
-4. RETROALIMENTACIÓN: Una sola oración en primera persona sobre qué hará el docente a continuación.
-   - Debe estar basada en la interpretación pedagógica.
+4. INTERPRETACIÓN PEDAGÓGICA SUGERIDA: Explica brevemente qué aprendizajes o nociones está demostrando el niño/a mediante su acción específica (por ejemplo, relacionando sus movimientos, la manipulación de objetos o interacciones con sus habilidades en desarrollo).
+
+5. INTERVENCIÓN PEDAGÓGICA: Describe brevemente cómo debe intervenir el docente en ese momento para complejizar el aprendizaje o enriquecer el desarrollo de la competencia (por ejemplo, planteando una pregunta retadora, agregando nuevos materiales o proponiendo un reto relacionado).
+
+6. RETROALIMENTACIÓN: Una sola oración en primera persona sobre qué hará el docente a continuación para dar continuidad al aprendizaje en la próxima sesión.
 
 REGLAS DE VALIDACIÓN DE ESTUDIANTE:
 - Se te dará una lista de estudiantes. Si el registro menciona un nombre que NO está en la lista, responde solo con el campo "error".
@@ -92,6 +96,8 @@ Respuesta correcta: {
   "contexto": "...",
   "accion": "...",
   "interpretacion": "...",
+  "interpretacionSugerida": "...",
+  "intervencion": "...",
   "retroalimentacion": "...",
   "studentNameMatch": "NombreOpcional"
 }`;
@@ -151,6 +157,8 @@ Aplica la estructura C+A+I usando SOLO el catálogo curricular proporcionado.`;
       contexto: String(data.contexto ?? ''),
       accion: String(data.accion ?? ''),
       interpretacion: String(data.interpretacion ?? ''),
+      interpretacionSugerida: String(data.interpretacionSugerida ?? ''),
+      intervencion: String(data.intervencion ?? ''),
       retroalimentacion: String(data.retroalimentacion ?? ''),
     },
     studentNameMatch: data.studentNameMatch ? String(data.studentNameMatch) : undefined,

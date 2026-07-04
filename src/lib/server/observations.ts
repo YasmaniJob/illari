@@ -10,7 +10,13 @@ function formatTime(iso: string) {
 }
 
 /** Intenta parsear el campo evidencia como JSON C+A+I; si falla, trata como texto legado */
-function parseEvidencia(raw: string | null): { contexto: string; accion: string; interpretacion: string } | null {
+function parseEvidencia(raw: string | null): {
+  contexto: string;
+  accion: string;
+  interpretacion: string;
+  intervencion?: string;
+  interpretacionSugerida?: string;
+} | null {
   if (!raw) return null;
   try {
     const obj = JSON.parse(raw);
@@ -48,6 +54,8 @@ export async function listObservations(sessionId: string): Promise<ChatMessage[]
           contexto: parsed.contexto,
           accion: parsed.accion,
           interpretacion: parsed.interpretacion,
+          intervencion: parsed.intervencion ?? '',
+          interpretacionSugerida: parsed.interpretacionSugerida ?? '',
           retroalimentacion: row.retroalimentacion ?? '',
         },
         studentName: row.studentName ?? undefined,
@@ -63,6 +71,8 @@ export async function listObservations(sessionId: string): Promise<ChatMessage[]
         contexto: '',
         accion: row.evidencia ?? '',
         interpretacion: '',
+        intervencion: '',
+        interpretacionSugerida: '',
         retroalimentacion: row.retroalimentacion ?? '',
       },
       studentName: row.studentName ?? undefined,

@@ -13,7 +13,7 @@ const SAMPLE_CSV = `ciclo,edad,area,competencia,capacidad,criterio
 ciclo-II,3 años,Comunicación,Se comunica oralmente,Adapta su discurso,Identifica el propósito
 ciclo-II,5 años,Matemática,Resuelve problemas de cantidad,Traduce cantidades,Modela con operaciones
 ciclo-II,4 años,Comunicación,Escribe diversos textos,Organiza ideas,Utiliza conectores
-ciclo-I,36 meses,Personal Social,Construye su identidad,Se valora a sí mismo,Reconoce su nombre y características`;
+ciclo-I,2 años,Personal Social,Construye su identidad,Se valora a sí mismo,Reconoce su nombre y características`;
 
 describe('parseCurriculumCsv', () => {
   it('parses valid CSV into rows', () => {
@@ -45,7 +45,7 @@ describe('uniqueSorted', () => {
 describe('getEdades', () => {
   it('returns edades in curricular order', () => {
     const rows = parseCurriculumCsv(SAMPLE_CSV);
-    expect(getEdades(rows)).toStrictEqual(['36 meses', '3 años', '4 años', '5 años']);
+    expect(getEdades(rows)).toStrictEqual(['2 años', '3 años', '4 años', '5 años']);
   });
 });
 
@@ -86,7 +86,9 @@ describe('getCapacidades', () => {
 
   it('filters by edad when provided', () => {
     const rows = parseCurriculumCsv(SAMPLE_CSV);
-    expect(getCapacidades(rows, 'Comunicación', 'Se comunica oralmente', '3 años')).toStrictEqual(['Adapta su discurso']);
+    expect(getCapacidades(rows, 'Comunicación', 'Se comunica oralmente', '3 años')).toStrictEqual([
+      'Adapta su discurso',
+    ]);
     expect(getCapacidades(rows, 'Comunicación', 'Se comunica oralmente', '5 años')).toStrictEqual([]);
   });
 });

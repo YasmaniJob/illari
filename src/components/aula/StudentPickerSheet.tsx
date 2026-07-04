@@ -45,9 +45,7 @@ export default function StudentPickerSheet({
     };
   }, []);
 
-  const filtered = query.trim()
-    ? students.filter((s) => s.name.toLowerCase().includes(query.toLowerCase()))
-    : students;
+  const filtered = query.trim() ? students.filter((s) => s.name.toLowerCase().includes(query.toLowerCase())) : students;
 
   function pick(id: string | null) {
     onSelect(id);
@@ -57,11 +55,7 @@ export default function StudentPickerSheet({
   const sheet = (
     <div className="fixed inset-0 z-[9999] flex flex-col justify-end">
       {/* Overlay */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
-        onClick={onClose}
-        aria-hidden
-      />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} aria-hidden />
 
       {/* Sheet */}
       <div
@@ -79,9 +73,7 @@ export default function StudentPickerSheet({
         {/* Header */}
         <div className="px-5 pt-2 pb-3 border-b border-cream-dark shrink-0">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-base font-extrabold text-warm-900">
-              Anotar en cuaderno de…
-            </p>
+            <p className="text-base font-extrabold text-warm-900">Anotar en cuaderno de…</p>
             <button
               type="button"
               onClick={onClose}
@@ -95,8 +87,18 @@ export default function StudentPickerSheet({
           </div>
           {/* Buscador */}
           <div className="relative">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-warm-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+            <svg
+              className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-warm-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
+              />
             </svg>
             <input
               ref={searchRef}
@@ -132,7 +134,13 @@ export default function StudentPickerSheet({
                   </span>
                 </div>
                 {selectedId === null && (
-                  <svg className="h-5 w-5 shrink-0 text-honey-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <svg
+                    className="h-5 w-5 shrink-0 text-honey-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 )}
@@ -171,7 +179,13 @@ export default function StudentPickerSheet({
                   {student.name}
                 </span>
                 {selectedId === student.id && (
-                  <svg className="h-5 w-5 shrink-0 text-lilac-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <svg
+                    className="h-5 w-5 shrink-0 text-lilac-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 )}

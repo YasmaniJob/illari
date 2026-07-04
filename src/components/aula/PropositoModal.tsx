@@ -20,7 +20,7 @@ interface FieldProps {
 const ACCENT_STYLES = {
   coral: 'bg-coral-500/10 border-coral-500/20 text-coral-700',
   lilac: 'bg-lilac-100 border-lilac-200 text-lilac-800',
-  mint:  'bg-mint-400/15 border-mint-400/30 text-mint-700',
+  mint: 'bg-mint-400/15 border-mint-400/30 text-mint-700',
   honey: 'bg-honey-200/60 border-honey-400/30 text-warm-800',
 };
 
@@ -45,24 +45,21 @@ function PropositoModal({ session, onClose }: Props) {
     [onClose],
   );
 
-  const fecha = new Date(session.createdAt).toLocaleDateString('es-PE', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).replace(/\b\w/g, (c, i) => i === 0 ? c.toUpperCase() : c.toLowerCase());
+  const fecha = new Date(session.createdAt)
+    .toLocaleDateString('es-PE', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+    .replace(/\b\w/g, (c, i) => (i === 0 ? c.toUpperCase() : c.toLowerCase()));
 
-  const gradoSeccion = [
-    session.grado,
-    session.seccion ? `Sección ${session.seccion}` : null,
-  ]
+  const gradoSeccion = [session.grado, session.seccion ? `Sección ${session.seccion}` : null]
     .filter(Boolean)
     .join(' · ');
 
   // El título solo es relevante si es distinto del área (evita duplicado en header)
-  const tituloDistinto = session.titulo && session.titulo !== session.area
-    ? session.titulo
-    : null;
+  const tituloDistinto = session.titulo && session.titulo !== session.area ? session.titulo : null;
 
   return (
     <div
@@ -73,7 +70,6 @@ function PropositoModal({ session, onClose }: Props) {
       onClick={handleOverlay}
     >
       <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden">
-
         {/* ── Header ── */}
         <div className="px-6 pt-6 pb-4 bg-gradient-to-br from-lilac-100/60 via-white to-honey-200/30 border-b border-cream-dark">
           <div className="flex items-start justify-between gap-3">
@@ -96,9 +92,7 @@ function PropositoModal({ session, onClose }: Props) {
 
               {/* Título — solo si existe y es distinto del área */}
               {tituloDistinto && (
-                <h2 className="text-xl font-extrabold text-warm-900 leading-snug">
-                  {tituloDistinto}
-                </h2>
+                <h2 className="text-xl font-extrabold text-warm-900 leading-snug">{tituloDistinto}</h2>
               )}
             </div>
 
@@ -109,7 +103,17 @@ function PropositoModal({ session, onClose }: Props) {
               aria-label="Cerrar"
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-warm-400 hover:bg-gray-100 hover:text-warm-900 transition-colors focus-ring-warm"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
@@ -119,7 +123,6 @@ function PropositoModal({ session, onClose }: Props) {
 
         {/* ── Body ── */}
         <div className="px-6 py-5 space-y-4 overflow-y-auto max-h-[60vh]">
-
           {/* Propósito de aprendizaje */}
           <div className="rounded-2xl bg-gradient-to-br from-lilac-100/80 to-lilac-50 border border-lilac-200 px-5 py-4 space-y-3">
             <p className="text-[10px] font-extrabold uppercase tracking-widest text-lilac-500">
@@ -127,15 +130,14 @@ function PropositoModal({ session, onClose }: Props) {
             </p>
             <Field label="Área curricular" value={session.area} accent="lilac" />
             <Field label="Competencia" value={session.competencia} accent="lilac" large />
-            {session.capacidad && (
-              <Field label="Capacidad" value={session.capacidad} accent="lilac" />
-            )}
+            {session.capacidad && <Field label="Capacidad" value={session.capacidad} accent="lilac" />}
           </div>
 
           {/* Criterio de evaluación */}
-          {session.criterio && (
-            <Field label="Criterio de evaluación" value={session.criterio} accent="coral" />
-          )}
+          {session.criterio && <Field label="Criterio de evaluación" value={session.criterio} accent="coral" />}
+
+          {/* Evidencia de aprendizaje */}
+          {session.evidencia && <Field label="Evidencia de aprendizaje" value={session.evidencia} accent="mint" />}
         </div>
 
         {/* ── Footer ── */}

@@ -48,11 +48,31 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
             "ciclo_id": "ciclo-I",
-            "descripcion": "Este nivel tiene como base principalmente el nivel 1 de la competencia Se comunica oralmente en su lengua materna."
+            "descripcion": "Este nivel tiene como base principalmente el nivel 1 (1 año) de la competencia Se comunica oralmente en su lengua materna."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Este nivel tiene como base principalmente el nivel 1 (2 años) de la competencia Se comunica oralmente en su lengua materna."
           },
           {
             "nivel": 2,
+            "grado_id": "ini-3-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Inicia su contacto con la segunda lengua (castellano) a través de canciones y saludos sencillos, mostrando interés por escuchar y familiarizarse con sonidos básicos."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-4-anios",
+            "ciclo_id": "ciclo-II",
+            "descripcion": "Obtiene información simple de palabras frecuentes en castellano acompañadas de gestos de su interlocutor, respondiendo mediante expresiones corporales o palabras aisladas en su lengua materna."
+          },
+          {
+            "nivel": 2,
+            "grado_id": "ini-5-anios",
             "ciclo_id": "ciclo-II",
             "descripcion": "Se comunica oralmente mediante palabras o frases breves. Obtiene información de textos acompañados de expresiones corporales, gestos y tono de voz de su interlocutor. Responde a través de algunas palabras aisladas, con apoyo de gestos y expresiones corporales y de su lengua materna."
           }
@@ -60,6 +80,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-II",
+            "grado_id": "ini-5-anios",
             "edad": "5 años",
             "nivel_ciclo": "logra el nivel esperado del ciclo II",
             "nota": "El programa solo especifica desempeños para 5 años en esta área.",

@@ -76,7 +76,7 @@ describe('matchScanToCurriculum', () => {
     },
   ];
 
-  const grados = ['9 meses', '18 meses', '24 meses', '36 meses', '3 años', '4 años', '5 años'];
+  const grados = ['1 año', '2 años', '3 años', '4 años', '5 años'];
   const secciones = ['A', 'B', 'C', 'Única'];
 
   it('matches all fields when extracted data aligns', () => {

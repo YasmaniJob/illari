@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "lint": "biome check --write .",
     "lint:check": "biome check .",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "curriculum:compile": "node scripts/compile-curriculum.cjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.5",

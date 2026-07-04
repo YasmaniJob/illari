@@ -24,6 +24,13 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora de manera activa su entorno inmediato y los objetos a su alcance utilizando todos sus sentidos (mirar, tocar, oler, chupar, escuchar) por propia iniciativa, reconociendo algunas características perceptuales simples y el uso instrumental básico de los objetos cotidianos."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Explora los objetos, el espacio y hechos que acontecen en su entorno, los observa y manipula con todos sus sentidos para obtener información sobre sus características o usos, experimenta y observa los efectos que sus acciones causan sobre ellos."
           },
@@ -37,6 +44,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "9 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -45,6 +53,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "18 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -53,6 +62,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "24 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -61,6 +71,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "36 meses",
             "nivel_ciclo": "logra el nivel esperado del ciclo I",
             "descripcion": [
@@ -94,8 +105,15 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
             "ciclo_id": "ciclo-I",
-            "descripcion": "Explora por propia iniciativa los objetos y situaciones de su entorno cotidiano utilizando sus sentidos, sus propias estrategias y criterios reconociendo algunas características y estableciendo relaciones o agrupaciones entre ellos y comprende algunas expresiones sencillas relacionadas con la cantidad y el tiempo."
+            "descripcion": "Explora los objetos de su entorno inmediato utilizando sus sentidos y establece relaciones iniciales entre las características perceptuales y los usos que les asigna, reaccionando a expresiones gestuales de cantidad y tiempo del adulto."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora por propia iniciativa los objetos y situaciones de su entorno cotidian utilizando sus sentidos, sus propias estrategias y criterios reconociendo algunas características y estableciendo relaciones o agrupaciones entre ellos y comprende algunas expresiones sencillas relacionadas con la cantidad y el tiempo."
           },
           {
             "nivel": 2,
@@ -107,6 +125,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "9 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -115,6 +134,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "18 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -123,6 +143,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "24 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -132,6 +153,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "36 meses",
             "nivel_ciclo": "logra el nivel esperado del ciclo I",
             "descripcion": [
@@ -166,6 +188,13 @@
         "estandares": [
           {
             "nivel": 1,
+            "grado_id": "ini-1-anio",
+            "ciclo_id": "ciclo-I",
+            "descripcion": "Explora el espacio cercano y desplaza su cuerpo por su propia iniciativa mediante giros, gateo, parándose o caminando, descubriendo la ubicación de objetos a su alcance en relación a sí mismo."
+          },
+          {
+            "nivel": 1,
+            "grado_id": "ini-2-anios",
             "ciclo_id": "ciclo-I",
             "descripcion": "Explora el espacio en situaciones cotidianas utilizando sus sentidos y sus propias estrategias, se desplaza y reconoce su posición o la ubicación de los objetos y comprende algunas expresiones sencillas relacionadas a su ubicación."
           },
@@ -179,6 +208,7 @@
         "desempenios": [
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "9 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -187,6 +217,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-1-anio",
             "edad": "18 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -195,6 +226,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "24 meses",
             "nivel_ciclo": "en proceso al nivel esperado del ciclo I",
             "descripcion": [
@@ -203,6 +235,7 @@
           },
           {
             "ciclo_id": "ciclo-I",
+            "grado_id": "ini-2-anios",
             "edad": "36 meses",
             "nivel_ciclo": "logra el nivel esperado del ciclo I",
             "descripcion": [

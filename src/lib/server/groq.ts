@@ -44,10 +44,7 @@ function safeParseJson(raw: string, fallback: Record<string, unknown>): Record<s
 }
 
 /** Texto → JSON usando Groq (OpenAI-compatible API) */
-export async function groqGenerateJson(
-  systemPrompt: string,
-  userPrompt: string,
-): Promise<Record<string, unknown>> {
+export async function groqGenerateJson(systemPrompt: string, userPrompt: string): Promise<Record<string, unknown>> {
   const apiKey = requireApiKey();
   const model = process.env.GROQ_TEXT_MODEL ?? DEFAULT_MODEL;
 

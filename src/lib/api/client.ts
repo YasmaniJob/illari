@@ -7,8 +7,8 @@ import {
   guestGetObservations,
   guestGetStudents,
   guestPatchObservation,
-  guestSaveStudents,
   guestPatchSession,
+  guestSaveStudents,
 } from '../guest/store';
 
 async function api<T>(url: string, init?: RequestInit): Promise<T> {
@@ -99,7 +99,12 @@ export async function postEvidence(input: {
   const session = input.session ?? guestGetActiveSession();
   if (!session) throw new Error('No hay sesión activa');
 
-  const result = await api<{ userMessage: ChatMessage; aiMessage: ChatMessage; studentNameMatch?: string; isUpdate?: boolean }>('/api/guest/evidence', {
+  const result = await api<{
+    userMessage: ChatMessage;
+    aiMessage: ChatMessage;
+    studentNameMatch?: string;
+    isUpdate?: boolean;
+  }>('/api/guest/evidence', {
     method: 'POST',
     body: JSON.stringify({
       session,
@@ -141,7 +146,9 @@ export async function saveStudents(grado: string, seccion: string, names: string
 
 export async function patchSession(
   sessionId: string,
-  updates: Partial<Pick<SessionConfig, 'titulo' | 'grado' | 'seccion' | 'area' | 'competencia' | 'capacidad' | 'criterio'>> & { studentNames?: string[] },
+  updates: Partial<
+    Pick<SessionConfig, 'titulo' | 'grado' | 'seccion' | 'area' | 'competencia' | 'capacidad' | 'criterio' | 'evidencia'>
+  > & { studentNames?: string[] },
 ): Promise<SessionConfig> {
   if (await isLoggedIn()) {
     const { session } = await api<{ session: SessionConfig }>(`/api/sessions/${sessionId}`, {
