@@ -133,12 +133,12 @@ function AICard({ message, onUpdate }: AICardProps) {
             onChange={(v) => onUpdate(message.id, 'accion', v)}
           />
           <CAISection
-            tag="I"
-            tagColor="#5b21b6"
-            tagBg="#ede9fe"
-            label="Interpretación curricular"
-            value={cai.interpretacion}
-            onChange={(v) => onUpdate(message.id, 'interpretacion', v)}
+            tag="INT"
+            tagColor="#0f766e"
+            tagBg="#ccfbf1"
+            label="Intervención pedagógica"
+            value={cai.intervencion}
+            onChange={(v) => onUpdate(message.id, 'intervencion', v)}
           />
           <CAISection
             tag="IPS"
@@ -149,12 +149,12 @@ function AICard({ message, onUpdate }: AICardProps) {
             onChange={(v) => onUpdate(message.id, 'interpretacionSugerida', v)}
           />
           <CAISection
-            tag="INT"
-            tagColor="#0f766e"
-            tagBg="#ccfbf1"
-            label="Intervención pedagógica"
-            value={cai.intervencion}
-            onChange={(v) => onUpdate(message.id, 'intervencion', v)}
+            tag="I"
+            tagColor="#5b21b6"
+            tagBg="#ede9fe"
+            label="Interpretación curricular"
+            value={cai.interpretacion}
+            onChange={(v) => onUpdate(message.id, 'interpretacion', v)}
           />
           {/* Retroalimentación */}
           <div className="border-t border-cream-dark pt-3 pb-1 mt-1">

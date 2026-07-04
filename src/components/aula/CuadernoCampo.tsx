@@ -37,9 +37,9 @@ function buildStudentEvidence(
         const parts = [
           cai.contexto && `[C] ${cai.contexto}`,
           cai.accion && `[A] ${cai.accion}`,
-          cai.interpretacion && `[I] ${cai.interpretacion}`,
-          cai.interpretacionSugerida && `[IPS] ${cai.interpretacionSugerida}`,
           cai.intervencion && `[INT] ${cai.intervencion}`,
+          cai.interpretacionSugerida && `[IPS] ${cai.interpretacionSugerida}`,
+          cai.interpretacion && `[I] ${cai.interpretacion}`,
         ].filter(Boolean);
         if (parts.length) entry.evidencia = parts.join('\n');
         if (cai.retroalimentacion) entry.retroalimentacion = cai.retroalimentacion;
