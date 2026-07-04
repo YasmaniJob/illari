@@ -578,24 +578,22 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                 )}
 
                 <div>
-                  <label htmlFor="edit-criterio" className="text-xs font-bold text-warm-700 mb-1.5 block">
-                    Criterio de evaluación
-                  </label>
-
-                  {/* Botón de sugerencia IA */}
-                  <div className="mb-2 mt-1.5 flex justify-start">
+                  <div className="flex items-center justify-between gap-4 mb-2">
+                    <label htmlFor="edit-criterio" className="text-xs font-bold text-warm-700 mb-0">
+                      Criterio de evaluación
+                    </label>
                     <button
                       type="button"
                       onClick={handleSuggest}
                       disabled={loadingSuggestions}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-lilac-200 bg-lilac-50/60 px-3 py-1.5 text-xs font-bold text-warm-900 hover:bg-lilac-100/60 hover:border-lilac-400/60 transition-all duration-200 active:scale-[0.97] disabled:opacity-50 disabled:cursor-wait"
+                      className="inline-flex items-center gap-1.2 rounded-xl border border-lilac-200 bg-lilac-50/70 px-2.5 py-1 text-[11px] font-bold text-lilac-700 hover:bg-lilac-100 hover:border-lilac-300 hover:text-lilac-800 transition-all duration-200 active:scale-[0.97] disabled:opacity-50 disabled:cursor-wait shadow-sm"
                     >
                       {loadingSuggestions ? (
                         <span className="h-3 w-3 rounded-full border-2 border-lilac-500 border-t-transparent animate-spin block" />
                       ) : (
-                        <span>✨</span>
+                        <span className="text-xs animate-pulse">✨</span>
                       )}
-                      {loadingSuggestions ? 'Generando sugerencias…' : 'Sugerir criterios con IA'}
+                      <span>Sugerir criterios</span>
                     </button>
                   </div>
 

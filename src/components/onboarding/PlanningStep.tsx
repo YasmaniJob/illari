@@ -355,28 +355,27 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
       {/* Criterios — escritura libre con tag input */}
       {values.competencia && (
         <div>
-          <p className="text-sm font-bold text-warm-900 mb-1.5">Criterios de evaluación</p>
-          <p className="text-xs text-warm-500 font-semibold mb-2">
-            Escribe los criterios de tu sesión y pulsa{' '}
-            <kbd className="rounded bg-cream-dark px-1 font-mono text-[10px]">Enter</kbd> para confirmar cada uno
-          </p>
-
-          {/* Botón de sugerencia IA */}
-          <div className="mb-3.5 mt-2 flex justify-start">
+          <div className="flex items-center justify-between gap-4 mb-2">
+            <p className="text-sm font-bold text-warm-900">Criterios de evaluación</p>
             <button
               type="button"
               onClick={handleSuggest}
               disabled={loadingSuggestions}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-lilac-200 bg-lilac-50/60 px-3.5 py-2 text-xs font-bold text-warm-900 hover:bg-lilac-100/60 hover:border-lilac-400/60 transition-all duration-200 active:scale-[0.97] disabled:opacity-50 disabled:cursor-wait"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-lilac-200 bg-lilac-50/70 px-3 py-1.5 text-xs font-bold text-lilac-700 hover:bg-lilac-100 hover:border-lilac-300 hover:text-lilac-800 transition-all duration-200 active:scale-[0.97] disabled:opacity-50 disabled:cursor-wait shadow-sm"
             >
               {loadingSuggestions ? (
-                <span className="h-3 w-3 rounded-full border-2 border-lilac-500 border-t-transparent animate-spin block" />
+                <span className="h-3.5 w-3.5 rounded-full border-2 border-lilac-500 border-t-transparent animate-spin block" />
               ) : (
-                <span>✨</span>
+                <span className="text-sm animate-pulse">✨</span>
               )}
-              {loadingSuggestions ? 'Generando sugerencias…' : 'Sugerir criterios con IA'}
+              <span>Sugerir criterios</span>
             </button>
           </div>
+
+          <p className="text-xs text-warm-500 font-semibold mb-2.5">
+            Escribe los criterios de tu sesión y pulsa{' '}
+            <kbd className="rounded bg-cream-dark px-1 font-mono text-[10px]">Enter</kbd> para confirmar cada uno
+          </p>
 
           {errorSuggestions && (
             <p className="text-xs text-coral-600 font-semibold mb-2">⚠ {errorSuggestions}</p>
