@@ -70,98 +70,7 @@ export function ScanHeaderAction({ scanning, scanDone, scanError, onScan }: Scan
   );
 }
 
-// ─── Tag input para criterios (escritura libre) ───────────────────────────────
 
-interface CriteriosTagInputProps {
-  criterios: string[];
-  onChange: (criterios: string[]) => void;
-}
-
-function CriteriosTagInput({ criterios, onChange }: CriteriosTagInputProps) {
-  const [inputValue, setInputValue] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const validCriterios = criterios.filter((c) => c.trim().length >= 2);
-
-  function addCriterio(text: string) {
-    const trimmed = text.trim();
-    if (trimmed.length < 2) return;
-    if (!criterios.includes(trimmed)) {
-      onChange([...criterios.filter((c) => c.trim().length >= 2), trimmed]);
-    }
-    setInputValue('');
-  }
-
-  function removeAt(index: number) {
-    onChange(validCriterios.filter((_, i) => i !== index));
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addCriterio(inputValue);
-    }
-    if (e.key === 'Backspace' && inputValue === '' && validCriterios.length > 0) {
-      onChange(validCriterios.slice(0, -1));
-    }
-  }
-
-  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
-    const text = e.clipboardData.getData('text');
-    const lines = text
-      .split(/[\n\r,;]+/)
-      .map((s) => s.trim())
-      .filter((s) => s.length >= 2);
-    if (lines.length > 1) {
-      e.preventDefault();
-      const merged = [...new Set([...validCriterios, ...lines])];
-      onChange(merged);
-      setInputValue('');
-    }
-  }
-
-  return (
-    <div
-      className="rounded-2xl border-2 border-cream-dark bg-white px-3 py-3 flex flex-col gap-2 cursor-text transition-all duration-200"
-      onClick={() => inputRef.current?.focus()}
-    >
-      {validCriterios.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {validCriterios.map((c, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-1 rounded-xl bg-coral-500/10 border border-coral-500/30 pl-3 pr-1.5 py-1 text-xs font-semibold text-coral-700"
-            >
-              {c}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeAt(i);
-                }}
-                aria-label={`Quitar criterio: ${c}`}
-                className="flex h-4 w-4 items-center justify-center rounded-full text-coral-400 hover:bg-coral-500/20 hover:text-coral-700 transition-colors font-bold text-xs"
-              >
-                ×
-              </button>
-            </span>
-          ))}
-        </div>
-      )}
-      <input
-        ref={inputRef}
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onPaste={handlePaste}
-        placeholder={validCriterios.length === 0 ? 'Escribe un criterio y pulsa Enter…' : 'Añadir otro criterio…'}
-        className="w-full bg-transparent text-sm text-warm-900 placeholder:text-warm-400 outline-none"
-        autoComplete="off"
-      />
-    </div>
-  );
-}
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 
@@ -352,7 +261,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
         </div>
       )}
 
-      {/* Criterios — escritura libre con tag input */}
+      {/* Criterios — escritura libre con textarea */}
       {values.competencia && (
         <div>
           <div className="flex items-center justify-between gap-4 mb-2">
@@ -373,8 +282,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
           </div>
 
           <p className="text-xs text-warm-500 font-semibold mb-2.5">
-            Escribe los criterios de tu sesión y pulsa{' '}
-            <kbd className="rounded bg-cream-dark px-1 font-mono text-[10px]">Enter</kbd> para confirmar cada uno
+            Describe los criterios de tu sesión. Si tienes más de uno, escríbelos en líneas separadas.
           </p>
 
           {errorSuggestions && (
@@ -388,14 +296,16 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
               </p>
               <div className="flex flex-col gap-2">
                 {suggestions.map((sug, i) => {
-                  const alreadyAdded = values.criterios.includes(sug);
+                  const cleanAdded = values.criterios.map((c) => c.trim()).filter(Boolean);
+                  const alreadyAdded = cleanAdded.includes(sug.trim());
                   return (
                     <button
                       key={i}
                       type="button"
                       onClick={() => {
                         if (!alreadyAdded) {
-                          onChange(patch(values, { criterios: [...values.criterios, sug] }));
+                          const updated = [...values.criterios.filter((c) => c.trim().length > 0), sug];
+                          onChange(patch(values, { criterios: updated }));
                         }
                       }}
                       disabled={alreadyAdded}
@@ -415,9 +325,12 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
             </div>
           )}
 
-          <CriteriosTagInput
-            criterios={values.criterios}
-            onChange={(criterios) => onChange(patch(values, { criterios }))}
+          <textarea
+            value={values.criterios.join('\n')}
+            onChange={(e) => onChange(patch(values, { criterios: e.target.value.split('\n') }))}
+            rows={4}
+            placeholder="Escribe el o los criterios de evaluación (uno por línea)…"
+            className="input-warm text-sm resize-none"
           />
         </div>
       )}
