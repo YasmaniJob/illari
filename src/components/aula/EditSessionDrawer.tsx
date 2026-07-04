@@ -152,14 +152,16 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
   const [area, setArea] = useState(session.area);
   const [competencia, setCompetencia] = useState(session.competencia);
   const [capacidad, setCapacidad] = useState(session.capacidad);
-  const [criterio, setCriterio] = useState(session.criterio);
+  const [criterios, setCriterios] = useState<string[]>(
+    session.criterio ? session.criterio.split('; ').filter(Boolean) : ['']
+  );
   const [evidencia, setEvidencia] = useState(session.evidencia ?? '');
   const planDirty =
     titulo !== (session.titulo ?? '') ||
     area !== session.area ||
     competencia !== session.competencia ||
     capacidad !== session.capacidad ||
-    criterio !== session.criterio ||
+    criterios.filter((c) => c.trim().length >= 2).join('; ') !== (session.criterio ?? '') ||
     evidencia !== (session.evidencia ?? '');
 
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -250,20 +252,20 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
     setArea(val);
     setCompetencia('');
     setCapacidad('');
-    setCriterio('');
+    setCriterios(['']);
     setSuggestions([]);
     setErrorSuggestions(null);
   }
   function handleCompetenciaChange(val: string) {
     setCompetencia(val);
     setCapacidad('');
-    setCriterio('');
+    setCriterios(['']);
     setSuggestions([]);
     setErrorSuggestions(null);
   }
   function handleCapacidadChange(val: string) {
     setCapacidad(val);
-    setCriterio('');
+    setCriterios(['']);
     setSuggestions([]);
     setErrorSuggestions(null);
   }
@@ -317,7 +319,15 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
     setSave('planificacion', 'saving');
     setErrors((e) => ({ ...e, planificacion: undefined }));
     try {
-      const updated = await patchSession(session.id, { titulo, area, competencia, capacidad, criterio, evidencia });
+      const cleanCriterio = criterios.filter((c) => c.trim().length >= 2).join('; ');
+      const updated = await patchSession(session.id, {
+        titulo,
+        area,
+        competencia,
+        capacidad,
+        criterio: cleanCriterio,
+        evidencia,
+      });
       onSaved(updated, []);
       flashSaved('planificacion');
     } catch (err) {
@@ -579,8 +589,8 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
 
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-2">
-                    <label htmlFor="edit-criterio" className="text-xs font-bold text-warm-700 mb-0">
-                      Criterio de evaluación
+                    <label className="text-xs font-bold text-warm-700 mb-0">
+                      Criterios de evaluación
                     </label>
                     <button
                       type="button"
@@ -608,14 +618,22 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                       </p>
                       <div className="flex flex-col gap-1.5">
                         {suggestions.map((sug, i) => {
-                          const alreadyAdded = criterio.includes(sug);
+                          const cleanAdded = criterios.map((c) => c.trim()).filter(Boolean);
+                          const alreadyAdded = cleanAdded.includes(sug.trim());
                           return (
                             <button
                               key={i}
                               type="button"
                               onClick={() => {
                                 if (!alreadyAdded) {
-                                  setCriterio((prev) => (prev ? `${prev}; ${sug}` : sug));
+                                  const emptyIndex = criterios.findIndex((c) => c.trim() === '');
+                                  if (emptyIndex !== -1) {
+                                    const next = [...criterios];
+                                    next[emptyIndex] = sug;
+                                    setCriterios(next);
+                                  } else {
+                                    setCriterios((prev) => [...prev, sug]);
+                                  }
                                 }
                               }}
                               disabled={alreadyAdded}
@@ -635,14 +653,59 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                     </div>
                   )}
 
-                  <textarea
-                    id="edit-criterio"
-                    value={criterio}
-                    onChange={(e) => setCriterio(e.target.value)}
-                    rows={3}
-                    placeholder="Describe el criterio de evaluación…"
-                    className="input-warm text-sm resize-none"
-                  />
+                  {/* Lista de campos de entrada por criterio */}
+                  <div className="flex flex-col gap-2">
+                    {criterios.map((crit, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={crit}
+                          onChange={(e) => {
+                            const next = [...criterios];
+                            next[index] = e.target.value;
+                            setCriterios(next);
+                          }}
+                          placeholder={`Ej. Describe el criterio de evaluación ${index + 1}…`}
+                          className="flex-1 input-warm text-sm"
+                        />
+                        {criterios.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCriterios((prev) => prev.filter((_, i) => i !== index));
+                            }}
+                            className="p-1.5 text-warm-400 hover:text-coral-500 hover:bg-coral-500/10 rounded-lg transition-all duration-200 active:scale-[0.97]"
+                            title="Eliminar criterio"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="3 6 5 6 21 6" />
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Botón para agregar otro */}
+                  <div className="mt-2.5 flex justify-start">
+                    <button
+                      type="button"
+                      onClick={() => setCriterios((prev) => [...prev, ''])}
+                      className="inline-flex items-center gap-1 rounded-xl border border-cream-dark bg-cream/30 px-2.5 py-1.5 text-[11px] font-bold text-warm-700 hover:bg-cream transition-all duration-200 active:scale-[0.97]"
+                    >
+                      + Agregar criterio
+                    </button>
+                  </div>
                 </div>
 
                 <div>

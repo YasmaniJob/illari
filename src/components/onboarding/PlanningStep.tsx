@@ -116,6 +116,13 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
     }
   }, [isCuna, values.titulo, onChange, values]);
 
+  // Asegura tener al menos un campo de criterio vacío si hay competencia elegida
+  useEffect(() => {
+    if (values.competencia && values.criterios.length === 0) {
+      onChange(patch(values, { criterios: [''] }));
+    }
+  }, [values.competencia, values.criterios.length, onChange, values]);
+
   // Cascada curricular — filtrada por edad si se provee
   const areas = useMemo(() => getAreas(curriculum, edad), [curriculum, edad]);
 
@@ -134,7 +141,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
   function handleAreaChange(area: string) {
     setSuggestions([]);
     setErrorSuggestions(null);
-    onChange(patch(values, { area, competencia: '', capacidades: [], criterios: [], evidencia: '' }));
+    onChange(patch(values, { area, competencia: '', capacidades: [], criterios: [''], evidencia: '' }));
   }
 
   function handleCompetenciaChange(competencia: string) {
@@ -143,7 +150,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
     const capacities = competencia
       ? getCapacidades(curriculum, values.area, competencia, edad)
       : [];
-    onChange(patch(values, { competencia, capacidades: capacities, criterios: [], evidencia: '' }));
+    onChange(patch(values, { competencia, capacidades: capacities, criterios: [''], evidencia: '' }));
   }
 
   // ── Toggle capacidad ────────────────────────────────────────────────────────
@@ -282,7 +289,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
           </div>
 
           <p className="text-xs text-warm-500 font-semibold mb-2.5">
-            Describe los criterios de tu sesión. Si tienes más de uno, escríbelos en líneas separadas.
+            Define cada uno de tus criterios de evaluación. Puedes agregar más filas usando el botón de abajo.
           </p>
 
           {errorSuggestions && (
@@ -304,8 +311,14 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
                       type="button"
                       onClick={() => {
                         if (!alreadyAdded) {
-                          const updated = [...values.criterios.filter((c) => c.trim().length > 0), sug];
-                          onChange(patch(values, { criterios: updated }));
+                          const emptyIndex = values.criterios.findIndex((c) => c.trim() === '');
+                          if (emptyIndex !== -1) {
+                            const next = [...values.criterios];
+                            next[emptyIndex] = sug;
+                            onChange(patch(values, { criterios: next }));
+                          } else {
+                            onChange(patch(values, { criterios: [...values.criterios, sug] }));
+                          }
                         }
                       }}
                       disabled={alreadyAdded}
@@ -325,13 +338,62 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
             </div>
           )}
 
-          <textarea
-            value={values.criterios.join('\n')}
-            onChange={(e) => onChange(patch(values, { criterios: e.target.value.split('\n') }))}
-            rows={4}
-            placeholder="Escribe el o los criterios de evaluación (uno por línea)…"
-            className="input-warm text-sm resize-none"
-          />
+          {/* Lista de campos de entrada por criterio */}
+          <div className="flex flex-col gap-2.5">
+            {values.criterios.map((crit, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={crit}
+                  onChange={(e) => {
+                    const next = [...values.criterios];
+                    next[index] = e.target.value;
+                    onChange(patch(values, { criterios: next }));
+                  }}
+                  placeholder={`Ej. Describe el criterio de evaluación ${index + 1}…`}
+                  className="flex-1 input-warm text-sm"
+                />
+                {values.criterios.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const next = values.criterios.filter((_, i) => i !== index);
+                      onChange(patch(values, { criterios: next }));
+                    }}
+                    className="p-2 text-warm-450 hover:text-coral-500 hover:bg-coral-500/10 rounded-xl transition-all duration-250 active:scale-[0.95]"
+                    title="Eliminar criterio"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4.5 w-4.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Botón para agregar un nuevo criterio en blanco */}
+          <div className="mt-3.5">
+            <button
+              type="button"
+              onClick={() => {
+                onChange(patch(values, { criterios: [...values.criterios, ''] }));
+              }}
+              className="inline-flex items-center gap-1 rounded-xl border border-cream-dark bg-cream/30 px-3 py-1.5 text-xs font-bold text-warm-700 hover:bg-cream hover:text-warm-850 hover:border-cream-darker transition-all duration-200 active:scale-[0.97]"
+            >
+              <span className="text-sm font-extrabold">+</span> Agregar criterio
+            </button>
+          </div>
         </div>
       )}
     </div>
