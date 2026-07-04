@@ -162,6 +162,35 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
     criterio !== session.criterio ||
     evidencia !== (session.evidencia ?? '');
 
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [errorSuggestions, setErrorSuggestions] = useState<string | null>(null);
+
+  async function handleSuggest() {
+    setLoadingSuggestions(true);
+    setErrorSuggestions(null);
+    try {
+      const res = await fetch('/api/suggest-criteria', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          area,
+          competencia,
+          capacidades: capacidad ? [capacidad] : [],
+          evidencia,
+          edad: session.grado,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Error al sugerir');
+      setSuggestions(data.suggestions ?? []);
+    } catch (err) {
+      setErrorSuggestions(err instanceof Error ? err.message : 'Error al conectar con la IA');
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  }
+
   // ── Load curriculum ─────────────────────────────────────────────────────────
   useEffect(() => {
     fetch('/api/curriculum')
@@ -222,15 +251,21 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
     setCompetencia('');
     setCapacidad('');
     setCriterio('');
+    setSuggestions([]);
+    setErrorSuggestions(null);
   }
   function handleCompetenciaChange(val: string) {
     setCompetencia(val);
     setCapacidad('');
     setCriterio('');
+    setSuggestions([]);
+    setErrorSuggestions(null);
   }
   function handleCapacidadChange(val: string) {
     setCapacidad(val);
     setCriterio('');
+    setSuggestions([]);
+    setErrorSuggestions(null);
   }
 
   // ── Save helpers ────────────────────────────────────────────────────────────
@@ -546,6 +581,62 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                   <label htmlFor="edit-criterio" className="text-xs font-bold text-warm-700 mb-1.5 block">
                     Criterio de evaluación
                   </label>
+
+                  {/* Botón de sugerencia IA */}
+                  <div className="mb-2 mt-1.5 flex justify-start">
+                    <button
+                      type="button"
+                      onClick={handleSuggest}
+                      disabled={loadingSuggestions}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-lilac-200 bg-lilac-50/60 px-3 py-1.5 text-xs font-bold text-warm-900 hover:bg-lilac-100/60 hover:border-lilac-400/60 transition-all duration-200 active:scale-[0.97] disabled:opacity-50 disabled:cursor-wait"
+                    >
+                      {loadingSuggestions ? (
+                        <span className="h-3 w-3 rounded-full border-2 border-lilac-500 border-t-transparent animate-spin block" />
+                      ) : (
+                        <span>✨</span>
+                      )}
+                      {loadingSuggestions ? 'Generando sugerencias…' : 'Sugerir criterios con IA'}
+                    </button>
+                  </div>
+
+                  {errorSuggestions && (
+                    <p className="text-xs text-coral-600 font-semibold mb-2">⚠ {errorSuggestions}</p>
+                  )}
+
+                  {suggestions.length > 0 && (
+                    <div className="rounded-2xl border-2 border-dashed border-lilac-200 bg-lilac-50/20 p-3.5 mb-3">
+                      <p className="text-[10px] font-extrabold uppercase tracking-widest text-lilac-600 mb-2">
+                        Sugerencias de la IA (Haz clic para agregar)
+                      </p>
+                      <div className="flex flex-col gap-1.5">
+                        {suggestions.map((sug, i) => {
+                          const alreadyAdded = criterio.includes(sug);
+                          return (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => {
+                                if (!alreadyAdded) {
+                                  setCriterio((prev) => (prev ? `${prev}; ${sug}` : sug));
+                                }
+                              }}
+                              disabled={alreadyAdded}
+                              className={[
+                                'text-xs font-semibold leading-relaxed text-left px-3 py-2 rounded-xl border transition-all duration-200 focus:outline-none w-full',
+                                alreadyAdded
+                                  ? 'bg-cream/40 border-cream-dark text-warm-400 cursor-not-allowed'
+                                  : 'bg-white border-lilac-100 text-warm-800 hover:bg-lilac-50/40 hover:border-lilac-300 active:scale-[0.99]',
+                              ].join(' ')}
+                            >
+                              {alreadyAdded ? '✓ ' : '+ '}
+                              {sug}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   <textarea
                     id="edit-criterio"
                     value={criterio}
