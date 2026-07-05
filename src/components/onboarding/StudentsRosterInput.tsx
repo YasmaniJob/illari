@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface StudentsRosterInputProps {
   names: string[];
@@ -20,7 +20,7 @@ function parseRawText(raw: string): string[] {
         .trim(),
     )
     .filter((s) => !/\d{6,}/.test(s)) // descartar teléfonos
-    .filter((s) => !/@/.test(s)) // descartar emails
+    .filter((s) => !/@/.test(s))       // descartar emails
     .filter((s) => s.length >= 2 && s.length <= 60)
     .filter((s) => /[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]/.test(s)); // al menos una letra
 }
@@ -93,42 +93,63 @@ export function RosterHeaderActions({ onFileImport, fileError, onFileError }: Ro
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 export default function StudentsRosterInput({ names, onChange }: StudentsRosterInputProps) {
-  const [inputValue, setInputValue] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const validNames = names.filter((n) => n.trim().length >= 2);
-
-  const mergeNames = useCallback(
-    (incoming: string[]) => {
-      const existing = names.filter((n) => n.trim().length >= 2);
-      onChange([...new Set([...existing, ...incoming])]);
-    },
-    [names, onChange],
+  // rows = nombres editables; siempre termina en al menos una fila vacía
+  const [rows, setRows] = useState<string[]>(() =>
+    names.length > 0 ? names : [''],
   );
 
-  function removeChip(name: string) {
-    onChange(names.filter((n) => n !== name));
-  }
+  // Sincronizar cuando names cambia desde afuera (ej: importar archivo).
+  // Comparamos por contenido para evitar loops cuando el padre re-renderiza
+  // con una nueva referencia de array pero los mismos valores.
+  useEffect(() => {
+    const currentValid = rows.filter((r) => r.trim().length >= 2).join('||');
+    const incomingValid = names.join('||');
+    if (currentValid === incomingValid) return; // ya sincronizado
 
-  // Confirma el valor actual del input como un nombre
-  function commitInput(value: string) {
-    const trimmed = value.trim().replace(/,$/, '');
-    if (trimmed.length >= 2) mergeNames([trimmed]);
-    setInputValue('');
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      commitInput(inputValue);
+    if (names.length === 0) {
+      setRows(['']);
+    } else {
+      setRows([...names, '']);
     }
-    if (e.key === 'Backspace' && inputValue === '' && validNames.length > 0) {
-      onChange(names.filter((n) => n !== validNames[validNames.length - 1]));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [names]);
+
+  // Refs para auto-focus al añadir fila
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const commitRows = useCallback(
+    (updated: string[]) => {
+      const valid = updated.filter((r) => r.trim().length >= 2);
+      onChange(valid);
+    },
+    [onChange],
+  );
+
+  function handleChange(index: number, value: string) {
+    // Detectar paste con separadores en onChange (mobile)
+    const hasMultiline = value.includes('\n') || value.includes('\r');
+    const hasSeparators = value.includes('\t') || (value.includes(',') && value.split(',').length > 2);
+
+    if (hasMultiline || hasSeparators) {
+      const parsed = parseRawText(value);
+      if (parsed.length > 1) {
+        const before = rows.slice(0, index).filter((r) => r.trim().length >= 2);
+        const after = rows.slice(index + 1).filter((r) => r.trim().length >= 2);
+        const next = [...before, ...parsed, ...after, ''];
+        setRows(next);
+        commitRows(next);
+        // Focus última fila real
+        setTimeout(() => inputRefs.current[next.length - 1]?.focus(), 30);
+        return;
+      }
     }
+
+    const next = rows.map((r, i) => (i === index ? value : r));
+    setRows(next);
+    commitRows(next);
   }
 
-  // Paste inteligente: detecta automáticamente si es lista o nombre simple
-  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
+  function handlePaste(index: number, e: React.ClipboardEvent<HTMLInputElement>) {
     const text = e.clipboardData.getData('text');
     const parsed = parseRawText(text);
     const isMultiline = text.includes('\n') || text.includes('\r') || text.includes('\t');
@@ -136,88 +157,117 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
 
     if (isLikelyList) {
       e.preventDefault();
-      mergeNames(parsed);
-      setInputValue('');
+      const before = rows.slice(0, index).filter((r) => r.trim().length >= 2);
+      const after = rows.slice(index + 1).filter((r) => r.trim().length >= 2);
+      const next = [...before, ...parsed, ...after, ''];
+      setRows(next);
+      commitRows(next);
+      setTimeout(() => inputRefs.current[next.length - 1]?.focus(), 30);
     }
-    // Si es un solo nombre sin separadores, deja que el input lo reciba normalmente
   }
 
-  // En mobile, onChange puede recibir texto pegado sin disparar onPaste
-  // Detectamos si el nuevo valor contiene separadores y lo procesamos
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const val = e.target.value;
-    const hasMultiline = val.includes('\n') || val.includes('\r');
-    const hasSeparators = val.includes('\t') || (val.includes(',') && val.split(',').length > 2);
-
-    if (hasMultiline || hasSeparators) {
-      const parsed = parseRawText(val);
-      if (parsed.length > 1) {
-        mergeNames(parsed);
-        setInputValue('');
-        return;
-      }
-    }
-    setInputValue(val);
+  function handleRemove(index: number) {
+    const next = rows.filter((_, i) => i !== index);
+    // Garantizar al menos una fila vacía
+    const safe = next.length === 0 ? [''] : next;
+    setRows(safe);
+    commitRows(safe);
+    // Focus la fila anterior o la que quede
+    const focusIdx = Math.max(0, index - 1);
+    setTimeout(() => inputRefs.current[focusIdx]?.focus(), 30);
   }
+
+  function handleAdd() {
+    const next = [...rows, ''];
+    setRows(next);
+    setTimeout(() => inputRefs.current[next.length - 1]?.focus(), 30);
+  }
+
+  const validCount = rows.filter((r) => r.trim().length >= 2).length;
 
   return (
     <div className="flex flex-col flex-1 min-h-0 gap-3">
       {/* Contador */}
       <p className="shrink-0 text-sm font-semibold text-warm-600">
-        {validNames.length > 0
-          ? `${validNames.length} niño${validNames.length !== 1 ? 's' : ''} en la lista`
+        {validCount > 0
+          ? `${validCount} niño${validCount !== 1 ? 's' : ''} en la lista`
           : 'Escribe o pega los nombres de tu aula'}
       </p>
 
-      {/* Área de chips + input */}
-      <div
-        className="flex-1 min-h-0 rounded-2xl border-2 border-cream-dark bg-white px-3 py-3 flex flex-col gap-2 cursor-text transition-all duration-200 overflow-hidden"
-        onClick={() => inputRef.current?.focus()}
-      >
-        {validNames.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 overflow-y-auto max-h-44 pr-0.5">
-            {validNames.map((name) => (
-              <span
-                key={name}
-                className="inline-flex items-center gap-1 rounded-xl bg-lilac-100 border border-lilac-200 pl-3 pr-1.5 py-1 text-sm font-semibold text-lilac-800 transition-colors hover:bg-lilac-200/70"
-              >
-                {name}
+      {/* Lista de inputs */}
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain flex flex-col gap-2 pr-0.5">
+        {rows.map((row, index) => {
+          const isLast = index === rows.length - 1;
+          const hasValue = row.trim().length >= 2;
+          const canRemove = rows.filter((r) => r.trim().length >= 2).length > 0 && !(isLast && !hasValue && rows.length === 1);
+
+          return (
+            <div key={index} className="flex items-center gap-2">
+              {/* Número de orden */}
+              <span className="shrink-0 w-6 text-right text-sm font-bold text-warm-400 select-none">
+                {hasValue ? index + 1 : ''}
+              </span>
+
+              <input
+                ref={(el) => { inputRefs.current[index] = el; }}
+                type="text"
+                value={row}
+                onChange={(e) => handleChange(index, e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && isLast && row.trim().length >= 2) {
+                    e.preventDefault();
+                    handleAdd();
+                  }
+                }}
+                onPaste={(e) => handlePaste(index, e)}
+                placeholder={
+                  isLast && validCount > 0
+                    ? 'Añadir otro…'
+                    : 'Nombre del estudiante…'
+                }
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="words"
+                className="flex-1 input-warm py-3"
+              />
+
+              {/* Botón eliminar — solo si hay contenido en esa fila */}
+              {hasValue && (
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeChip(name);
-                  }}
-                  aria-label={`Quitar ${name}`}
-                  className="flex h-4 w-4 items-center justify-center rounded-full text-lilac-500 hover:bg-lilac-300 hover:text-lilac-900 transition-colors text-xs font-bold"
+                  onClick={() => handleRemove(index)}
+                  className="p-2 text-warm-400 hover:text-coral-500 hover:bg-coral-500/10 rounded-xl transition-all duration-200 active:scale-[0.95]"
+                  title="Eliminar estudiante"
+                  aria-label={`Eliminar ${row}`}
                 >
-                  ×
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  </svg>
                 </button>
-              </span>
-            ))}
-          </div>
-        )}
+              )}
 
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputValue}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-          onBlur={() => commitInput(inputValue)}
-          placeholder={validNames.length === 0 ? 'Escribe un nombre o pega la lista completa…' : 'Añadir otro…'}
-          className="w-full bg-transparent text-base text-warm-900 placeholder:text-warm-400 outline-none min-w-[120px]"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="words"
-        />
+              {/* Botón + — solo en la última fila, habilitado si tiene valor */}
+              {isLast && (
+                <button
+                  type="button"
+                  disabled={!hasValue}
+                  onClick={handleAdd}
+                  className="shrink-0 flex items-center justify-center h-[52px] w-[52px] rounded-xl border-2 border-dashed border-cream-dark bg-white text-warm-500 hover:border-coral-500/40 hover:text-coral-500 hover:bg-coral-500/5 transition-all duration-200 active:scale-[0.95] disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100"
+                  title="Añadir estudiante"
+                  aria-label="Añadir estudiante"
+                >
+                  <span aria-hidden="true" className="text-xl font-light leading-none">+</span>
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Hint mínimo */}
+      {/* Hint */}
       <p className="shrink-0 text-xs text-warm-500 font-semibold">
-        Escribe y pulsa <kbd className="rounded bg-cream-dark px-1 py-0.5 font-mono text-[10px]">Enter</kbd>, o pega
-        directamente desde WhatsApp, Word o Excel
+        Puedes pegar la lista completa desde WhatsApp, Word o Excel
       </p>
     </div>
   );

@@ -80,6 +80,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [errorSuggestions, setErrorSuggestions] = useState<string | null>(null);
+  const criterioRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   async function handleSuggest() {
     setLoadingSuggestions(true);
@@ -345,12 +346,21 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
               return (
                 <div key={index} className="flex items-center gap-2">
                   <input
+                    ref={(el) => { criterioRefs.current[index] = el; }}
                     type="text"
                     value={crit}
                     onChange={(e) => {
                       const next = [...values.criterios];
                       next[index] = e.target.value;
                       onChange(patch(values, { criterios: next }));
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && isLast && crit.trim() !== '') {
+                        e.preventDefault();
+                        const next = [...values.criterios, ''];
+                        onChange(patch(values, { criterios: next }));
+                        setTimeout(() => criterioRefs.current[next.length - 1]?.focus(), 30);
+                      }
                     }}
                     placeholder={`Ej. Describe el criterio de evaluación ${index + 1}…`}
                     className="flex-1 input-warm"
@@ -384,7 +394,11 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
                     <button
                       type="button"
                       disabled={crit.trim() === ''}
-                      onClick={() => onChange(patch(values, { criterios: [...values.criterios, ''] }))}
+                      onClick={() => {
+                        const next = [...values.criterios, ''];
+                        onChange(patch(values, { criterios: next }));
+                        setTimeout(() => criterioRefs.current[next.length - 1]?.focus(), 30);
+                      }}
                       className="shrink-0 flex items-center justify-center h-[52px] w-[52px] rounded-xl border-2 border-dashed border-cream-dark bg-white text-warm-500 hover:border-coral-500/40 hover:text-coral-500 hover:bg-coral-500/5 transition-all duration-200 active:scale-[0.95] disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100"
                       title="Agregar criterio"
                       aria-label="Agregar criterio"

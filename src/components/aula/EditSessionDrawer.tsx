@@ -155,6 +155,7 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
   const [criterios, setCriterios] = useState<string[]>(
     session.criterio ? session.criterio.split('; ').filter(Boolean) : ['']
   );
+  const criterioRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [evidencia, setEvidencia] = useState(session.evidencia ?? '');
   const planDirty =
     titulo !== (session.titulo ?? '') ||
@@ -660,12 +661,23 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                       return (
                         <div key={index} className="flex items-center gap-2">
                           <input
+                            ref={(el) => { criterioRefs.current[index] = el; }}
                             type="text"
                             value={crit}
                             onChange={(e) => {
                               const next = [...criterios];
                               next[index] = e.target.value;
                               setCriterios(next);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && isLast && crit.trim() !== '') {
+                                e.preventDefault();
+                                setCriterios((prev) => {
+                                  const next = [...prev, ''];
+                                  setTimeout(() => criterioRefs.current[next.length - 1]?.focus(), 30);
+                                  return next;
+                                });
+                              }
                             }}
                             placeholder={`Ej. Describe el criterio de evaluación ${index + 1}…`}
                             className="flex-1 input-warm"
@@ -687,7 +699,11 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                             <button
                               type="button"
                               disabled={crit.trim() === ''}
-                              onClick={() => setCriterios((prev) => [...prev, ''])}
+                              onClick={() => setCriterios((prev) => {
+                                const next = [...prev, ''];
+                                setTimeout(() => criterioRefs.current[next.length - 1]?.focus(), 30);
+                                return next;
+                              })}
                               className="shrink-0 flex items-center justify-center h-[52px] w-[52px] rounded-xl border-2 border-dashed border-cream-dark bg-white text-warm-500 hover:border-coral-500/40 hover:text-coral-500 hover:bg-coral-500/5 transition-all duration-200 active:scale-[0.95] disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100"
                               title="Agregar criterio"
                               aria-label="Agregar criterio"
