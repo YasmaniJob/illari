@@ -51,11 +51,10 @@
     cursor: pointer;
   }
 
-  /* ── Suprimir outline del browser globalmente ───────────────────────────────
-     Usamos nuestros propios focus rings vía focus:ring-* de Tailwind.
-     Framer Motion no siempre hereda outline:none de className. */
-  *:focus,
-  *:focus-visible {
+  /* ── Suprimir outline del browser solo donde hay ring propio ───────────────
+     Solo suprimimos el outline en elementos que gestionan su propio focus
+     con focus-ring-warm. El resto conserva el outline nativo como fallback. */
+  *:focus:not(:focus-visible) {
     outline: none;
   }
 
@@ -120,11 +119,11 @@
   }
 
   .input-warm {
-    @apply w-full rounded-2xl border-2 border-cream-dark bg-white px-5 py-4 text-lg text-warm-900 placeholder:text-warm-500/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus:outline-none;
+    @apply w-full rounded-2xl border-2 border-cream-dark bg-white px-5 py-4 text-lg text-warm-900 placeholder:text-warm-500/70 shadow-[0_2px_8px_-2px_rgba(61,44,41,0.06)] transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:border-coral-500/60 focus-visible:shadow-[inset_0_0_0_2px_rgba(224,122,95,0.25),0_2px_8px_-2px_rgba(61,44,41,0.06)];
   }
 
   .focus-ring-warm {
-    @apply transition-all duration-200 ease-in-out focus:outline-none;
+    @apply transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coral-500/60;
   }
 
   .text-display {

@@ -655,56 +655,49 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
 
                   {/* Lista de campos de entrada por criterio */}
                   <div className="flex flex-col gap-2">
-                    {criterios.map((crit, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <input
-                          type="text"
-                          value={crit}
-                          onChange={(e) => {
-                            const next = [...criterios];
-                            next[index] = e.target.value;
-                            setCriterios(next);
-                          }}
-                          placeholder={`Ej. Describe el criterio de evaluación ${index + 1}…`}
-                          className="flex-1 input-warm text-sm"
-                        />
-                        {criterios.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCriterios((prev) => prev.filter((_, i) => i !== index));
+                    {criterios.map((crit, index) => {
+                      const isLast = index === criterios.length - 1;
+                      return (
+                        <div key={index} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={crit}
+                            onChange={(e) => {
+                              const next = [...criterios];
+                              next[index] = e.target.value;
+                              setCriterios(next);
                             }}
-                            className="p-1.5 text-warm-400 hover:text-coral-500 hover:bg-coral-500/10 rounded-lg transition-all duration-200 active:scale-[0.97]"
-                            title="Eliminar criterio"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
+                            placeholder={`Ej. Describe el criterio de evaluación ${index + 1}…`}
+                            className="flex-1 input-warm"
+                          />
+                          {criterios.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => setCriterios((prev) => prev.filter((_, i) => i !== index))}
+                              className="p-1.5 text-warm-400 hover:text-coral-500 hover:bg-coral-500/10 rounded-lg transition-all duration-200 active:scale-[0.97]"
+                              title="Eliminar criterio"
                             >
-                              <polyline points="3 6 5 6 21 6" />
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Botón para agregar otro */}
-                  <div className="mt-2.5 flex justify-start">
-                    <button
-                      type="button"
-                      onClick={() => setCriterios((prev) => [...prev, ''])}
-                      className="inline-flex items-center gap-1 rounded-xl border border-cream-dark bg-cream/30 px-2.5 py-1.5 text-[11px] font-bold text-warm-700 hover:bg-cream transition-all duration-200 active:scale-[0.97]"
-                    >
-                      + Agregar criterio
-                    </button>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                              </svg>
+                            </button>
+                          )}
+                          {isLast && (
+                            <button
+                              type="button"
+                              disabled={crit.trim() === ''}
+                              onClick={() => setCriterios((prev) => [...prev, ''])}
+                              className="shrink-0 flex items-center justify-center h-[52px] w-[52px] rounded-xl border-2 border-dashed border-cream-dark bg-white text-warm-500 hover:border-coral-500/40 hover:text-coral-500 hover:bg-coral-500/5 transition-all duration-200 active:scale-[0.95] disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100"
+                              title="Agregar criterio"
+                              aria-label="Agregar criterio"
+                            >
+                              <span aria-hidden="true" className="text-xl font-light leading-none">+</span>
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
