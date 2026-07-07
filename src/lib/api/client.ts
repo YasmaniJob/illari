@@ -147,7 +147,10 @@ export async function saveStudents(grado: string, seccion: string, names: string
 export async function patchSession(
   sessionId: string,
   updates: Partial<
-    Pick<SessionConfig, 'titulo' | 'grado' | 'seccion' | 'area' | 'competencia' | 'capacidad' | 'criterio' | 'evidencia'>
+    Pick<
+      SessionConfig,
+      'titulo' | 'grado' | 'seccion' | 'area' | 'competencia' | 'capacidad' | 'criterio' | 'evidencia'
+    >
   > & { studentNames?: string[] },
 ): Promise<SessionConfig> {
   if (await isLoggedIn()) {

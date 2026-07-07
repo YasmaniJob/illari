@@ -153,7 +153,7 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
   const [competencia, setCompetencia] = useState(session.competencia);
   const [capacidad, setCapacidad] = useState(session.capacidad);
   const [criterios, setCriterios] = useState<string[]>(
-    session.criterio ? session.criterio.split('; ').filter(Boolean) : ['']
+    session.criterio ? session.criterio.split('; ').filter(Boolean) : [''],
   );
   const criterioRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [evidencia, setEvidencia] = useState(session.evidencia ?? '');
@@ -590,9 +590,7 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
 
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-2">
-                    <label className="text-xs font-bold text-warm-700 mb-0">
-                      Criterios de evaluación
-                    </label>
+                    <label className="text-xs font-bold text-warm-700 mb-0">Criterios de evaluación</label>
                     <button
                       type="button"
                       onClick={handleSuggest}
@@ -661,7 +659,9 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                       return (
                         <div key={index} className="flex items-center gap-2">
                           <input
-                            ref={(el) => { criterioRefs.current[index] = el; }}
+                            ref={(el) => {
+                              criterioRefs.current[index] = el;
+                            }}
                             type="text"
                             value={crit}
                             onChange={(e) => {
@@ -689,7 +689,16 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                               className="p-1.5 text-warm-400 hover:text-coral-500 hover:bg-coral-500/10 rounded-lg transition-all duration-200 active:scale-[0.97]"
                               title="Eliminar criterio"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
                                 <polyline points="3 6 5 6 21 6" />
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                               </svg>
@@ -699,16 +708,20 @@ function EditSessionDrawer({ session, onClose, onSaved }: Props) {
                             <button
                               type="button"
                               disabled={crit.trim() === ''}
-                              onClick={() => setCriterios((prev) => {
-                                const next = [...prev, ''];
-                                setTimeout(() => criterioRefs.current[next.length - 1]?.focus(), 30);
-                                return next;
-                              })}
+                              onClick={() =>
+                                setCriterios((prev) => {
+                                  const next = [...prev, ''];
+                                  setTimeout(() => criterioRefs.current[next.length - 1]?.focus(), 30);
+                                  return next;
+                                })
+                              }
                               className="shrink-0 flex items-center justify-center h-[52px] w-[52px] rounded-xl border-2 border-dashed border-cream-dark bg-white text-warm-500 hover:border-coral-500/40 hover:text-coral-500 hover:bg-coral-500/5 transition-all duration-200 active:scale-[0.95] disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100"
                               title="Agregar criterio"
                               aria-label="Agregar criterio"
                             >
-                              <span aria-hidden="true" className="text-xl font-light leading-none">+</span>
+                              <span aria-hidden="true" className="text-xl font-light leading-none">
+                                +
+                              </span>
                             </button>
                           )}
                         </div>

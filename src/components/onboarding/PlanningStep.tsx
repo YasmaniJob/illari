@@ -70,8 +70,6 @@ export function ScanHeaderAction({ scanning, scanDone, scanError, onScan }: Scan
   );
 }
 
-
-
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 export default function PlanningStep({ curriculum, edad, values, onChange }: PlanningStepProps) {
@@ -133,8 +131,8 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
   );
 
   const todasCapacidades = useMemo(
-    () => (values.area && values.competencia ? getCapacidades(curriculum, values.area, values.competencia, edad) : []),
-    [curriculum, values.area, values.competencia, edad],
+    () => (values.area && values.competencia ? getCapacidades(curriculum, values.area, values.competencia) : []),
+    [curriculum, values.area, values.competencia],
   );
 
   // ── Cascada ─────────────────────────────────────────────────────────────────
@@ -148,9 +146,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
   function handleCompetenciaChange(competencia: string) {
     setSuggestions([]);
     setErrorSuggestions(null);
-    const capacities = competencia
-      ? getCapacidades(curriculum, values.area, competencia, edad)
-      : [];
+    const capacities = competencia ? getCapacidades(curriculum, values.area, competencia) : [];
     onChange(patch(values, { competencia, capacidades: capacities, criterios: [''], evidencia: '' }));
   }
 
@@ -293,9 +289,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
             Define cada uno de tus criterios de evaluación. Puedes agregar más filas usando el botón de abajo.
           </p>
 
-          {errorSuggestions && (
-            <p className="text-xs text-coral-600 font-semibold mb-2">⚠ {errorSuggestions}</p>
-          )}
+          {errorSuggestions && <p className="text-xs text-coral-600 font-semibold mb-2">⚠ {errorSuggestions}</p>}
 
           {suggestions.length > 0 && (
             <div className="rounded-2xl border-2 border-dashed border-lilac-200 bg-lilac-50/20 p-4 mb-3.5">
@@ -346,7 +340,9 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
               return (
                 <div key={index} className="flex items-center gap-2">
                   <input
-                    ref={(el) => { criterioRefs.current[index] = el; }}
+                    ref={(el) => {
+                      criterioRefs.current[index] = el;
+                    }}
                     type="text"
                     value={crit}
                     onChange={(e) => {
@@ -403,7 +399,9 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
                       title="Agregar criterio"
                       aria-label="Agregar criterio"
                     >
-                      <span aria-hidden="true" className="text-xl font-light leading-none">+</span>
+                      <span aria-hidden="true" className="text-xl font-light leading-none">
+                        +
+                      </span>
                     </button>
                   )}
                 </div>

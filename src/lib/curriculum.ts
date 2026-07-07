@@ -7,20 +7,62 @@ export interface CurriculumRow {
   criterio: string;
 }
 
+/**
+ * Parsea una línea CSV respetando el estándar RFC 4180:
+ * los campos pueden estar entre comillas dobles y contener comas internas.
+ */
+function parseCsvLine(line: string): string[] {
+  const fields: string[] = [];
+  let i = 0;
+  while (i <= line.length) {
+    if (line[i] === '"') {
+      // Campo entrecomillado
+      let field = '';
+      i++; // saltar la comilla de apertura
+      while (i < line.length) {
+        if (line[i] === '"') {
+          if (line[i + 1] === '"') {
+            // Comilla escapada
+            field += '"';
+            i += 2;
+          } else {
+            // Comilla de cierre
+            i++;
+            break;
+          }
+        } else {
+          field += line[i++];
+        }
+      }
+      fields.push(field.trim());
+      // Saltar la coma separadora
+      if (line[i] === ',') i++;
+    } else {
+      // Campo sin comillas: leer hasta la siguiente coma
+      const end = line.indexOf(',', i);
+      if (end === -1) {
+        fields.push(line.slice(i).trim());
+        break;
+      }
+      fields.push(line.slice(i, end).trim());
+      i = end + 1;
+    }
+  }
+  return fields;
+}
+
 export function parseCurriculumCsv(raw: string): CurriculumRow[] {
   const lines = raw.trim().split(/\r?\n/);
   const [header, ...rows] = lines;
-  const cols = header.split(',').map((c) => c.trim());
+  const cols = parseCsvLine(header);
 
   return rows
     .filter((line) => line.trim().length > 0)
     .map((line) => {
-      // Split only on the first N-1 commas (last field may contain commas)
-      const parts = line.split(',');
+      const parts = parseCsvLine(line);
       const row: Record<string, string> = {};
       cols.forEach((col, i) => {
-        // Join remaining parts into the last column
-        row[col] = (i === cols.length - 1 ? parts.slice(i).join(',') : (parts[i] ?? '')).trim();
+        row[col] = (parts[i] ?? '').trim();
       });
       return row as unknown as CurriculumRow;
     });
@@ -40,6 +82,14 @@ export function getCompetencias(data: CurriculumRow[], area: string, edad?: stri
   return uniqueSorted(filtered.map((r) => r.competencia));
 }
 
+/**
+ * Obtiene las capacidades asociadas a una competencia y área.
+ * 
+ * @warning EVITAR filtrar por 'edad' en interfaces de planificación de sesiones. 
+ * Las capacidades son estructurales y fijas para cada competencia en toda la Educación Inicial.
+ * Filtrar por edad limita al docente, ocultando capacidades oficiales solo porque no tienen 
+ * desempeños asignados para esa edad en el CSV.
+ */
 export function getCapacidades(data: CurriculumRow[], area: string, competencia: string, edad?: string): string[] {
   const filtered = data.filter((r) => r.area === area && r.competencia === competencia && (!edad || r.edad === edad));
   return uniqueSorted(filtered.map((r) => r.capacidad));

@@ -20,7 +20,7 @@ function parseRawText(raw: string): string[] {
         .trim(),
     )
     .filter((s) => !/\d{6,}/.test(s)) // descartar teléfonos
-    .filter((s) => !/@/.test(s))       // descartar emails
+    .filter((s) => !/@/.test(s)) // descartar emails
     .filter((s) => s.length >= 2 && s.length <= 60)
     .filter((s) => /[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]/.test(s)); // al menos una letra
 }
@@ -94,9 +94,7 @@ export function RosterHeaderActions({ onFileImport, fileError, onFileError }: Ro
 
 export default function StudentsRosterInput({ names, onChange }: StudentsRosterInputProps) {
   // rows = nombres editables; siempre termina en al menos una fila vacía
-  const [rows, setRows] = useState<string[]>(() =>
-    names.length > 0 ? names : [''],
-  );
+  const [rows, setRows] = useState<string[]>(() => (names.length > 0 ? names : ['']));
 
   // Sincronizar cuando names cambia desde afuera (ej: importar archivo).
   // Comparamos por contenido para evitar loops cuando el padre re-renderiza
@@ -111,7 +109,7 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
     } else {
       setRows([...names, '']);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [names]);
 
   // Refs para auto-focus al añadir fila
@@ -199,7 +197,8 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
         {rows.map((row, index) => {
           const isLast = index === rows.length - 1;
           const hasValue = row.trim().length >= 2;
-          const canRemove = rows.filter((r) => r.trim().length >= 2).length > 0 && !(isLast && !hasValue && rows.length === 1);
+          const canRemove =
+            rows.filter((r) => r.trim().length >= 2).length > 0 && !(isLast && !hasValue && rows.length === 1);
 
           return (
             <div key={index} className="flex items-center gap-2">
@@ -209,7 +208,9 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
               </span>
 
               <input
-                ref={(el) => { inputRefs.current[index] = el; }}
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
                 type="text"
                 value={row}
                 onChange={(e) => handleChange(index, e.target.value)}
@@ -220,11 +221,7 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
                   }
                 }}
                 onPaste={(e) => handlePaste(index, e)}
-                placeholder={
-                  isLast && validCount > 0
-                    ? 'Añadir otro…'
-                    : 'Nombre del estudiante…'
-                }
+                placeholder={isLast && validCount > 0 ? 'Añadir otro…' : 'Nombre del estudiante…'}
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="words"
@@ -240,7 +237,16 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
                   title="Eliminar estudiante"
                   aria-label={`Eliminar ${row}`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <polyline points="3 6 5 6 21 6" />
                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                   </svg>
@@ -257,7 +263,9 @@ export default function StudentsRosterInput({ names, onChange }: StudentsRosterI
                   title="Añadir estudiante"
                   aria-label="Añadir estudiante"
                 >
-                  <span aria-hidden="true" className="text-xl font-light leading-none">+</span>
+                  <span aria-hidden="true" className="text-xl font-light leading-none">
+                    +
+                  </span>
                 </button>
               )}
             </div>

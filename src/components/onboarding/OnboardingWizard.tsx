@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { createSession, saveStudents } from '../../lib/api/client';
-import type { CurriculumRow } from '../../lib/curriculum';
+import { type CurriculumRow, getCapacidades } from '../../lib/curriculum';
 import type { MatchedScanResult } from '../../lib/curriculumMatch';
 import { compressImageForScan } from '../../lib/scan/compressImage';
 import CardStack, { type CardDirection } from './CardStack';
@@ -16,7 +16,7 @@ const STEP_EMOJI: Record<number, string> = { 1: '🏫', 2: '👥', 3: '📚' };
 const TOTAL = STEPS.length;
 
 const CICLO_I_ITEMS = [
-  { key: '1 año',  emoji: '🍼', bg: '#fce7f3', border: '#f9a8d4', label: '#be185d' },
+  { key: '1 año', emoji: '🍼', bg: '#fce7f3', border: '#f9a8d4', label: '#be185d' },
   { key: '2 años', emoji: '🌱', bg: '#d1fae5', border: '#6ee7b7', label: '#065f46' },
 ] as const;
 
@@ -374,7 +374,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       if (prev.includes(key)) {
         return prev.filter((g) => g !== key);
       }
-      
+
       if (isCicloI) {
         // Clear Ciclo II grades when choosing a Ciclo I grade
         return [...prev.filter((g) => !['3 años', '4 años', '5 años'].includes(g)), key];
@@ -476,14 +476,19 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       const data = (await res.json()) as { matched: MatchedScanResult; error?: string };
       if (!res.ok) throw new Error(data.error ?? 'Error al escanear');
       const m = data.matched;
-      setPlanning((prev) => ({
-        titulo: m.titulo.value || prev.titulo,
-        area: m.area.value || prev.area,
-        competencia: m.competencia.value || prev.competencia,
-        capacidades: [],
-        criterios: m.criterio.value ? [m.criterio.value] : prev.criterios,
-        evidencia: prev.evidencia,
-      }));
+      setPlanning((prev) => {
+        const area = m.area.value || prev.area;
+        const competencia = m.competencia.value || prev.competencia;
+        const capacities = competencia ? getCapacidades(curriculum, area, competencia) : [];
+        return {
+          titulo: m.titulo.value || prev.titulo,
+          area,
+          competencia,
+          capacidades: capacities,
+          criterios: m.criterio.value ? [m.criterio.value] : prev.criterios,
+          evidencia: prev.evidencia,
+        };
+      });
       setScanDone(true);
     } catch (err) {
       setScanError(err instanceof Error ? err.message : 'No se pudo analizar la imagen.');

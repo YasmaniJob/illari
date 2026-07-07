@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Reconstruct previous CAI note if it exists
-    let previousNote: EvidenciaCAI | undefined = undefined;
+    let previousNote: EvidenciaCAI | undefined;
     if (existingAIObs?.evidencia) {
       try {
         const parsed = JSON.parse(existingAIObs.evidencia);

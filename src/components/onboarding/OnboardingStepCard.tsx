@@ -18,7 +18,9 @@ export default function OnboardingStepCard({ title, hint, headerActions, childre
         </div>
         {headerActions && <div className="shrink-0 flex items-center gap-2">{headerActions}</div>}
       </header>
-      <div className="mt-4 flex-1 min-h-0 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain">{children}</div>
+      <div className="mt-4 flex-1 min-h-0 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain">
+        {children}
+      </div>
     </article>
   );
 }

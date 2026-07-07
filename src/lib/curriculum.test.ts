@@ -34,6 +34,15 @@ describe('parseCurriculumCsv', () => {
     expect(parseCurriculumCsv('')).toHaveLength(0);
     expect(parseCurriculumCsv('header1,header2\n')).toHaveLength(0);
   });
+  it('parses quoted fields containing commas (RFC 4180)', () => {
+    const csv = `ciclo,edad,area,competencia,capacidad,criterio
+ciclo-I,3 años,Matemática,"Resuelve problemas de forma, movimiento y localización",Modela objetos con formas geométricas,Describe relaciones espaciales`;
+    const rows = parseCurriculumCsv(csv);
+    expect(rows).toHaveLength(1);
+    expect(rows[0].competencia).toBe('Resuelve problemas de forma, movimiento y localización');
+    expect(rows[0].capacidad).toBe('Modela objetos con formas geométricas');
+    expect(rows[0].criterio).toBe('Describe relaciones espaciales');
+  });
 });
 
 describe('uniqueSorted', () => {
