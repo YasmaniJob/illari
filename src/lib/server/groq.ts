@@ -63,7 +63,7 @@ export async function groqGenerateJson(systemPrompt: string, userPrompt: string)
           { role: 'user', content: userPrompt },
         ],
         temperature: 0.2,
-        max_tokens: 1024,
+        max_tokens: 2048,
         response_format: { type: 'json_object' },
       }),
     },

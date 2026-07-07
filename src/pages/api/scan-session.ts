@@ -4,6 +4,7 @@ import { GRADOS, SECCIONES } from '../../lib/classroom';
 import { parseCurriculumCsv } from '../../lib/curriculum';
 import { type ExtractedScanFields, matchScanToCurriculum } from '../../lib/curriculumMatch';
 import { buildCatalogPromptAppendix } from '../../lib/scan/catalog';
+import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
 import { GeminiNotConfiguredError, geminiVisionJson } from '../../lib/server/googleGemini';
 
 export const prerender = false;
@@ -41,6 +42,9 @@ async function extractWithVision(imageBase64: string, mimeType: string): Promise
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  const user = await requireUser(request);
+  if (!user) return unauthorizedResponse();
+
   try {
     const body = await request.json();
     const imageBase64 = body?.imageBase64 as string | undefined;
