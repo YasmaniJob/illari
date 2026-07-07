@@ -122,7 +122,7 @@ export default function PlanningStep({ curriculum, edad, values, onChange }: Pla
     }
   }, [values.competencia, values.criterios.length, onChange, values]);
 
-  // Cascada curricular — filtrada por edad si se provee
+  // Cascada curricular — áreas y competencias filtradas por edad; capacidades no (son fijas por competencia)
   const areas = useMemo(() => getAreas(curriculum, edad), [curriculum, edad]);
 
   const competencias = useMemo(

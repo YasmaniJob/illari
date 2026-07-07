@@ -30,17 +30,6 @@ const SECCIONES_FIJAS = ['A', 'B', 'C', 'D', 'Única'] as const;
 
 // ─── Util ─────────────────────────────────────────────────────────────────────
 
-function getCapacidadFromCriterio(
-  curriculum: CurriculumRow[],
-  area: string,
-  competencia: string,
-  criterio: string,
-): string {
-  return (
-    curriculum.find((r) => r.area === area && r.competencia === competencia && r.criterio === criterio)?.capacidad ?? ''
-  );
-}
-
 // ─── GradoCard — con tilt 3D (Framer Motion) ────────────────────────────────
 
 interface GradoCardProps {
@@ -513,7 +502,10 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         seccion: seccion,
         area: planning.area,
         competencia: planning.competencia,
-        capacidad: getCapacidadFromCriterio(curriculum, planning.area, planning.competencia, primaryCriterio),
+        // Usamos la primera capacidad que el docente seleccionó explícitamente en el Wizard.
+        // Al elegir una competencia todas las capacidades se auto-seleccionan, por lo que
+        // planning.capacidades[0] siempre está disponible cuando area+competencia están definidos.
+        capacidad: planning.capacidades[0] ?? '',
         criterio,
         evidencia: planning.evidencia.trim(),
       });
