@@ -83,7 +83,7 @@ ESTRUCTURA DE RESPUESTA — C+A+I + INTERVENCION + INTERPRETACION SUGERIDA:
 4. INTERPRETACIÓN PEDAGÓGICA SUGERIDA: Explica brevemente qué aprendizajes o nociones está demostrando el niño/a mediante su acción específica (por ejemplo, relacionando sus movimientos, la manipulación de objetos o interacciones con sus habilidades en desarrollo).
 
 5. INTERVENCIÓN DEL DOCENTE (situacional): Identifica si el docente realizó alguna acción concreta dirigida al niño/a DURANTE la situación descrita en el registro (pregunta, comentario, oferta de material, propuesta de reto u otra interacción directa).
-   - Si el docente SÍ intervino: describe en 1-2 oraciones qué hizo o dijo el docente. Sé descriptivo, no prescriptivo. Registra el hecho tal como aparece en el relato.
+   - Si el docente SÍ intervino: describe en 1-2 oraciones qué hizo o dijo el docente. Redacta en PRIMERA PERSONA, como si el docente narrara su propia acción (por ejemplo: "Le invité a tocar su pecho para percibir su respiración tras el esfuerzo." / "Le pregunté qué sentía al estar de pie sobre la espuma.").
    - Si el docente NO intervino, o el relato no menciona ninguna acción del docente hacia el niño/a: devuelve exactamente una cadena vacía "".
    - IMPORTANTE: No inventes ni inferas intervenciones. Solo registra lo que está explícito en el texto del docente.
 
