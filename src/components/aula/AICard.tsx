@@ -24,7 +24,7 @@ interface AICardProps {
   ) => void;
 }
 
-function AutoResizeTextarea({ value, onChange, className }: any) {
+function AutoResizeTextarea({ value, onChange, className, placeholder }: any) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ function AutoResizeTextarea({ value, onChange, className }: any) {
     }
   }, [value]);
 
-  return <textarea ref={ref} value={value} onChange={onChange} rows={1} className={`overflow-hidden ${className}`} />;
+  return <textarea ref={ref} value={value} onChange={onChange} rows={1} placeholder={placeholder} className={`overflow-hidden ${className}`} />;
 }
 
 // ─── Sección individual C / A / I ─────────────────────────────────────────────
@@ -46,9 +46,10 @@ interface CAISectionProps {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  placeholder?: string;
 }
 
-function CAISection({ tag, tagColor, tagBg, label, value, onChange }: CAISectionProps) {
+function CAISection({ tag, tagColor, tagBg, label, value, onChange, placeholder }: CAISectionProps) {
   return (
     <div className="flex gap-3">
       {/* Tag lateral */}
@@ -69,7 +70,8 @@ function CAISection({ tag, tagColor, tagBg, label, value, onChange }: CAISection
         <AutoResizeTextarea
           value={value}
           onChange={(e: any) => onChange(e.target.value)}
-          className="w-full resize-none bg-transparent border border-transparent hover:border-cream-dark focus:bg-white rounded-xl px-3 py-2 -mx-3 text-sm text-warm-800 leading-relaxed transition-all duration-200"
+          placeholder={placeholder}
+          className="w-full resize-none bg-transparent border border-transparent hover:border-cream-dark focus:bg-white rounded-xl px-3 py-2 -mx-3 text-sm text-warm-800 leading-relaxed transition-all duration-200 placeholder:text-warm-400 placeholder:italic"
         />
       </div>
     </div>
@@ -136,8 +138,9 @@ function AICard({ message, onUpdate }: AICardProps) {
             tag="INT"
             tagColor="#0f766e"
             tagBg="#ccfbf1"
-            label="Intervención pedagógica"
+            label="Intervención del docente"
             value={cai.intervencion}
+            placeholder="Sin intervención del docente durante esta situación."
             onChange={(v) => onUpdate(message.id, 'intervencion', v)}
           />
           <CAISection
