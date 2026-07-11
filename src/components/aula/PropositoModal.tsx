@@ -51,6 +51,7 @@ function PropositoModal({ session, onClose }: Props) {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
+      timeZone: 'America/Lima',
     })
     .replace(/\b\w/g, (c, i) => (i === 0 ? c.toUpperCase() : c.toLowerCase()));
 

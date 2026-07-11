@@ -381,6 +381,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
+    timeZone: 'America/Lima',
   });
 
   const evidenceMap = buildStudentEvidence(messages, students);

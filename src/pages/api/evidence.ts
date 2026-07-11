@@ -107,7 +107,7 @@ export const POST: APIRoute = async ({ request }) => {
     const isUpdate = Boolean(resolvedExisting?.id);
 
     function formatTime(iso: string) {
-      return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit' }).format(new Date(iso));
+      return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Lima' }).format(new Date(iso));
     }
 
     return new Response(
