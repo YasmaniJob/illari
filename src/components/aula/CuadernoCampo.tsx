@@ -51,6 +51,11 @@ function buildStudentEvidence(
 
 // ─── Datos estructurados por estudiante (para formato ficha) ──────────────────
 
+interface StudentCAIEntry {
+  text: string;
+  timestamp: string;
+}
+
 interface StudentCAI {
   contexto: string;
   accion: string;
@@ -58,20 +63,23 @@ interface StudentCAI {
   interpretacionSugerida: string;
   interpretacion: string;
   retroalimentacion: string;
-  rawTexts: string[];
+  entries: StudentCAIEntry[];
 }
 
 function buildStudentCAI(messages: ChatMessage[], students: StudentDto[]): Map<string, StudentCAI> {
   const def = (): StudentCAI => ({
     contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-    interpretacion: '', retroalimentacion: '', rawTexts: [],
+    interpretacion: '', retroalimentacion: '', entries: [],
   });
   const map = new Map<string, StudentCAI>();
   for (const s of students) map.set(s.name, def());
   for (const msg of messages) {
     if (msg.type === 'user' && msg.studentName) {
       if (!map.has(msg.studentName)) map.set(msg.studentName, def());
-      map.get(msg.studentName)!.rawTexts.push(msg.text);
+      map.get(msg.studentName)!.entries.push({
+        text: msg.text,
+        timestamp: msg.timestamp,
+      });
     }
     if (msg.type === 'ai' && msg.studentName) {
       if (!map.has(msg.studentName)) map.set(msg.studentName, def());
@@ -86,6 +94,7 @@ function buildStudentCAI(messages: ChatMessage[], students: StudentDto[]): Map<s
   }
   return map;
 }
+
 
 // ─── PDF Styles ───────────────────────────────────────────────────────────────
 
@@ -261,9 +270,14 @@ function PerStudentDocument({ session, students, caiMap, fecha }: PerStudentDocP
       {students.map((student) => {
         const d = caiMap.get(student.name) ?? {
           contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-          interpretacion: '', retroalimentacion: '', rawTexts: [],
+          interpretacion: '', retroalimentacion: '', entries: [],
         };
-        const situacion = d.rawTexts.join('\n\n');
+        
+        // Formatear cada observación con su respectiva fecha y hora
+        const situacion = d.entries.length > 0
+          ? d.entries.map(e => `[${fecha} — ${e.timestamp}]\n${e.text}`).join('\n\n')
+          : 'Sin observaciones registradas';
+
         const intereses = [d.contexto, d.accion].filter(Boolean).join('\n');
         const capacidades = [d.interpretacionSugerida, d.interpretacion].filter(Boolean).join('\n');
 
@@ -416,9 +430,13 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
         .map((student) => {
           const d = caiMap.get(student.name) ?? {
             contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-            interpretacion: '', retroalimentacion: '', rawTexts: [],
+            interpretacion: '', retroalimentacion: '', entries: [],
           };
-          const situacion = d.rawTexts.join('\n\n');
+          
+          const situacionHtml = d.entries.length > 0
+            ? d.entries.map(e => `<p style="margin:0 0 2px;font-size:8pt;color:#e07a5f;font-weight:bold">[${fecha} — ${e.timestamp}]</p><p style="margin:0 0 10px;line-height:1.4">${e.text}</p>`).join('')
+            : '<p style="color:#aaa;font-style:italic">Sin observaciones registradas</p>';
+
           const intereses = [d.contexto, d.accion].filter(Boolean).join('\n');
           const capacidades = [d.interpretacionSugerida, d.interpretacion].filter(Boolean).join('\n');
           return `
@@ -435,7 +453,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
             </table>
             <p style="font-family:Arial,sans-serif;font-size:9pt;font-weight:bold;margin:8px 0 3px">1. SITUACIÓN OBSERVADA</p>
             <p style="font-family:Arial,sans-serif;font-size:8pt;color:#666;font-style:italic;margin:0 0 4px">¿Qué hace el niño(a)? ¿Cómo interactúa con objetos, el espacio y las personas? (Describir sin interpretar)</p>
-            <div style="border:1px solid #111;padding:6px 8px;min-height:56px;font-family:Arial,sans-serif;font-size:9pt;white-space:pre-line;margin-bottom:10px">${situacion}</div>
+            <div style="border:1px solid #111;padding:8px;min-height:56px;font-family:Arial,sans-serif;font-size:9pt;margin-bottom:10px">${situacionHtml}</div>
             <p style="font-family:Arial,sans-serif;font-size:9pt;font-weight:bold;margin:8px 0 3px">2. ANÁLISIS PEDAGÓGICO</p>
             <p style="font-family:Arial,sans-serif;font-size:8pt;color:#666;font-style:italic;margin:0 0 6px">Se realiza entre las docentes responsables de una misma aula</p>
             <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:9pt">
@@ -462,14 +480,17 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
         .map((student) => {
           const d = caiMap.get(student.name) ?? {
             contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-            interpretacion: '', retroalimentacion: '', rawTexts: [],
+            interpretacion: '', retroalimentacion: '', entries: [],
           };
+          const situacionPlain = d.entries.length > 0
+            ? d.entries.map(e => `[${fecha} — ${e.timestamp}]\n${e.text}`).join('\n\n')
+            : 'Sin observaciones registradas';
           return [
             `=== ${student.name.toUpperCase()} ===`,
             `EDAD: ${session.grado ?? '—'} | SECCIÓN: ${session.seccion ?? '—'} | FECHA: ${fecha}`,
             '',
             '1. SITUACIÓN OBSERVADA',
-            d.rawTexts.join('\n'),
+            situacionPlain,
             '',
             '2. ANÁLISIS PEDAGÓGICO',
             `Intereses e iniciativas: ${[d.contexto, d.accion].filter(Boolean).join(' / ')}`,
@@ -852,9 +873,8 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
               {students.map((student) => {
                 const d = caiMap.get(student.name) ?? {
                   contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-                  interpretacion: '', retroalimentacion: '', rawTexts: [],
+                  interpretacion: '', retroalimentacion: '', entries: [],
                 };
-                const situacion = d.rawTexts.join('\n\n');
                 const intereses = [d.contexto, d.accion].filter(Boolean).join('\n');
                 const capacidades = [d.interpretacionSugerida, d.interpretacion].filter(Boolean).join('\n');
                 return (
@@ -881,10 +901,22 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
                       <p className="text-[11px] text-gray-400 italic mb-2">
                         ¿Qué hace el niño(a)? ¿Cómo interactúa con objetos, el espacio y las personas? (Describir sin interpretar)
                       </p>
-                      <div className="border border-gray-700 px-3 py-2 min-h-[56px] text-sm whitespace-pre-line">
-                        {situacion || <span className="text-gray-300">Sin observaciones registradas</span>}
+                      <div className="border border-gray-700 px-4 py-3 min-h-[56px] text-sm space-y-4 bg-white rounded-lg">
+                        {d.entries.length > 0 ? (
+                          d.entries.map((e, idx) => (
+                            <div key={idx} className="pb-3 last:pb-0 border-b last:border-0 border-gray-100">
+                              <span className="text-[10px] font-extrabold text-coral-500 block mb-1">
+                                📅 {fecha} — {e.timestamp}
+                              </span>
+                              <p className="text-warm-850 font-medium leading-relaxed">{e.text}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <span className="text-gray-300 italic">Sin observaciones registradas</span>
+                        )}
                       </div>
                     </div>
+
                     {/* Sección 2 */}
                     <div>
                       <p className="text-[11px] font-extrabold uppercase tracking-wider mb-1">2. Análisis pedagógico</p>
