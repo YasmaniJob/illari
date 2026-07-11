@@ -610,28 +610,32 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
           </div>
 
           {/* Toggle formato */}
-          <div className="flex items-center rounded-xl border border-cream-dark overflow-hidden shrink-0">
+          <div className="flex items-center gap-1 bg-warm-100 p-1 rounded-xl border border-cream-dark/60 shrink-0">
             <button
               type="button"
               onClick={() => setFormat('table')}
               className={[
-                'px-3 py-2 text-xs font-bold transition-colors focus-ring-warm',
-                format === 'table' ? 'bg-warm-800 text-white' : 'bg-white text-warm-600 hover:bg-cream',
+                'px-3.5 py-1.5 text-xs font-extrabold rounded-lg transition-all duration-200 focus-ring-warm',
+                format === 'table'
+                  ? 'bg-warm-900 text-white shadow-sm scale-[1.02]'
+                  : 'text-warm-600 hover:text-warm-900 hover:bg-white/40',
               ].join(' ')}
               title="Tabla general — todos los estudiantes"
             >
-              Tabla
+              📊 Tabla General
             </button>
             <button
               type="button"
               onClick={() => setFormat('per-student')}
               className={[
-                'px-3 py-2 text-xs font-bold transition-colors border-l border-cream-dark focus-ring-warm',
-                format === 'per-student' ? 'bg-warm-800 text-white' : 'bg-white text-warm-600 hover:bg-cream',
+                'px-3.5 py-1.5 text-xs font-extrabold rounded-lg transition-all duration-200 focus-ring-warm',
+                format === 'per-student'
+                  ? 'bg-warm-900 text-white shadow-sm scale-[1.02]'
+                  : 'text-warm-600 hover:text-warm-900 hover:bg-white/40',
               ].join(' ')}
               title="Ficha por niño — dos secciones por estudiante"
             >
-              Por niño
+              👤 Ficha por Niño
             </button>
           </div>
 
