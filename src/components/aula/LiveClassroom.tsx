@@ -76,6 +76,17 @@ export default function LiveClassroom() {
     [students, selectedStudentId],
   );
 
+  /** Conteo de observaciones (mensajes user) por nombre de estudiante — para badges del sidebar */
+  const observationCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const m of messages) {
+      if (m.type === 'user' && m.studentName) {
+        counts[m.studentName] = (counts[m.studentName] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [messages]);
+
   const handleSend = useCallback(
     async (text: string) => {
       if (!session) return;
@@ -390,13 +401,14 @@ export default function LiveClassroom() {
               variant="sidebar"
               grado={session.grado ?? undefined}
               seccion={session.seccion ?? undefined}
+              observationCounts={observationCounts}
             />
           )}
         </div>
 
         {/* Chat area */}
         <div className="flex flex-col min-h-0">
-          <ChatFeed messages={messages} sending={sending} onUpdateAI={handleUpdateAI} />
+          <ChatFeed messages={messages} sending={sending} filterStudentName={selectedStudent?.name} onUpdateAI={handleUpdateAI} />
           <ChatInputBar
             onSend={handleSend}
             onVoiceTranscript={handleVoiceTranscript}

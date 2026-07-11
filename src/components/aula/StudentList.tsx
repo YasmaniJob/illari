@@ -7,6 +7,8 @@ interface StudentListProps {
   variant: 'carousel' | 'sidebar';
   grado?: string;
   seccion?: string;
+  /** Mapa nombre_estudiante -> cantidad de observaciones en la sesión */
+  observationCounts?: Record<string, number>;
 }
 
 function Avatar({ name }: { name: string }) {
@@ -62,7 +64,7 @@ function GeneralOption({
   );
 }
 
-export default function StudentList({ students, selectedId, onSelect, variant, grado, seccion }: StudentListProps) {
+export default function StudentList({ students, selectedId, onSelect, variant, grado, seccion, observationCounts }: StudentListProps) {
   if (variant === 'carousel') {
     return (
       <div className="md:hidden">
@@ -119,6 +121,11 @@ export default function StudentList({ students, selectedId, onSelect, variant, g
                   </span>
                 )}
               </div>
+              {observationCounts && (observationCounts[student.name] ?? 0) > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-lilac-500 px-1 text-[10px] font-extrabold text-white shrink-0">
+                  {observationCounts[student.name]}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -171,6 +178,16 @@ export default function StudentList({ students, selectedId, onSelect, variant, g
                   </span>
                 )}
               </div>
+              {/* Badge: cantidad de observaciones */}
+              {(observationCounts?.[student.name] ?? 0) > 0 ? (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-lilac-500 px-1 text-[10px] font-extrabold text-white shrink-0">
+                  {observationCounts![student.name]}
+                </span>
+              ) : (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-cream-dark px-1 text-[10px] font-extrabold text-warm-400 shrink-0">
+                  0
+                </span>
+              )}
             </button>
           </li>
         ))}

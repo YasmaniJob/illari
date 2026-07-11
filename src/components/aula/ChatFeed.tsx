@@ -14,6 +14,8 @@ export type ChatMessage = UserMessage | AIMessage;
 interface ChatFeedProps {
   messages: ChatMessage[];
   sending?: boolean;
+  /** Cuando está definido, filtra el feed para mostrar solo las observaciones de este estudiante */
+  filterStudentName?: string;
   onUpdateAI: (
     id: string,
     field: 'contexto' | 'accion' | 'interpretacion' | 'retroalimentacion' | 'intervencion' | 'interpretacionSugerida',
@@ -59,28 +61,66 @@ function TypingBubble() {
   );
 }
 
-function ChatFeed({ messages, sending = false, onUpdateAI }: ChatFeedProps) {
+function ChatFeed({ messages, sending = false, filterStudentName, onUpdateAI }: ChatFeedProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Cuando hay un estudiante en foco, mostrar solo sus observaciones
+  const displayMessages = filterStudentName
+    ? messages.filter((m) => m.studentName === filterStudentName)
+    : messages;
 
   // Scroll to bottom on new messages AND when the typing bubble appears/disappears
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages.length, sending]);
 
+  const avatarColors = ['bg-coral-500', 'bg-lilac-500', 'bg-sky-300', 'bg-honey-400', 'bg-mint-400'];
+
   return (
     <div ref={containerRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-6 md:px-8">
-      {messages.length === 0 && !sending && (
-        <div className="h-full flex flex-col items-center justify-center text-center px-6">
-          <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-honey-200 text-3xl mb-4">🌼</span>
-          <p className="text-lg font-extrabold text-warm-900">Tu línea de observaciones</p>
-          <p className="mt-2 text-base text-warm-600 max-w-xs leading-relaxed">
-            Escribe lo que observas. La IA organiza la evidencia por ti.
-          </p>
+      {/* Cabecera de estudiante en foco */}
+      {filterStudentName && (
+        <div className="flex items-center gap-3 px-1 pb-3 mb-1 border-b border-lilac-100">
+          <span
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm font-extrabold text-white select-none ${avatarColors[filterStudentName.charCodeAt(0) % avatarColors.length]}`}
+          >
+            {filterStudentName.charAt(0).toUpperCase()}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-extrabold text-warm-900 capitalize leading-tight">{filterStudentName}</p>
+            <p className="text-xs font-semibold text-warm-500">Historial de observaciones</p>
+          </div>
+          <span className="flex items-center gap-1.5 text-[10px] font-extrabold text-lilac-700 bg-lilac-100 px-2.5 py-1 rounded-lg shrink-0">
+            <span className="h-1.5 w-1.5 rounded-full bg-lilac-500 animate-pulse" />
+            En foco
+          </span>
         </div>
       )}
 
-      {messages.map((msg, idx) => {
+      {displayMessages.length === 0 && !sending && (
+        <div className="h-full flex flex-col items-center justify-center text-center px-6">
+          {filterStudentName ? (
+            <>
+              <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-lilac-100 text-3xl mb-4">🔍</span>
+              <p className="text-lg font-extrabold text-warm-900 capitalize">{filterStudentName}</p>
+              <p className="mt-2 text-base text-warm-600 max-w-xs leading-relaxed">
+                Aún no hay observaciones para este estudiante. ¡Selecciónalo y empieza a anotar!
+              </p>
+            </>
+          ) : (
+            <>
+              <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-honey-200 text-3xl mb-4">🌼</span>
+              <p className="text-lg font-extrabold text-warm-900">Tu línea de observaciones</p>
+              <p className="mt-2 text-base text-warm-600 max-w-xs leading-relaxed">
+                Escribe lo que observas. La IA organiza la evidencia por ti.
+              </p>
+            </>
+          )}
+        </div>
+      )}
+
+      {displayMessages.map((msg, idx) => {
         if (msg.type === 'user') {
           return (
             <div key={msg.id} className="flex justify-end">
@@ -103,7 +143,7 @@ function ChatFeed({ messages, sending = false, onUpdateAI }: ChatFeedProps) {
         let inferredStudentName = msg.studentName;
         if (!inferredStudentName) {
           for (let i = idx - 1; i >= 0; i--) {
-            const prev = messages[i];
+            const prev = displayMessages[i];
             if (prev.type === 'user') {
               inferredStudentName = prev.studentName;
               break;
