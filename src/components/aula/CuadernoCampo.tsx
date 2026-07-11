@@ -51,49 +51,66 @@ function buildStudentEvidence(
 
 // ─── Datos estructurados por estudiante (para formato ficha) ──────────────────
 
-interface StudentCAIEntry {
-  text: string;
-  timestamp: string;
-}
+// ─── Fichas Individuales de Observación (una por cada descripción) ────────────
 
-interface StudentCAI {
+interface FichaIndividual {
+  id: string;
+  studentName: string;
+  grado: string;
+  seccion: string;
+  timestamp: string;
+  situacion: string;
   contexto: string;
   accion: string;
   intervencion: string;
   interpretacionSugerida: string;
   interpretacion: string;
   retroalimentacion: string;
-  entries: StudentCAIEntry[];
 }
 
-function buildStudentCAI(messages: ChatMessage[], students: StudentDto[]): Map<string, StudentCAI> {
-  const def = (): StudentCAI => ({
-    contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-    interpretacion: '', retroalimentacion: '', entries: [],
-  });
-  const map = new Map<string, StudentCAI>();
-  for (const s of students) map.set(s.name, def());
-  for (const msg of messages) {
+function buildFichasIndividuales(
+  messages: ChatMessage[],
+  students: StudentDto[],
+  session: SessionConfig,
+): FichaIndividual[] {
+  const fichas: FichaIndividual[] = [];
+
+  for (let i = 0; i < messages.length; i++) {
+    const msg = messages[i];
     if (msg.type === 'user' && msg.studentName) {
-      if (!map.has(msg.studentName)) map.set(msg.studentName, def());
-      map.get(msg.studentName)!.entries.push({
-        text: msg.text,
+      const nextMsg = messages[i + 1];
+      
+      let aiFields = {
+        contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
+        interpretacion: '', retroalimentacion: ''
+      };
+      
+      if (nextMsg && nextMsg.type === 'ai') {
+        aiFields = {
+          contexto: nextMsg.cai.contexto,
+          accion: nextMsg.cai.accion,
+          intervencion: nextMsg.cai.intervencion,
+          interpretacionSugerida: nextMsg.cai.interpretacionSugerida,
+          interpretacion: nextMsg.cai.interpretacion,
+          retroalimentacion: nextMsg.cai.retroalimentacion
+        };
+      }
+      
+      fichas.push({
+        id: msg.id,
+        studentName: msg.studentName,
+        grado: session.grado ?? '—',
+        seccion: session.seccion ?? '—',
         timestamp: msg.timestamp,
+        situacion: msg.text,
+        ...aiFields
       });
     }
-    if (msg.type === 'ai' && msg.studentName) {
-      if (!map.has(msg.studentName)) map.set(msg.studentName, def());
-      const e = map.get(msg.studentName)!;
-      e.contexto = msg.cai.contexto;
-      e.accion = msg.cai.accion;
-      e.intervencion = msg.cai.intervencion;
-      e.interpretacionSugerida = msg.cai.interpretacionSugerida;
-      e.interpretacion = msg.cai.interpretacion;
-      e.retroalimentacion = msg.cai.retroalimentacion;
-    }
   }
-  return map;
+  
+  return fichas;
 }
+
 
 
 // ─── PDF Styles ───────────────────────────────────────────────────────────────
@@ -255,34 +272,23 @@ function CuadernoDocument({ session, rows, padRows, fecha }: DocProps) {
   );
 }
 
-// ─── PDF Ficha por estudiante ─────────────────────────────────────────────────
+// ─── PDF Fichas Individuales por Observación ──────────────────────────────────
 
 interface PerStudentDocProps {
   session: SessionConfig;
-  students: StudentDto[];
-  caiMap: Map<string, StudentCAI>;
+  fichas: FichaIndividual[];
   fecha: string;
 }
 
-function PerStudentDocument({ session, students, caiMap, fecha }: PerStudentDocProps) {
+function PerStudentDocument({ session, fichas, fecha }: PerStudentDocProps) {
   return (
     <Document title={`Fichas de Observación — ${session.titulo || session.area}`}>
-      {students.map((student) => {
-        const d = caiMap.get(student.name) ?? {
-          contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-          interpretacion: '', retroalimentacion: '', entries: [],
-        };
-        
-        // Formatear cada observación con su respectiva fecha y hora
-        const situacion = d.entries.length > 0
-          ? d.entries.map(e => `[${fecha} — ${e.timestamp}]\n${e.text}`).join('\n\n')
-          : 'Sin observaciones registradas';
-
-        const intereses = [d.contexto, d.accion].filter(Boolean).join('\n');
-        const capacidades = [d.interpretacionSugerida, d.interpretacion].filter(Boolean).join('\n');
+      {fichas.map((ficha) => {
+        const intereses = [ficha.contexto, ficha.accion].filter(Boolean).join('\n');
+        const capacidades = [ficha.interpretacionSugerida, ficha.interpretacion].filter(Boolean).join('\n');
 
         return (
-          <Page key={student.id} size="A4" style={S.page}>
+          <Page key={ficha.id} size="A4" style={S.page}>
             <Text style={S.title}>Ficha de Observación Pedagógica</Text>
 
             {/* Datos de la sesión (compacto) */}
@@ -305,15 +311,15 @@ function PerStudentDocument({ session, students, caiMap, fecha }: PerStudentDocP
             <View style={S.metaTable}>
               <View style={S.metaRow}>
                 <Text style={S.metaLabel}>NOMBRE DEL{'\n'}NIÑO/A</Text>
-                <Text style={[S.metaValueWide, { fontFamily: 'Helvetica-Bold' }]}>{student.name}</Text>
+                <Text style={[S.metaValueWide, { fontFamily: 'Helvetica-Bold' }]}>{ficha.studentName}</Text>
               </View>
               <View style={S.metaRow}>
                 <Text style={S.metaLabel}>EDAD</Text>
-                <Text style={[S.metaValue, { width: 90 }]}>{session.grado ?? '—'}</Text>
+                <Text style={[S.metaValue, { width: 90 }]}>{ficha.grado}</Text>
                 <Text style={S.metaLabel}>SECCIÓN</Text>
-                <Text style={[S.metaValue, { width: 60 }]}>{session.seccion ?? '—'}</Text>
-                <Text style={S.metaLabel}>FECHA</Text>
-                <Text style={S.metaValue}>{fecha}</Text>
+                <Text style={[S.metaValue, { width: 60 }]}>{ficha.seccion}</Text>
+                <Text style={S.metaLabel}>FECHA / HORA</Text>
+                <Text style={S.metaValue}>{fecha} — {ficha.timestamp}</Text>
               </View>
             </View>
 
@@ -326,7 +332,7 @@ function PerStudentDocument({ session, students, caiMap, fecha }: PerStudentDocP
                 ¿Qué hace el niño(a)? ¿Cómo interactúa con objetos, el espacio y las personas? (Describir sin interpretar)
               </Text>
               <View style={{ borderWidth: 1, borderColor: '#111', paddingHorizontal: 6, paddingVertical: 5, minHeight: 60 }}>
-                <Text>{situacion}</Text>
+                <Text>{ficha.situacion}</Text>
               </View>
             </View>
 
@@ -357,7 +363,7 @@ function PerStudentDocument({ session, students, caiMap, fecha }: PerStudentDocP
                 <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 8, color: '#444', marginBottom: 3 }}>
                   Necesidades o dificultades:
                 </Text>
-                <Text>{d.retroalimentacion}</Text>
+                <Text>{ficha.retroalimentacion}</Text>
               </View>
             </View>
           </Page>
@@ -366,6 +372,7 @@ function PerStudentDocument({ session, students, caiMap, fecha }: PerStudentDocP
     </Document>
   );
 }
+
 
 // ─── Modal component ──────────────────────────────────────────────────────────
 
@@ -377,7 +384,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
   });
 
   const evidenceMap = buildStudentEvidence(messages, students);
-  const caiMap = buildStudentCAI(messages, students);
+  const fichas = buildFichasIndividuales(messages, students, session);
   const grupoEntry = evidenceMap.get('__grupo__');
 
   const rows = [
@@ -400,7 +407,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
     try {
       const pdfDoc =
         format === 'per-student' ? (
-          <PerStudentDocument session={session} students={students} caiMap={caiMap} fecha={fecha} />
+          <PerStudentDocument session={session} fichas={fichas} fecha={fecha} />
         ) : (
           <CuadernoDocument session={session} rows={rows} padRows={padRows} fecha={fecha} />
         );
@@ -416,7 +423,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
     } catch (err) {
       console.error('Error generando PDF:', err);
     }
-  }, [session, rows, padRows, fecha, format, students, caiMap]);
+  }, [session, rows, padRows, fecha, format, fichas]);
 
   // Copia HTML enriquecido al clipboard — Word, Google Docs y LibreOffice
   // respetan tablas y estilos cuando se pega desde HTML.
@@ -426,34 +433,25 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
 
     if (format === 'per-student') {
       // ── Formato ficha por estudiante ─────────────────────────────────────────
-      const studentSections = students
-        .map((student) => {
-          const d = caiMap.get(student.name) ?? {
-            contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-            interpretacion: '', retroalimentacion: '', entries: [],
-          };
-          
-          const situacionHtml = d.entries.length > 0
-            ? d.entries.map(e => `<p style="margin:0 0 2px;font-size:8pt;color:#e07a5f;font-weight:bold">[${fecha} — ${e.timestamp}]</p><p style="margin:0 0 10px;line-height:1.4">${e.text}</p>`).join('')
-            : '<p style="color:#aaa;font-style:italic">Sin observaciones registradas</p>';
-
-          const intereses = [d.contexto, d.accion].filter(Boolean).join('\n');
-          const capacidades = [d.interpretacionSugerida, d.interpretacion].filter(Boolean).join('\n');
+      const studentSections = fichas
+        .map((ficha) => {
+          const intereses = [ficha.contexto, ficha.accion].filter(Boolean).join('\n');
+          const capacidades = [ficha.interpretacionSugerida, ficha.interpretacion].filter(Boolean).join('\n');
           return `
-            <h3 style="font-family:Arial,sans-serif;font-size:11pt;font-weight:bold;margin:20px 0 6px;border-top:2px solid #111;padding-top:12px">${student.name}</h3>
+            <h3 style="font-family:Arial,sans-serif;font-size:11pt;font-weight:bold;margin:20px 0 6px;border-top:2px solid #111;padding-top:12px">${ficha.studentName}</h3>
             <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:9pt;margin-bottom:8px">
               <tr>
                 <td style="border:1px solid #111;padding:3px 6px;font-weight:bold">EDAD</td>
-                <td style="border:1px solid #111;padding:3px 6px">${session.grado ?? '—'}</td>
+                <td style="border:1px solid #111;padding:3px 6px">${ficha.grado}</td>
                 <td style="border:1px solid #111;padding:3px 6px;font-weight:bold">SECCIÓN</td>
-                <td style="border:1px solid #111;padding:3px 6px">${session.seccion ?? '—'}</td>
-                <td style="border:1px solid #111;padding:3px 6px;font-weight:bold">FECHA</td>
-                <td style="border:1px solid #111;padding:3px 6px">${fecha}</td>
+                <td style="border:1px solid #111;padding:3px 6px">${ficha.seccion}</td>
+                <td style="border:1px solid #111;padding:3px 6px;font-weight:bold">FECHA / HORA</td>
+                <td style="border:1px solid #111;padding:3px 6px">${fecha} — ${ficha.timestamp}</td>
               </tr>
             </table>
             <p style="font-family:Arial,sans-serif;font-size:9pt;font-weight:bold;margin:8px 0 3px">1. SITUACIÓN OBSERVADA</p>
             <p style="font-family:Arial,sans-serif;font-size:8pt;color:#666;font-style:italic;margin:0 0 4px">¿Qué hace el niño(a)? ¿Cómo interactúa con objetos, el espacio y las personas? (Describir sin interpretar)</p>
-            <div style="border:1px solid #111;padding:8px;min-height:56px;font-family:Arial,sans-serif;font-size:9pt;margin-bottom:10px">${situacionHtml}</div>
+            <div style="border:1px solid #111;padding:8px;min-height:56px;font-family:Arial,sans-serif;font-size:9pt;margin-bottom:10px;white-space:pre-line">${ficha.situacion}</div>
             <p style="font-family:Arial,sans-serif;font-size:9pt;font-weight:bold;margin:8px 0 3px">2. ANÁLISIS PEDAGÓGICO</p>
             <p style="font-family:Arial,sans-serif;font-size:8pt;color:#666;font-style:italic;margin:0 0 6px">Se realiza entre las docentes responsables de una misma aula</p>
             <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:9pt">
@@ -464,7 +462,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
                 <strong>Combinación de capacidades que muestran el desarrollo de las Competencias:</strong><br/>${capacidades.replace(/\n/g, '<br/>')}
               </td></tr>
               <tr><td style="border:1px solid #888;padding:5px 8px;vertical-align:top">
-                <strong>Necesidades o dificultades:</strong><br/>${d.retroalimentacion}
+                <strong>Necesidades o dificultades:</strong><br/>${ficha.retroalimentacion}
               </td></tr>
             </table>`;
         })
@@ -476,26 +474,19 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
         ${studentSections}
       </body></html>`;
 
-      plain = students
-        .map((student) => {
-          const d = caiMap.get(student.name) ?? {
-            contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-            interpretacion: '', retroalimentacion: '', entries: [],
-          };
-          const situacionPlain = d.entries.length > 0
-            ? d.entries.map(e => `[${fecha} — ${e.timestamp}]\n${e.text}`).join('\n\n')
-            : 'Sin observaciones registradas';
+      plain = fichas
+        .map((ficha) => {
           return [
-            `=== ${student.name.toUpperCase()} ===`,
-            `EDAD: ${session.grado ?? '—'} | SECCIÓN: ${session.seccion ?? '—'} | FECHA: ${fecha}`,
+            `=== ${ficha.studentName.toUpperCase()} ===`,
+            `EDAD: ${ficha.grado} | SECCIÓN: ${ficha.seccion} | FECHA / HORA: ${fecha} — ${ficha.timestamp}`,
             '',
             '1. SITUACIÓN OBSERVADA',
-            situacionPlain,
+            ficha.situacion,
             '',
             '2. ANÁLISIS PEDAGÓGICO',
-            `Intereses e iniciativas: ${[d.contexto, d.accion].filter(Boolean).join(' / ')}`,
-            `Combinación de capacidades: ${[d.interpretacionSugerida, d.interpretacion].filter(Boolean).join(' / ')}`,
-            `Necesidades o dificultades: ${d.retroalimentacion}`,
+            `Intereses e iniciativas: ${[ficha.contexto, ficha.accion].filter(Boolean).join(' / ')}`,
+            `Combinación de capacidades: ${[ficha.interpretacionSugerida, ficha.interpretacion].filter(Boolean).join(' / ')}`,
+            `Necesidades o dificultades: ${ficha.retroalimentacion}`,
           ].join('\n');
         })
         .join('\n\n');
@@ -509,6 +500,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
         ['CRITERIO DE EVALUACIÓN', session.criterio ?? '—'],
         ['EVIDENCIA DE APRENDIZAJE', session.evidencia ?? '—'],
       ];
+
 
       const metaHtml = metaRows
         .map((row, i) => {
@@ -868,75 +860,73 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
             </div>
           ) : (
             /* ── Fichas por estudiante ──────────────────────────────────────── */
-            <div className="p-8 min-w-[600px] space-y-8">
-              <h2 className="text-center text-sm font-bold tracking-[0.2em] uppercase">Fichas de Observación Pedagógica</h2>
-              {students.map((student) => {
-                const d = caiMap.get(student.name) ?? {
-                  contexto: '', accion: '', intervencion: '', interpretacionSugerida: '',
-                  interpretacion: '', retroalimentacion: '', entries: [],
-                };
-                const intereses = [d.contexto, d.accion].filter(Boolean).join('\n');
-                const capacidades = [d.interpretacionSugerida, d.interpretacion].filter(Boolean).join('\n');
-                return (
-                  <div key={student.id} className="border-2 border-gray-200 rounded-xl p-5">
-                    <h3 className="text-base font-extrabold text-warm-900 capitalize mb-3 pb-2 border-b border-gray-200">
-                      {student.name}
-                    </h3>
-                    {/* Meta */}
-                    <table className="w-full border-collapse text-sm mb-4">
-                      <tbody>
-                        <tr>
-                          <td className="border border-gray-700 px-2 py-1.5 font-bold text-xs">EDAD</td>
-                          <td className="border border-gray-700 px-2 py-1.5 text-sm">{session.grado ?? '—'}</td>
-                          <td className="border border-gray-700 px-2 py-1.5 font-bold text-xs">SECCIÓN</td>
-                          <td className="border border-gray-700 px-2 py-1.5 text-sm">{session.seccion ?? '—'}</td>
-                          <td className="border border-gray-700 px-2 py-1.5 font-bold text-xs">FECHA</td>
-                          <td className="border border-gray-700 px-2 py-1.5 text-sm">{fecha}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    {/* Sección 1 */}
-                    <div className="mb-4">
-                      <p className="text-[11px] font-extrabold uppercase tracking-wider mb-1">1. Situación observada</p>
-                      <p className="text-[11px] text-gray-400 italic mb-2">
-                        ¿Qué hace el niño(a)? ¿Cómo interactúa con objetos, el espacio y las personas? (Describir sin interpretar)
-                      </p>
-                      <div className="border border-gray-700 px-4 py-3 min-h-[56px] text-sm space-y-4 bg-white rounded-lg">
-                        {d.entries.length > 0 ? (
-                          d.entries.map((e, idx) => (
-                            <div key={idx} className="pb-3 last:pb-0 border-b last:border-0 border-gray-100">
-                              <span className="text-[10px] font-extrabold text-coral-500 block mb-1">
-                                📅 {fecha} — {e.timestamp}
-                              </span>
-                              <p className="text-warm-850 font-medium leading-relaxed">{e.text}</p>
-                            </div>
-                          ))
-                        ) : (
-                          <span className="text-gray-300 italic">Sin observaciones registradas</span>
-                        )}
+            <div className="p-8 min-w-[600px] space-y-8 text-left">
+              <h2 className="text-center text-sm font-bold tracking-[0.2em] uppercase text-warm-900 mb-6">
+                Fichas de Observación Pedagógica
+              </h2>
+              {fichas.length > 0 ? (
+                fichas.map((ficha) => {
+                  const intereses = [ficha.contexto, ficha.accion].filter(Boolean).join('\n');
+                  const capacidades = [ficha.interpretacionSugerida, ficha.interpretacion].filter(Boolean).join('\n');
+                  return (
+                    <div key={ficha.id} className="border-2 border-gray-200 rounded-xl p-5 bg-white shadow-sm">
+                      <div className="flex items-center justify-between pb-2 mb-3 border-b border-gray-200">
+                        <h3 className="text-base font-extrabold text-warm-900 capitalize">
+                          {ficha.studentName}
+                        </h3>
+                        <span className="text-xs font-bold text-warm-500 bg-warm-100 px-2.5 py-1 rounded-lg">
+                          🕒 {fecha} — {ficha.timestamp}
+                        </span>
+                      </div>
+                      {/* Meta */}
+                      <table className="w-full border-collapse text-sm mb-4">
+                        <tbody>
+                          <tr>
+                            <td className="border border-gray-700 px-2 py-1.5 font-bold text-xs">EDAD</td>
+                            <td className="border border-gray-700 px-2 py-1.5 text-sm">{ficha.grado}</td>
+                            <td className="border border-gray-700 px-2 py-1.5 font-bold text-xs">SECCIÓN</td>
+                            <td className="border border-gray-700 px-2 py-1.5 text-sm">{ficha.seccion}</td>
+                            <td className="border border-gray-700 px-2 py-1.5 font-bold text-xs">FECHA / HORA</td>
+                            <td className="border border-gray-700 px-2 py-1.5 text-sm">{fecha} — {ficha.timestamp}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      {/* Sección 1 */}
+                      <div className="mb-4">
+                        <p className="text-[11px] font-extrabold uppercase tracking-wider mb-1">1. Situación observada</p>
+                        <p className="text-[11px] text-gray-400 italic mb-2">
+                          ¿Qué hace el niño(a)? ¿Cómo interactúa con objetos, el espacio y las personas? (Describir sin interpretar)
+                        </p>
+                        <div className="border border-gray-700 px-4 py-3 min-h-[56px] text-sm bg-warm-50/20 rounded-lg whitespace-pre-line text-warm-850 font-medium">
+                          {ficha.situacion}
+                        </div>
+                      </div>
+                      {/* Sección 2 */}
+                      <div>
+                        <p className="text-[11px] font-extrabold uppercase tracking-wider mb-1">2. Análisis pedagógico</p>
+                        <p className="text-[11px] text-gray-400 italic mb-2">Se realiza entre las docentes responsables de una misma aula</p>
+                        <div className="border border-gray-500 px-3 py-2 min-h-[36px] text-sm whitespace-pre-line mb-2 bg-white rounded-lg">
+                          <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Intereses e iniciativas del niño(a)</span>
+                          {intereses || <span className="text-gray-300">—</span>}
+                        </div>
+                        <div className="border border-gray-500 px-3 py-2 min-h-[36px] text-sm whitespace-pre-line mb-2 bg-white rounded-lg">
+                          <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Combinación de capacidades que muestran el desarrollo de las Competencias</span>
+                          {capacidades || <span className="text-gray-300">—</span>}
+                        </div>
+                        <div className="border border-gray-500 px-3 py-2 min-h-[36px] text-sm whitespace-pre-line bg-white rounded-lg">
+                          <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Necesidades o dificultades</span>
+                          {ficha.retroalimentacion || <span className="text-gray-300">—</span>}
+                        </div>
                       </div>
                     </div>
-
-                    {/* Sección 2 */}
-                    <div>
-                      <p className="text-[11px] font-extrabold uppercase tracking-wider mb-1">2. Análisis pedagógico</p>
-                      <p className="text-[11px] text-gray-400 italic mb-2">Se realiza entre las docentes responsables de una misma aula</p>
-                      <div className="border border-gray-500 px-3 py-2 min-h-[36px] text-sm whitespace-pre-line mb-2">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Intereses e iniciativas del niño(a)</span>
-                        {intereses || <span className="text-gray-300">—</span>}
-                      </div>
-                      <div className="border border-gray-500 px-3 py-2 min-h-[36px] text-sm whitespace-pre-line mb-2">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Combinación de capacidades que muestran el desarrollo de las Competencias</span>
-                        {capacidades || <span className="text-gray-300">—</span>}
-                      </div>
-                      <div className="border border-gray-500 px-3 py-2 min-h-[36px] text-sm whitespace-pre-line">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Necesidades o dificultades</span>
-                        {d.retroalimentacion || <span className="text-gray-300">—</span>}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <div className="py-12 text-center text-warm-500 bg-white rounded-xl border border-dashed border-warm-200">
+                  <span className="text-4xl block mb-2">📋</span>
+                  <p className="font-bold">No hay fichas individuales de observación registradas en esta sesión.</p>
+                </div>
+              )}
             </div>
           )}
         </div>
