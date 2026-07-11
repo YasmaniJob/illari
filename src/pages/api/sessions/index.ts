@@ -7,8 +7,22 @@ export const prerender = false;
 export const GET: APIRoute = async ({ request }) => {
   const user = await requireUser(request);
   if (!user) return unauthorizedResponse();
-  const sessions = await listSessionsForUser(user.id);
-  return new Response(JSON.stringify({ sessions }), {
+
+  const url = new URL(request.url);
+  const status = url.searchParams.get('status') as 'active' | 'completed' | null;
+  const limitStr = url.searchParams.get('limit');
+  const offsetStr = url.searchParams.get('offset');
+
+  const limit = limitStr ? parseInt(limitStr, 10) : undefined;
+  const offset = offsetStr ? parseInt(offsetStr, 10) : undefined;
+
+  const { sessions, total } = await listSessionsForUser(user.id, {
+    status: status || undefined,
+    limit,
+    offset,
+  });
+
+  return new Response(JSON.stringify({ sessions, total }), {
     headers: { 'Content-Type': 'application/json' },
   });
 };

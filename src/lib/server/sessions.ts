@@ -1,4 +1,4 @@
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import { db, schema } from '../../db';
 import type { SessionConfig } from '../curriculum';
 
@@ -18,13 +18,43 @@ function rowToConfig(row: typeof schema.classSessions.$inferSelect): SessionConf
   };
 }
 
-export async function listSessionsForUser(userId: string): Promise<SessionConfig[]> {
-  const rows = await db
+export async function listSessionsForUser(
+  userId: string,
+  options?: {
+    status?: 'active' | 'completed';
+    limit?: number;
+    offset?: number;
+  }
+): Promise<{ sessions: SessionConfig[]; total: number }> {
+  let conditions = eq(schema.classSessions.userId, userId);
+  if (options?.status) {
+    conditions = and(conditions, eq(schema.classSessions.status, options.status)) as any;
+  }
+
+  const countRes = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(schema.classSessions)
+    .where(conditions);
+  const total = Number(countRes[0]?.count ?? 0);
+
+  let query = db
     .select()
     .from(schema.classSessions)
-    .where(eq(schema.classSessions.userId, userId))
+    .where(conditions)
     .orderBy(desc(schema.classSessions.createdAt));
-  return rows.map(rowToConfig);
+
+  if (options?.limit !== undefined) {
+    query = query.limit(options.limit) as any;
+  }
+  if (options?.offset !== undefined) {
+    query = query.offset(options.offset) as any;
+  }
+
+  const rows = await query;
+  return {
+    sessions: rows.map(rowToConfig),
+    total,
+  };
 }
 
 export async function getActiveSessionForUser(userId: string): Promise<SessionConfig | null> {

@@ -48,10 +48,22 @@ export function clearAuthCache() {
   cacheExpires = 0;
 }
 
-export async function fetchSessions(): Promise<SessionConfig[]> {
-  if (!(await isLoggedIn())) return [];
-  const { sessions } = await api<{ sessions: SessionConfig[] }>('/api/sessions');
-  return sessions;
+export async function fetchSessions(params?: {
+  status?: 'active' | 'completed';
+  limit?: number;
+  offset?: number;
+}): Promise<{ sessions: SessionConfig[]; total: number }> {
+  if (!(await isLoggedIn())) return { sessions: [], total: 0 };
+
+  const searchParams = new URLSearchParams();
+  if (params?.status) searchParams.set('status', params.status);
+  if (params?.limit !== undefined) searchParams.set('limit', String(params.limit));
+  if (params?.offset !== undefined) searchParams.set('offset', String(params.offset));
+
+  const queryString = searchParams.toString();
+  const url = `/api/sessions${queryString ? `?${queryString}` : ''}`;
+
+  return api<{ sessions: SessionConfig[]; total: number }>(url);
 }
 
 export async function fetchActiveSession(): Promise<SessionConfig | null> {

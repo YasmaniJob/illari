@@ -17,59 +17,196 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ userName }: DashboardProps) {
-  const [sessions, setSessions] = useState<SessionConfig[]>([]);
+  const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active');
+  const [activeSessions, setActiveSessions] = useState<SessionConfig[]>([]);
+  const [completedSessions, setCompletedSessions] = useState<SessionConfig[]>([]);
+  const [completedTotal, setCompletedTotal] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [historialOpen, setHistorialOpen] = useState(false);
   const [authModal, setAuthModal] = useState<'login' | 'register' | null>(null);
   const isLoggedIn = !!userName;
 
+  const LIMIT = 10;
+
   useEffect(() => {
     if (!isLoggedIn) return;
-    fetchSessions()
-      .then(setSessions)
-      .catch(() => setSessions([]));
+
+    // Fetch active sessions
+    const fetchActive = fetchSessions({ status: 'active' })
+      .then((res) => {
+        setActiveSessions(res.sessions);
+        return res.sessions;
+      })
+      .catch(() => {
+        setActiveSessions([]);
+        return [];
+      });
+
+    // Fetch first page of completed sessions
+    const fetchCompletedFirstPage = fetchSessions({ status: 'completed', limit: LIMIT, offset: 0 })
+      .then((res) => {
+        setCompletedSessions(res.sessions);
+        setCompletedTotal(res.total);
+      })
+      .catch(() => {
+        setCompletedSessions([]);
+        setCompletedTotal(0);
+      });
+
+    Promise.all([fetchActive, fetchCompletedFirstPage]).then(([active]) => {
+      if (active.length === 0) {
+        setActiveTab('completed');
+      } else {
+        setActiveTab('active');
+      }
+    });
   }, [isLoggedIn]);
+
+  const loadMoreCompleted = () => {
+    if (loadingMore || completedSessions.length >= completedTotal) return;
+    setLoadingMore(true);
+
+    const nextOffset = completedSessions.length;
+    fetchSessions({ status: 'completed', limit: LIMIT, offset: nextOffset })
+      .then((res) => {
+        setCompletedSessions((prev) => [...prev, ...res.sessions]);
+        setCompletedTotal(res.total);
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoadingMore(false);
+      });
+  };
+
+  const totalSessionsCount = activeSessions.length + completedTotal;
 
   // ── Sidebar content (shared between desktop aside and mobile accordion) ──────
   const sidebarInner = isLoggedIn ? (
-    sessions.length === 0 ? (
-      <div className="flex flex-col items-center justify-center flex-1 gap-3 text-center px-4 py-8">
-        <span className="text-4xl" aria-hidden>
-          🌱
-        </span>
-        <p className="text-sm font-semibold text-warm-700 leading-relaxed">
-          Todavía no guardaste ninguna clase. ¡La primera será especial!
-        </p>
+    <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+      {/* Tabs Header */}
+      <div className="flex border-b border-cream-dark bg-cream-light/35 shrink-0">
+        <button
+          type="button"
+          onClick={() => setActiveTab('active')}
+          className={`flex-1 py-3 text-sm font-bold text-center border-b-2 transition-all focus:outline-none cursor-pointer ${
+            activeTab === 'active'
+              ? 'border-coral-500 text-coral-600'
+              : 'border-transparent text-warm-700 hover:text-warm-900 hover:bg-cream/20'
+          }`}
+        >
+          En curso ({activeSessions.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('completed')}
+          className={`flex-1 py-3 text-sm font-bold text-center border-b-2 transition-all focus:outline-none cursor-pointer ${
+            activeTab === 'completed'
+              ? 'border-coral-500 text-coral-600'
+              : 'border-transparent text-warm-700 hover:text-warm-900 hover:bg-cream/20'
+          }`}
+        >
+          Historial ({completedTotal})
+        </button>
       </div>
-    ) : (
-      <ul className="flex flex-col gap-2 px-4 py-4 overflow-y-auto flex-1">
-        {sessions.map((session) => (
-          <li key={session.id}>
-            <a
-              href={session.status === 'active' ? '/aula' : '#'}
-              className="flex flex-col gap-1 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 transition-all duration-200 hover:border-lilac-400/50 hover:shadow-sm"
-            >
-              {session.grado && session.seccion && (
-                <p className="text-xs font-bold text-coral-600 uppercase tracking-wide">
-                  {session.grado} · Sección {session.seccion}
-                </p>
+
+      {/* Tabs Content */}
+      <div className="flex-1 overflow-y-auto flex flex-col min-h-0">
+        {activeTab === 'active' ? (
+          activeSessions.length === 0 ? (
+            <div className="flex flex-col items-center justify-center flex-1 gap-3 text-center px-4 py-8">
+              <span className="text-4xl" aria-hidden>
+                🌱
+              </span>
+              <p className="text-sm font-semibold text-warm-700 leading-relaxed">
+                No tienes ninguna clase activa en este momento.
+              </p>
+              <a
+                href="/onboarding"
+                className="mt-2 text-xs font-bold text-coral-600 hover:underline"
+              >
+                ¡Comienza una nueva clase!
+              </a>
+            </div>
+          ) : (
+            <ul className="flex flex-col gap-2 px-4 py-4 flex-1">
+              {activeSessions.map((session) => (
+                <li key={session.id}>
+                  <a
+                    href="/aula"
+                    className="flex flex-col gap-1 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 transition-all duration-200 hover:border-lilac-400/50 hover:shadow-sm"
+                  >
+                    {session.grado && session.seccion && (
+                      <p className="text-xs font-bold text-coral-600 uppercase tracking-wide">
+                        {session.grado} · Sección {session.seccion}
+                      </p>
+                    )}
+                    <p className="text-sm font-bold text-warm-900 line-clamp-1">{session.titulo || session.area}</p>
+                    <div className="flex items-center justify-between gap-2 mt-0.5">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-mint-400/30 text-warm-900">
+                        En el aula
+                      </span>
+                      <time className="text-xs text-warm-500 font-semibold shrink-0">
+                        {formatDate(session.createdAt)}
+                      </time>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        ) : (
+          completedSessions.length === 0 ? (
+            <div className="flex flex-col items-center justify-center flex-1 gap-3 text-center px-4 py-8">
+              <span className="text-4xl" aria-hidden>
+                📖
+              </span>
+              <p className="text-sm font-semibold text-warm-700 leading-relaxed">
+                Todavía no has terminado ninguna clase.
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col flex-1">
+              <ul className="flex flex-col gap-2 px-4 py-4">
+                {completedSessions.map((session) => (
+                  <li key={session.id}>
+                    <div
+                      className="flex flex-col gap-1 rounded-2xl border border-cream-dark bg-white/70 px-4 py-3 transition-all duration-200 hover:border-warm-300 hover:shadow-sm"
+                    >
+                      {session.grado && session.seccion && (
+                        <p className="text-xs font-bold text-warm-500 uppercase tracking-wide">
+                          {session.grado} · Sección {session.seccion}
+                        </p>
+                      )}
+                      <p className="text-sm font-bold text-warm-700 line-clamp-1">{session.titulo || session.area}</p>
+                      <div className="flex items-center justify-between gap-2 mt-0.5">
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-cream-dark text-warm-600">
+                          Terminada
+                        </span>
+                        <time className="text-xs text-warm-500 font-semibold shrink-0">
+                          {formatDate(session.createdAt)}
+                        </time>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {completedSessions.length < completedTotal && (
+                <div className="px-4 pb-6 pt-2 text-center shrink-0">
+                  <button
+                    type="button"
+                    onClick={loadMoreCompleted}
+                    disabled={loadingMore}
+                    className="w-full rounded-xl border-2 border-cream-dark bg-white hover:bg-cream-light/30 disabled:opacity-50 px-4 py-2 text-xs font-bold text-warm-700 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                  >
+                    {loadingMore ? 'Cargando...' : 'Cargar más clases'}
+                  </button>
+                </div>
               )}
-              <p className="text-sm font-bold text-warm-900 line-clamp-1">{session.titulo || session.area}</p>
-              <div className="flex items-center justify-between gap-2 mt-0.5">
-                <span
-                  className={[
-                    'text-xs font-bold px-2 py-0.5 rounded-full',
-                    session.status === 'active' ? 'bg-mint-400/30 text-warm-900' : 'bg-cream-dark text-warm-700',
-                  ].join(' ')}
-                >
-                  {session.status === 'active' ? 'En el aula' : 'Terminada'}
-                </span>
-                <time className="text-xs text-warm-500 font-semibold shrink-0">{formatDate(session.createdAt)}</time>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    )
+            </div>
+          )
+        )}
+      </div>
+    </div>
   ) : (
     /* No logueado — cloud promo card */
     <div className="flex-1 overflow-y-auto px-4 py-4">
@@ -85,14 +222,14 @@ export default function Dashboard({ userName }: DashboardProps) {
           <button
             type="button"
             onClick={() => setAuthModal('register')}
-            className="w-full rounded-xl bg-lilac-600 px-4 py-3 text-sm font-bold text-white text-center shadow-[0_4px_14px_0_rgba(139,92,246,0.35)] transition-all duration-200 hover:bg-lilac-500 active:scale-[0.98]"
+            className="w-full rounded-xl bg-lilac-600 px-4 py-3 text-sm font-bold text-white text-center shadow-[0_4px_14px_0_rgba(139,92,246,0.35)] transition-all duration-200 hover:bg-lilac-500 active:scale-[0.98] cursor-pointer"
           >
             Crear cuenta gratis
           </button>
           <button
             type="button"
             onClick={() => setAuthModal('login')}
-            className="w-full rounded-xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 text-center transition-all duration-200 hover:bg-cream active:scale-[0.98]"
+            className="w-full rounded-xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 text-center transition-all duration-200 hover:bg-cream active:scale-[0.98] cursor-pointer"
           >
             Ya tengo cuenta
           </button>
@@ -159,15 +296,15 @@ export default function Dashboard({ userName }: DashboardProps) {
           <button
             type="button"
             onClick={() => setHistorialOpen((v) => !v)}
-            className="w-full flex items-center justify-between gap-2 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 transition-all duration-200 hover:bg-cream active:scale-[0.98] focus:outline-none"
+            className="w-full flex items-center justify-between gap-2 rounded-2xl border-2 border-cream-dark bg-white px-4 py-3 text-sm font-bold text-warm-700 transition-all duration-200 hover:bg-cream active:scale-[0.98] focus:outline-none cursor-pointer"
             aria-expanded={historialOpen}
           >
             <span className="flex items-center gap-2">
               <span aria-hidden>📖</span>
               Mis clases anteriores
-              {sessions.length > 0 && (
+              {isLoggedIn && totalSessionsCount > 0 && (
                 <span className="rounded-full bg-coral-500/15 px-2 py-0.5 text-xs font-extrabold text-coral-600">
-                  {sessions.length}
+                  {totalSessionsCount}
                 </span>
               )}
             </span>
@@ -183,7 +320,7 @@ export default function Dashboard({ userName }: DashboardProps) {
           </button>
 
           {historialOpen && (
-            <div className="mt-2 rounded-2xl border-2 border-cream-dark bg-[#fdf8f4] overflow-hidden max-h-72 overflow-y-auto">
+            <div className="mt-2 rounded-2xl border-2 border-cream-dark bg-[#fdf8f4] overflow-hidden max-h-[350px] flex flex-col">
               {sidebarInner}
             </div>
           )}
