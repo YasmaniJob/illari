@@ -597,7 +597,7 @@ function CuadernoCampo({ session, students, messages, onClose }: Props) {
         setTimeout(() => setCopyState('idle'), 2500);
       }
     }
-  }, [session, rows, padRows, fecha, format, students, caiMap]);
+  }, [session, rows, padRows, fecha, format, fichas]);
 
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
