@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { transcribeAudioWithGemini } from '../../../lib/server/transcribeAudio';
+import { transcribeAudioWithGemini } from '@/shared/server/transcribe-audio';
 
 export const prerender = false;
 

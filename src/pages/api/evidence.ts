@@ -1,10 +1,15 @@
 import type { APIRoute } from 'astro';
-import curriculoRaw from '../../data/curriculo.csv?raw';
-import { parseCurriculumCsv } from '../../lib/curriculum';
-import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
-import { findExistingAIObs, insertUserObservation, upsertAIObservation } from '../../lib/server/observations';
-import { type EvidenciaCAI, generatePedagogicalEvidence } from '../../lib/server/pedagogicalEvidence';
-import { getSessionById } from '../../lib/server/sessions';
+import { parseCurriculumCsv } from '@/features/curriculum/curriculum';
+import curriculoRaw from '@/features/curriculum/data/curriculo.csv?raw';
+import { getSessionById } from '@/features/dashboard/server/sessions';
+import {
+  findExistingAIObs,
+  insertUserObservation,
+  upsertAIObservation,
+} from '@/features/live-classroom/server/observations';
+import { type EvidenciaCAI, generatePedagogicalEvidence } from '@/features/live-classroom/server/pedagogicalEvidence';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
+import { formatTime } from '@/shared/server/utils';
 
 export const prerender = false;
 
@@ -105,10 +110,6 @@ export const POST: APIRoute = async ({ request }) => {
     ]);
 
     const isUpdate = Boolean(resolvedExisting?.id);
-
-    function formatTime(iso: string) {
-      return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Lima' }).format(new Date(iso));
-    }
 
     return new Response(
       JSON.stringify({

@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import curriculoRaw from '../../data/curriculo.csv?raw';
-import { parseCurriculumCsv } from '../../lib/curriculum';
+import { parseCurriculumCsv } from '@/features/curriculum/curriculum';
+import curriculoRaw from '@/features/curriculum/data/curriculo.csv?raw';
 
 export const prerender = false;
 

@@ -1,11 +1,11 @@
 import type { APIRoute } from 'astro';
-import curriculoRaw from '../../data/curriculo.csv?raw';
-import { GRADOS, SECCIONES } from '../../lib/classroom';
-import { parseCurriculumCsv } from '../../lib/curriculum';
-import { type ExtractedScanFields, matchScanToCurriculum } from '../../lib/curriculumMatch';
-import { buildCatalogPromptAppendix } from '../../lib/scan/catalog';
-import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
-import { GeminiNotConfiguredError, geminiVisionJson } from '../../lib/server/googleGemini';
+import { parseCurriculumCsv } from '@/features/curriculum/curriculum';
+import { type ExtractedScanFields, matchScanToCurriculum } from '@/features/curriculum/curriculumMatch';
+import curriculoRaw from '@/features/curriculum/data/curriculo.csv?raw';
+import { buildCatalogPromptAppendix } from '@/features/scan/client/lib/catalog';
+import { GeminiNotConfiguredError, geminiVisionJson } from '@/features/scan/server/googleGemini';
+import { GRADOS, SECCIONES } from '@/shared/client/classroom';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 
@@ -46,9 +46,31 @@ export const POST: APIRoute = async ({ request }) => {
   if (!user) return unauthorizedResponse();
 
   try {
-    const body = await request.json();
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return new Response(JSON.stringify({ error: 'JSON malformado' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     const imageBase64 = body?.imageBase64 as string | undefined;
     const mimeType = (body?.mimeType as string) || 'image/jpeg';
+
+    const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
+      return new Response(
+        JSON.stringify({
+          error: `Tipo de archivo no permitido: ${mimeType}. Solo se admiten: ${ALLOWED_MIME_TYPES.join(', ')}`,
+        }),
+        {
+          status: 415,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
 
     if (!imageBase64 || typeof imageBase64 !== 'string') {
       return new Response(JSON.stringify({ error: 'Imagen requerida' }), {

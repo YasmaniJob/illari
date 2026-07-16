@@ -1,0 +1,117 @@
+---
+import '@/shared/client/styles/global.css';
+import AuthHeader from '@/shared/client/layouts/AuthHeader';
+import MiWawitaLogo from '@/shared/client/ui/MiWawitaLogo';
+
+interface Props {
+  title?: string;
+  description?: string;
+  fullWidth?: boolean;
+  /** Pantalla fija sin scroll (onboarding) */
+  fixedViewport?: boolean;
+  /** Layout enmarcado: canvas pastel + marco blanco centrado, sin scroll */
+  boxed?: boolean;
+}
+
+const {
+  title = 'Mi Wawita — Cuaderno de Campo',
+  description = 'Cuaderno de campo digital para educación inicial.',
+  fullWidth = false,
+  fixedViewport = false,
+  boxed = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body
+    class:list={[
+      boxed
+        ? 'h-dvh bg-[#EBF3FC]'
+        : fixedViewport
+          ? 'h-dvh overflow-hidden bg-[#EBF3FC]'
+          : 'min-h-screen bg-[#EBF3FC]',
+    ]}
+  >
+
+    {boxed ? (
+      /* ── OPEN SEAMLESS LAYOUT ── */
+      <div class="h-dvh flex flex-col overflow-hidden">
+
+          {/* Navbar integrada al fondo */}
+          <header class="shrink-0 h-14 sm:h-16 bg-transparent px-4 sm:px-8 flex items-center">
+            {/* Logo */}
+            <a
+              href="/"
+              class="flex items-center min-w-0 transition-opacity duration-200 hover:opacity-85 focus-ring-warm rounded-xl -m-1 p-1"
+            >
+              <MiWawitaLogo size="sm" />
+            </a>
+
+            {/* Auth */}
+            <div class="ml-auto">
+              <AuthHeader client:load userName={Astro.locals.user?.name ?? null} />
+            </div>
+          </header>
+
+          {/* Contenido */}
+          <main class="flex-1 min-h-0 overflow-hidden">
+            <slot />
+          </main>
+
+      </div>
+    ) : (
+      /* ── LAYOUT ESTÁNDAR ── */
+      <>
+        <header
+          class="sticky top-0 z-40 h-16 bg-transparent"
+        >
+          <div
+            class:list={[
+              'mx-auto h-full px-5 sm:px-8 flex items-center justify-between gap-3',
+              fullWidth ? 'max-w-full' : 'max-w-5xl',
+            ]}
+          >
+            <a
+              href="/"
+              class="flex items-center min-w-0 transition-opacity duration-200 hover:opacity-85 focus-ring-warm rounded-xl -m-1 p-1"
+            >
+              <MiWawitaLogo size="sm" />
+            </a>
+
+            <AuthHeader client:load userName={Astro.locals.user?.name ?? null} />
+          </div>
+        </header>
+
+        <main
+          class:list={[
+            'mx-auto',
+            fixedViewport
+              ? ['overflow-hidden', fullWidth ? 'h-[calc(100dvh-4rem)] max-w-full w-full p-0' : 'h-[calc(100dvh-4rem)] max-w-2xl w-full px-5 py-4 sm:px-6']
+              : [
+                  'px-5 sm:px-8 py-10 sm:py-14 max-w-5xl',
+                  fullWidth ? 'max-w-full min-h-[calc(100vh-4rem)] p-0 sm:p-0' : '',
+                ],
+          ]}
+        >
+          <slot />
+        </main>
+      </>
+    )}
+  </body>
+</html>

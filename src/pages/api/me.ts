@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { requireUser } from '../../lib/server/auth';
+import { requireUser } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 

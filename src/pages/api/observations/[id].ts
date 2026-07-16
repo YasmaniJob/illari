@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
-import { updateAIObservation } from '../../../lib/server/observations';
+import { updateAIObservation } from '@/features/live-classroom/server/observations';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 

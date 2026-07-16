@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
-import { getActiveSessionForUser } from '../../../lib/server/sessions';
+import { getActiveSessionForUser } from '@/features/dashboard/server/sessions';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 

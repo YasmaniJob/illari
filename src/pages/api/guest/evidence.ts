@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import curriculoRaw from '../../../data/curriculo.csv?raw';
-import type { SessionConfig } from '../../../lib/curriculum';
-import { parseCurriculumCsv } from '../../../lib/curriculum';
-import { generatePedagogicalEvidence } from '../../../lib/server/pedagogicalEvidence';
+import type { SessionConfig } from '@/features/curriculum/curriculum';
+import { parseCurriculumCsv } from '@/features/curriculum/curriculum';
+import curriculoRaw from '@/features/curriculum/data/curriculo.csv?raw';
+import { generatePedagogicalEvidence } from '@/features/live-classroom/server/pedagogicalEvidence';
 
 export const prerender = false;
 

@@ -1,8 +1,8 @@
 ---
-import OnboardingWizard from '../components/onboarding/OnboardingWizard';
-import curriculoRaw from '../data/curriculo.csv?raw';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { parseCurriculumCsv } from '../lib/curriculum';
+import OnboardingWizard from '@/features/class-preparation/client/components/OnboardingWizard';
+import { parseCurriculumCsv } from '@/features/curriculum/curriculum';
+import curriculoRaw from '@/features/curriculum/data/curriculo.csv?raw';
+import BaseLayout from '@/shared/client/layouts/BaseLayout.astro';
 
 const curriculum = parseCurriculumCsv(curriculoRaw);
 ---

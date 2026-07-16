@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
-import { requireUser, unauthorizedResponse } from '../../../../lib/server/auth';
-import { listObservations } from '../../../../lib/server/observations';
-import { getSessionById } from '../../../../lib/server/sessions';
+import { getSessionById } from '@/features/dashboard/server/sessions';
+import { listObservations } from '@/features/live-classroom/server/observations';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 

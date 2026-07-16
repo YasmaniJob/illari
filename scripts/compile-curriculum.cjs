@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Target CSV path
-const csvPath = path.join(__dirname, '..', 'src', 'data', 'curriculo.csv');
+const csvPath = path.join(__dirname, '..', 'src', 'features', 'curriculum', 'data', 'curriculo.csv');
 
 // Source data directory
 const dataDir = path.join(__dirname, '..', 'data');
@@ -21,7 +21,7 @@ const jsonFiles = [
 // Predefined age order for sorting
 const EDAD_ORDER = ['1 año', '2 años', '3 años', '4 años', '5 años'];
 
-let allRows = [];
+const allRows = [];
 
 jsonFiles.forEach((file) => {
   const filePath = path.join(dataDir, file);
@@ -44,7 +44,7 @@ jsonFiles.forEach((file) => {
 
     comp.desempenios.forEach((des) => {
       const ciclo = des.ciclo_id;
-      
+
       // Map developmentally detailed age groups to school grades based on grado_id
       let edad = des.edad;
       if (des.grado_id === 'ini-1-anio') {

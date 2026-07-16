@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
-import { listStudentsForClass, saveStudentsRoster } from '../../../lib/server/students';
+import { listStudentsForClass, saveStudentsRoster } from '@/features/students/server/students';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 

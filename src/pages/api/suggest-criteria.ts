@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { requireUser, unauthorizedResponse } from '../../lib/server/auth';
-import { geminiGenerateJson } from '../../lib/server/googleGemini';
+import { geminiGenerateJson } from '@/features/scan/server/googleGemini';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 

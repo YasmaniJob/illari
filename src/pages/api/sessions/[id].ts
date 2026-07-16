@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 import { and, eq } from 'drizzle-orm';
-import { db, schema } from '../../../db';
-import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
-import { saveStudentsRoster } from '../../../lib/server/students';
+import { saveStudentsRoster } from '@/features/students/server/students';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
+import { db, schema } from '@/shared/server/db';
 
 export const prerender = false;
 
@@ -12,7 +12,15 @@ export const PATCH: APIRoute = async ({ request, params }) => {
   if (!user) return unauthorizedResponse();
 
   const sessionId = params.id as string;
-  const body = await request.json();
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return new Response(JSON.stringify({ error: 'JSON malformado' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   // Verify ownership
   const [existing] = await db

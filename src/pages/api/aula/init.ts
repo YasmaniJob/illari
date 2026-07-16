@@ -4,10 +4,10 @@
  * Replaces 3 serial fetches (active session → observations → students) with 1.
  */
 import type { APIRoute } from 'astro';
-import { requireUser, unauthorizedResponse } from '../../../lib/server/auth';
-import { listObservations } from '../../../lib/server/observations';
-import { getActiveSessionForUser } from '../../../lib/server/sessions';
-import { listStudentsForClass } from '../../../lib/server/students';
+import { getActiveSessionForUser } from '@/features/dashboard/server/sessions';
+import { listObservations } from '@/features/live-classroom/server/observations';
+import { listStudentsForClass } from '@/features/students/server/students';
+import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
 
 export const prerender = false;
 
