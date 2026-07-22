@@ -52,29 +52,29 @@ function GradoCard({ gradoKey, emoji, bg, border, label, isSelected, onToggle }:
       type="button"
       onClick={() => onToggle(gradoKey)}
       aria-pressed={isSelected}
-      whileHover={{ scale: 1.025, y: -2 }}
+      whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className="relative w-full h-full rounded-2xl overflow-hidden select-none flex flex-col items-center justify-center gap-2.5 focus:outline-none transition-colors duration-200"
+      className="relative w-full h-full min-h-[110px] py-4 px-3 rounded-2xl overflow-hidden select-none flex flex-col items-center justify-center gap-2.5 focus:outline-none transition-all duration-200 cursor-pointer"
       style={
         {
-          backgroundColor: isSelected ? bg : bg + '80',
+          backgroundColor: isSelected ? bg : bg + '75',
           borderWidth: '2px',
           borderStyle: 'solid',
-          borderColor: isSelected ? border : 'transparent',
+          borderColor: isSelected ? border : 'rgba(0,0,0,0.06)',
           boxShadow: isSelected
-            ? '0 8px 12px -3px rgba(0, 0, 0, 0.03), 0 3px 6px -2px rgba(0, 0, 0, 0.03)'
-            : '0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01)',
+            ? '0 10px 18px -4px rgba(0, 0, 0, 0.06)'
+            : '0 2px 4px rgba(0, 0, 0, 0.02)',
           outline: 'none',
         } as React.CSSProperties
       }
     >
       {/* Tick */}
       <motion.span
-        className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-extrabold"
+        className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full text-xs font-extrabold shadow-2xs"
         style={{ backgroundColor: border, color: '#fff' }}
         initial={false}
-        animate={isSelected ? { scale: [0, 1.4, 1], opacity: 1 } : { scale: 0.6, opacity: 0 }}
+        animate={isSelected ? { scale: [0, 1.3, 1], opacity: 1 } : { scale: 0.6, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 500, damping: 20 }}
       >
         ✓
@@ -82,17 +82,17 @@ function GradoCard({ gradoKey, emoji, bg, border, label, isSelected, onToggle }:
 
       {/* Emoji wrapped in a clean badge shape */}
       <motion.div
-        className="w-12 h-12 rounded-full flex items-center justify-center bg-white shadow-sm border border-cream-dark/40 shrink-0"
+        className="w-13 h-13 rounded-2xl flex items-center justify-center bg-white shadow-xs border border-cream-dark/50 shrink-0"
         initial={false}
         animate={isSelected ? { scale: [1, 1.1, 1] } : { scale: 1 }}
         transition={{ type: 'spring', stiffness: 400, damping: 20 }}
       >
-        <span className="text-xl select-none leading-none">{emoji}</span>
+        <span className="text-2xl select-none leading-none">{emoji}</span>
       </motion.div>
 
       {/* Label */}
       <span
-        className="text-xs font-extrabold tracking-tight text-center leading-tight transition-colors duration-200"
+        className="text-sm font-extrabold tracking-tight text-center leading-tight transition-colors duration-200"
         style={{ color: isSelected ? label : '#5c4a42' }}
       >
         {gradoKey}
@@ -128,18 +128,18 @@ function AulaStepView({ grados, onToggleGrado, seccion, onChangeSeccion }: AulaS
   const hasGrados = grados.length > 0;
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 md:gap-8 flex-1 min-h-0 p-1.5">
+    <div className="flex flex-col md:flex-row gap-6 md:gap-8 flex-1 min-h-0 p-1">
       {/* Columna Izquierda: Selección de Edades / Grados */}
-      <div className="flex flex-col gap-3.5 flex-1 min-h-0">
+      <div className="flex flex-col gap-5 flex-1 min-h-0">
         {/* Ciclo I */}
-        <div className="flex flex-col gap-2.5 flex-1 min-h-0">
-          <div className="flex justify-center shrink-0 select-none">
-            <span className="inline-flex items-center gap-1.5 bg-rose-50/70 border border-rose-200/50 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider text-rose-700 shadow-sm">
+        <div className="flex flex-col gap-3 flex-1 min-h-0">
+          <div className="flex items-center shrink-0 select-none">
+            <span className="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200/80 rounded-full px-3.5 py-1 text-xs font-black uppercase tracking-wider text-rose-700 shadow-2xs">
               <span>👶</span>
               <span>Ciclo I — Cuna · 0 a 2 años</span>
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-2.5 flex-1 min-h-[90px]">
+          <div className="grid grid-cols-2 gap-3.5 flex-1">
             {CICLO_I_ITEMS.map((item) => (
               <GradoCard
                 key={item.key}
@@ -156,14 +156,14 @@ function AulaStepView({ grados, onToggleGrado, seccion, onChangeSeccion }: AulaS
         </div>
 
         {/* Ciclo II */}
-        <div className="flex flex-col gap-2.5 flex-1 min-h-0 mt-1.5">
-          <div className="flex justify-center shrink-0 select-none">
-            <span className="inline-flex items-center gap-1.5 bg-purple-50/70 border border-purple-200/50 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider text-purple-700 shadow-sm">
+        <div className="flex flex-col gap-3 flex-1 min-h-0 mt-1">
+          <div className="flex items-center shrink-0 select-none">
+            <span className="inline-flex items-center gap-1.5 bg-purple-50 border border-purple-200/80 rounded-full px-3.5 py-1 text-xs font-black uppercase tracking-wider text-purple-700 shadow-2xs">
               <span>🧸</span>
               <span>Ciclo II — Jardín · 3 a 5 años</span>
             </span>
           </div>
-          <div className="grid grid-cols-3 gap-2.5 flex-1 min-h-[90px]">
+          <div className="grid grid-cols-3 gap-3.5 flex-1">
             {CICLO_II_ITEMS.map((item) => (
               <GradoCard
                 key={item.key}
@@ -179,6 +179,7 @@ function AulaStepView({ grados, onToggleGrado, seccion, onChangeSeccion }: AulaS
           </div>
         </div>
       </div>
+
 
       {/* Columna Derecha: Selección de Sección (Con divisor para separar visualmente) */}
       <div className="flex flex-col md:w-[38%] shrink-0 md:border-l-2 md:border-cream-dark/60 md:pl-6 min-h-0 gap-3.5">
@@ -666,9 +667,10 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col h-full min-h-0 w-full p-4 md:py-6 md:px-20 overflow-hidden">
+    <div className="flex flex-col h-full min-h-0 w-full max-w-5xl mx-auto p-3 sm:p-4 md:py-4 md:px-6 overflow-hidden">
       {/* Playful Stepper Hybrid (Pills on a dotted path) */}
-      <div className="shrink-0 relative flex items-center justify-between w-full max-w-3xl mx-auto mb-6 px-6 select-none">
+      <div className="shrink-0 relative flex items-center justify-between w-full max-w-2xl mx-auto mb-4 px-2 sm:px-6 select-none">
+
         {/* Steps and Connectors */}
         {STEPS.map((label, index) => {
           const s = index + 1;
