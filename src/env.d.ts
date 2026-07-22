@@ -16,4 +16,7 @@ interface ImportMetaEnv {
   readonly GEMINI_TEXT_MODEL?: string;
   readonly GEMINI_VISION_MODEL?: string;
   readonly PUBLIC_APP_URL?: string;
+  readonly DEEPSEEK_API_KEY?: string;
+  readonly DEEPSEEK_MODEL?: string;
 }
+

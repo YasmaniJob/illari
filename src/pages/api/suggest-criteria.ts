@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
-import { geminiGenerateJson } from '@/features/scan/server/googleGemini';
+import { deepseekGenerateJson } from '@/features/scan/server/deepseek';
 import { requireUser, unauthorizedResponse } from '@/shared/server/auth-middleware';
+
 
 export const prerender = false;
 
@@ -38,7 +39,8 @@ Responde únicamente un JSON válido con el siguiente formato:
 - Evidencia de aprendizaje: ${evidencia || 'Sin definir'}
 - Edad del aula: ${edad || 'No especificada'}`;
 
-    const data = await geminiGenerateJson(systemPrompt, userPrompt);
+    const data = await deepseekGenerateJson(systemPrompt, userPrompt);
+
 
     return new Response(JSON.stringify({ suggestions: data.suggestions ?? [] }), {
       headers: { 'Content-Type': 'application/json' },

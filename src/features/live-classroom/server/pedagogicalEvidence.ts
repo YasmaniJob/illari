@@ -1,5 +1,6 @@
 import type { CurriculumRow, SessionConfig } from '@/features/curriculum/curriculum';
-import { groqGenerateJson } from '@/features/scan/server/groq';
+import { deepseekGenerateJson } from '@/features/scan/server/deepseek';
+
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -153,7 +154,8 @@ ${observationText}
 
 Aplica la estructura C+A+I usando SOLO el catálogo curricular proporcionado.`;
 
-  const data = await groqGenerateJson(systemPrompt, userPrompt);
+  const data = await deepseekGenerateJson(systemPrompt, userPrompt);
+
 
   if (data.error) {
     return { error: String(data.error) };
