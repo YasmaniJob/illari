@@ -565,6 +565,8 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       content: (
         <OnboardingStepCard
           title="Tu aula"
+          onNext={() => goTo(2)}
+          nextDisabled={!canAdvance()}
           headerActions={
             <div className="flex items-center gap-2 select-none">
               {grados.length === 0 ? (
@@ -593,6 +595,9 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         <div className="relative flex flex-1 min-h-0 w-full flex-col">
           <OnboardingStepCard
             title="Mis estudiantes"
+            onBack={() => goTo(1)}
+            onNext={() => goTo(3)}
+            nextDisabled={!canAdvance()}
             headerActions={
               <RosterHeaderActions
                 fileError={rosterFileError}
@@ -638,6 +643,10 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       content: (
         <OnboardingStepCard
           title={grados.some((g) => ['1 año', '2 años'].includes(g)) ? 'Planificación de contexto' : 'Planificación'}
+          onBack={() => goTo(2)}
+          onNext={handleStartSession}
+          nextDisabled={!canAdvance()}
+          isLastStep={true}
           headerActions={
             <>
               <input
@@ -663,6 +672,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
       ),
     },
   ];
+
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
@@ -769,97 +779,14 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         })}
       </div>
 
-      {/* CONTENT COLUMN WITH INTELLIGENT LATERAL NAVIGATION */}
+      {/* CONTENT COLUMN WITH HEADER NAVIGATION */}
       <div className="relative flex-1 min-h-0 w-full flex flex-col">
-        {/* DESKTOP LATERAL BUTTON: ANTERIOR (Inside container, left edge) */}
-        {step > 1 && (
-          <button
-            type="button"
-            onClick={() => goTo(step - 1)}
-            className="hidden md:flex absolute left-2 lg:left-3 top-1/2 -translate-y-1/2 z-30 group items-center gap-2 rounded-2xl border-2 border-cream-dark/90 bg-white/95 backdrop-blur-xs px-3.5 py-3 text-sm font-extrabold text-warm-700 shadow-lg hover:border-lilac-300 hover:bg-lilac-50/80 hover:text-lilac-700 hover:scale-105 active:scale-95 transition-all select-none cursor-pointer"
-            aria-label="Paso anterior"
-          >
-            <span className="text-base transition-transform group-hover:-translate-x-0.5 select-none">👈</span>
-            <span className="hidden xl:inline">Atrás</span>
-          </button>
-        )}
-
-        {/* Step Card Container (With lateral padding on desktop to clear side buttons) */}
-        <div className="flex-1 min-h-0 flex flex-col md:px-12 lg:px-14">
+        {/* Step Card Container */}
+        <div className="flex-1 min-h-0 flex flex-col">
           <CardStack cards={stackCards} activeStep={step} direction={direction} />
         </div>
-
-        {/* DESKTOP LATERAL BUTTON: SIGUIENTE / FINAL (Inside container, right edge) */}
-        <button
-          type="button"
-          onClick={() => {
-            if (step < 3) goTo(step + 1);
-            else handleStartSession();
-          }}
-          disabled={!canAdvance()}
-          className={[
-            'hidden md:flex absolute right-2 lg:right-3 top-1/2 -translate-y-1/2 z-30 items-center justify-center gap-2 rounded-2xl px-4 lg:px-5 py-3.5 text-sm font-extrabold transition-all duration-200 shadow-xl select-none',
-            canAdvance()
-              ? step === 3
-                ? 'bg-gradient-to-r from-coral-500 to-amber-500 hover:from-coral-600 hover:to-amber-600 text-white cursor-pointer hover:scale-105 active:scale-95 shadow-coral-500/25'
-                : 'bg-coral-500 hover:bg-coral-600 text-white cursor-pointer hover:scale-105 active:scale-95 shadow-coral-500/20'
-              : 'bg-white/90 border-2 border-cream-dark text-warm-300 opacity-60 cursor-not-allowed',
-          ].join(' ')}
-          aria-label={step === 3 ? 'Empezar la aventura' : 'Siguiente paso'}
-        >
-          {step === 3 ? (
-            <>
-              <span className="text-base select-none">🚀</span>
-              <span className="hidden xl:inline">¡Empezar!</span>
-            </>
-          ) : (
-            <>
-              <span className="hidden xl:inline">Siguiente</span>
-              <span className="text-base select-none">➔</span>
-            </>
-          )}
-        </button>
-
-        {/* MOBILE ONLY NAVIGATION FOOTER */}
-        <div className="md:hidden shrink-0 pt-3 flex items-center justify-between gap-3 border-t border-cream-dark/60 select-none">
-          {step > 1 ? (
-            <button
-              type="button"
-              onClick={() => goTo(step - 1)}
-              className="flex items-center gap-1.5 rounded-2xl border-2 border-cream-dark bg-white px-4 py-2.5 text-sm font-extrabold text-warm-700 active:scale-97 cursor-pointer"
-            >
-              <span className="text-base select-none">👈</span>
-              <span>Atrás</span>
-            </button>
-          ) : (
-            <div />
-          )}
-
-          <button
-            type="button"
-            onClick={() => {
-              if (step < 3) goTo(step + 1);
-              else handleStartSession();
-            }}
-            disabled={!canAdvance()}
-            className={[
-              'flex-1 flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-extrabold transition-all duration-200 shadow-md select-none',
-              canAdvance()
-                ? 'bg-coral-500 text-white cursor-pointer active:scale-98'
-                : 'bg-warm-100/90 text-warm-400 border border-warm-200/80 cursor-not-allowed opacity-65',
-            ].join(' ')}
-          >
-            {step === 3 ? (
-              <span>🚀 ¡Empezar clase!</span>
-            ) : (
-              <>
-                <span>Siguiente paso</span>
-                <span className="text-base select-none">➔</span>
-              </>
-            )}
-          </button>
-        </div>
       </div>
+
 
 
       {/* Modal de Confirmación de Guardado */}
