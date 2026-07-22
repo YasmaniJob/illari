@@ -667,10 +667,10 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col h-full min-h-0 w-full max-w-5xl mx-auto p-3 sm:p-4 md:py-4 md:px-6 overflow-hidden">
-      {/* Playful Stepper Hybrid (Pills on a dotted path) */}
-      <div className="shrink-0 relative flex items-center justify-between w-full max-w-2xl mx-auto mb-4 px-2 sm:px-6 select-none">
 
+    <div className="flex flex-col h-full min-h-0 w-full max-w-7xl mx-auto p-3 sm:p-5 md:py-4 md:px-8 overflow-hidden">
+      {/* Playful Stepper Hybrid (Pills on a dotted path) */}
+      <div className="shrink-0 relative flex items-center justify-between w-full max-w-3xl mx-auto mb-4 px-2 sm:px-6 select-none">
         {/* Steps and Connectors */}
         {STEPS.map((label, index) => {
           const s = index + 1;
@@ -707,7 +707,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                 disabled={!isComplete && !isActive}
                 onClick={() => isComplete && goTo(s)}
                 className={[
-                  'relative flex items-center gap-2 pl-1 pr-3 py-1 rounded-full text-[10px] md:text-xs font-black tracking-wide uppercase transition-all duration-300 focus:outline-none select-none z-10 shadow-md shrink-0',
+                  'relative flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-full text-xs font-black tracking-wide uppercase transition-all duration-300 focus:outline-none select-none z-10 shadow-md shrink-0',
                   isActive
                     ? 'bg-coral-500 text-white scale-105 border-2 border-white ring-4 ring-coral-100/50'
                     : isComplete
@@ -735,7 +735,7 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                     />
                     <span
                       className={[
-                        'normal-case shrink-0 select-none font-bold text-[9px] md:text-[10px] tracking-normal',
+                        'normal-case shrink-0 select-none font-bold text-xs tracking-normal',
                         isActive || isComplete ? 'text-white/95' : 'text-warm-400/80',
                       ].join(' ')}
                     >
@@ -744,11 +744,11 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
                   </>
                 )}
 
-                {isComplete && <span className="ml-1 text-[9px] font-black text-white shrink-0">✓</span>}
+                {isComplete && <span className="ml-1 text-[10px] font-black text-white shrink-0">✓</span>}
               </button>
 
               {s < 3 && (
-                <div className="flex-1 min-w-[16px] md:min-w-[32px] h-1.5 mx-1 md:mx-2 shrink-0 select-none pointer-events-none relative">
+                <div className="flex-1 min-w-[20px] md:min-w-[40px] h-1.5 mx-2 shrink-0 select-none pointer-events-none relative">
                   <svg className="w-full h-full overflow-visible" preserveAspectRatio="none">
                     <line
                       x1="0"
@@ -769,39 +769,58 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
         })}
       </div>
 
-      {/* CONTENT COLUMN WITH LATERAL NAVIGATION */}
-      <div className="relative flex-1 min-h-0 w-full flex flex-col gap-4">
-        {/* Floating Left Button (Desktop only) */}
-        {step > 1 && (
-          <button
-            type="button"
-            onClick={() => goTo(step - 1)}
-            className="hidden md:flex absolute -left-14 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full border-2 border-cream-dark bg-white shadow-md items-center justify-center text-warm-600 hover:border-warm-300 hover:text-warm-800 transition-all select-none hover:scale-105 active:scale-95 cursor-pointer"
-            aria-label="Paso anterior"
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-        )}
-
+      {/* CONTENT COLUMN WITH INTEGRATED NAVIGATION */}
+      <div className="relative flex-1 min-h-0 w-full flex flex-col gap-3">
         {/* Step Card Container */}
         <div className="flex-1 min-h-0 flex flex-col">
           <CardStack cards={stackCards} activeStep={step} direction={direction} />
         </div>
 
-        {/* Floating Right Button (Desktop only) */}
-        <button
-          type="button"
-          onClick={() => {
-            if (step < 3) goTo(step + 1);
-            else handleStartSession();
-          }}
-          disabled={!canAdvance()}
-          className={[
-            'hidden md:flex absolute -right-14 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full border-2 items-center justify-center transition-all select-none shadow-md',
-            canAdvance()
-              ? 'bg-coral-500 border-coral-300 text-white hover:bg-coral-600 hover:scale-105 active:scale-95 cursor-pointer'
+        {/* UNIFIED NAVIGATION BAR */}
+        <div className="shrink-0 pt-2 flex items-center justify-between gap-4 border-t border-cream-dark/60 select-none">
+          {step > 1 ? (
+            <button
+              type="button"
+              onClick={() => goTo(step - 1)}
+              className="flex items-center gap-2 rounded-2xl border-2 border-cream-dark bg-white px-5 sm:px-6 py-2.5 sm:py-3 text-sm font-extrabold text-warm-700 hover:border-warm-300 hover:bg-cream/40 transition-all active:scale-97 cursor-pointer shadow-2xs"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Atrás</span>
+            </button>
+          ) : (
+            <div />
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              if (step < 3) goTo(step + 1);
+              else handleStartSession();
+            }}
+            disabled={!canAdvance()}
+            className={[
+              'flex items-center justify-center gap-2.5 rounded-2xl px-7 sm:px-9 py-3 sm:py-3.5 text-sm sm:text-base font-extrabold transition-all duration-200 shadow-md select-none',
+              canAdvance()
+                ? 'bg-coral-500 hover:bg-coral-600 text-white cursor-pointer active:scale-98'
+                : 'bg-warm-100/90 text-warm-400 border border-warm-200/80 cursor-not-allowed opacity-65',
+            ].join(' ')}
+          >
+            {step === 3 ? (
+              <span>🚀 ¡Empezar clase!</span>
+            ) : (
+              <>
+                <span>Siguiente paso</span>
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+r:bg-coral-600 hover:scale-105 active:scale-95 cursor-pointer'
               : 'bg-white border-cream-dark text-warm-300 opacity-55 cursor-default',
           ].join(' ')}
           aria-label={step === 3 ? 'Empezar clase' : 'Siguiente paso'}
