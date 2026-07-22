@@ -820,46 +820,9 @@ export default function OnboardingWizard({ curriculum }: OnboardingWizardProps) 
           </button>
         </div>
       </div>
-r:bg-coral-600 hover:scale-105 active:scale-95 cursor-pointer'
-              : 'bg-white border-cream-dark text-warm-300 opacity-55 cursor-default',
-          ].join(' ')}
-          aria-label={step === 3 ? 'Empezar clase' : 'Siguiente paso'}
-        >
-          {step === 3 ? (
-            <span className="text-xl">🚀</span>
-          ) : (
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          )}
-        </button>
-
-        {/* MOBILE ONLY FOOTER */}
-        <footer className="md:hidden shrink-0 pt-2 pb-2 flex items-center gap-3">
-          {step > 1 && (
-            <button
-              type="button"
-              onClick={() => goTo(step - 1)}
-              className="flex items-center justify-center gap-1.5 shrink-0 rounded-2xl border-2 border-cream-dark bg-white px-5 py-3 text-sm font-bold text-warm-600 hover:border-warm-300 hover:text-warm-800 transition-all focus:outline-none"
-            >
-              Atrás
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={() => {
-              if (step < 3) goTo(step + 1);
-              else handleStartSession();
-            }}
-            disabled={!canAdvance()}
-            className="btn-primary flex-1 py-3 text-base"
-          >
-            {step === 3 ? '🚀 ¡Empezar clase!' : 'Siguiente →'}
-          </button>
-        </footer>
-      </div>
 
       {/* Modal de Confirmación de Guardado */}
+
       <AnimatePresence>
         {showSuccessModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
